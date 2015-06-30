@@ -5,7 +5,7 @@ var fifteenMinuteButton = document.getElementById('fifteen-minute-button');
 var resetTimeoutButton = document.getElementById('reset-timeout-button');
 
 var currentTimeText = document.getElementById('current-time-text');
-var currentTimeProgressBar = document.getElementById('current-time-progress-bar');
+var pomodoroTechniqueLink = document.getElementById('pomodoro-technique-link');
 
 var currentTime;
 var interval;
@@ -74,4 +74,8 @@ fifteenMinuteButton.addEventListener('click', function(event) {
 resetTimeoutButton.addEventListener('click', function(event) {
 	resetTimeInterval();
 	addon.port.emit('reset-timeout');
+});
+
+pomodoroTechniqueLink.addEventListener('click', function(event) {
+	addon.port.emit('pomodorotechnique.com');
 });
