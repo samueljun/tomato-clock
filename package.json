@@ -4,10 +4,9 @@
   "id": "jid1-Kt2kYYgi32zPuw",
   "description": "An Add-on for Pomodoro Technique users",
   "author": "Samuel Jun",
-  "homepage": "https://github.com/samueljun/pomodoro-clock",
-
-  "permissions": {"private-browsing": true},
-
   "license": "MPL 2.0",
-  "version": "1.0.2"
+  "version": "1.0.2",
+  
+  "homepage": "https://github.com/samueljun/Pomodoro-Clock",
+  "permissions": {"private-browsing": true}
 }

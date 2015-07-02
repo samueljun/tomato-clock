@@ -8,19 +8,24 @@
 		<link href="bootstrap-3.3.5-dist/css/bootstrap.min.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
-		<div class="container text-center">
-			<h4>
-				<a href="javascript:void(0)" id="pomodoro-technique-link">
-					<span id="current-time-text">00:00</span>
-				</a>
-			</h4>
-			<button class="btn btn-danger btn-sm" id="pomodoro-button">Pomodoro</button>
-			<button class="btn btn-default btn-sm" id="five-minute-button">5'</button>
-			<button class="btn btn-default btn-sm" id="ten-minute-button">10'</button>
-			<button class="btn btn-default btn-sm" id="fifteen-minute-button">15'</button>
-			<button class="btn btn-warning btn-sm" id="reset-timeout-button">Reset</button>
+		<div class="container">
+			<div class="text-center">
+				<h4>
+					<a href="javascript:void(0)" id="stats-link">
+						<span id="current-time-text">00:00</span>
+					</a>
+					<a class="pull-right" href="javascript:void(0)" id="pomodoro-technique-link">
+						<span class="glyphicon glyphicon-info-sign"></span>
+					</a>
+				</h4>
+				<button class="btn btn-danger btn-sm" id="pomodoro-button">Pomodoro</button>
+				<button class="btn btn-default btn-sm" id="five-minute-button">5'</button>
+				<button class="btn btn-default btn-sm" id="ten-minute-button">10'</button>
+				<button class="btn btn-default btn-sm" id="fifteen-minute-button">15'</button>
+				<button class="btn btn-warning btn-sm" id="reset-timeout-button">Reset</button>
+			</div>
 		</div>
 
-		<script src="pomodoro.js"></script>
+		<script src="panel.js"></script>
 	</body>
 </html>
