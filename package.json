@@ -2,7 +2,7 @@
 	"name": "pomodoro-clock",
 	"title": "Pomodoro Clock",
 	"id": "jid1-Kt2kYYgi32zPuw",
-	"description": "Pomodoro Clock is a simple Firefox extension for Pomodoro Technique users.",
+	"description": "An extension for Pomodoro Technique users.",
 	"author": "Samuel Jun",
 	"license": "MPL 2.0",
 	"version": "1.1.1",
