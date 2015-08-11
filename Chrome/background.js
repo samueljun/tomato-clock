@@ -1,12 +1,19 @@
 var pomodoroAlarmId = 'pomodoroClockAlarm';
+var pomodoroNotificationId = 'pomodoroClockNotification';
 
 chrome.alarms.onAlarm.addListener(function(alarm) {
 	if (alarm.name === pomodoroAlarmId) {
-		chrome.notifications.create(null, {
+		chrome.notifications.create(pomodoroNotificationId, {
 			type: 'basic',
-			iconUrl: 'tomato-icon-64.png',
+			iconUrl: 'Pictures/tomato-icon-64.png',
 			title: 'Pomodoro Clock',
 			message: 'Timer is done!'
 		});
+	}
+});
+
+chrome.notifications.onClicked.addListener(function(notificationId) {
+	if (notificationId === pomodoroNotificationId) {
+		chrome.notifications.clear(pomodoroNotificationId);
 	}
 });
