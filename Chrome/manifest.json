@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "Pomodoro Clock",
+  "version": "1.0",
+
+  "description": "A simple extension for Pomodoro Technique users",
+  "icons": {
+    "16": "Pictures/tomato-icon-16.png",
+    "32": "Pictures/tomato-icon-32.png",
+    "48": "Pictures/tomato-icon-48.png",
+    "64": "Pictures/tomato-icon-64.png"
+  },
+
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistant": "false"
+  },
+
+  "author": "Samuel Jun",
+  "permissions": [
+    "alarms",
+    "notifications",
+    "storage"
+  ]
+}

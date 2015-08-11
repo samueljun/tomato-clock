@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="Libraries/bootstrap-3.3.5-dist/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+		<div class="text-center">
+			<h3>
+				<span id="current-time-text">00:00</span>
+			</h3>
+			<button class="btn btn-danger btn-block" id="pomodoro-button" tabindex="1">Pomodoro</button>
+			<button class="btn btn-default btn-block btn-sm" id="five-minute-button">5'</button>
+			<button class="btn btn-default btn-block btn-sm" id="ten-minute-button">10'</button>
+			<button class="btn btn-default btn-block btn-sm" id="fifteen-minute-button">15'</button>
+			<button class="btn btn-warning btn-block" id="reset-timeout-button">Reset</button>
+
+			<button class="btn btn-link" id="stats-link" title="Stats">
+				<span class="glyphicon glyphicon-stats"></span>
+			</button>
+			<button class="btn btn-link" id="pomodoro-technique-link" title="http://pomodorotechnique.com">
+				<span class="glyphicon glyphicon-info-sign"></span>
+			</button>
+		</div>
+	</div>
+
+	<script src="popup.js"></script>
+</body>
+</html>
