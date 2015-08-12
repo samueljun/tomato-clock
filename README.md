@@ -1,4 +1,4 @@
-# Pomodoro Clock - Firefox Extension
+# Pomodoro Clock - Browser Extension
 
 Pomodoro Clock is a simple extension for Pomodoro Technique users.
 
