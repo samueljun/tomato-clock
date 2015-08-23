@@ -68,7 +68,7 @@ function resetNamespaceAlarms(namespace) {
 
 pomodoroButton.addEventListener('click', function(event) {
 	setTimeInterval(1500000);
-	createNamespaceAlarm(pomodoroAlarmNamespace, 0);
+	createNamespaceAlarm(pomodoroAlarmNamespace, 25);
 });
 
 fiveMinuteButton.addEventListener('click', function(event) {
