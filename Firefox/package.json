@@ -1,12 +1,16 @@
 {
-	"name": "pomodoro-clock",
-	"title": "Pomodoro Clock",
-	"id": "jid1-Kt2kYYgi32zPuw",
-	"description": "An extension for Pomodoro Technique users.",
-	"author": "Samuel Jun",
-	"license": "MPL 2.0",
-	"version": "1.1.1",
+  "title": "Pomodoro Clock",
+  "name": "pomodoro-clock",
+  "version": "1.2.0",
+  "description": "An extension for Pomodoro Technique users.",
+  "main": "index.js",
+  "author": "Samuel Jun",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MPL 2.0",
 
-	"homepage": "https://github.com/samueljun/Pomodoro-Clock",
-	"permissions": { "private-browsing": true }
+  "homepage": "https://github.com/samueljun/Pomodoro-Clock",
+  "permissions": { "private-browsing": true }
 }
