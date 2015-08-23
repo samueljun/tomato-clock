@@ -16,6 +16,10 @@
 
 		<hr>
 
+		<button class="btn btn-warning" id="reset-stats-button">Reset Stats</button>
+
+		<br>
+
 		<div class="form-group">
 			<label class="control-label" for="date-range-picker">Date Range</label>
 			<input class="form-control" id="date-range-picker" type="text" name="daterange" />
@@ -52,5 +56,11 @@
 		<h3>Finished Pomodoros</h3>
 		<canvas id="finished-pomodoro-dates-chart"></canvas>
 	</div>
+
+	<script src="Libraries/Chart.js-1.0.2/Chart.min.js"></script>
+	<script src="Libraries/jquery-2.1.4.min.js"></script>
+	<script src="Libraries/bootstrap-daterangepicker-master/moment.min.js"></script>
+	<script src="Libraries/bootstrap-daterangepicker-master/daterangepicker.js"></script>
+	<script src="stats.js"></script>
 </body>
 </html>

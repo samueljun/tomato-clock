@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Pomodoro Clock",
-  "version": "1.0.1",
+  "version": "1.0.2",
 
   "description": "A simple extension for Pomodoro Technique users",
   "icons": {
@@ -21,6 +21,7 @@
     "scripts": ["background.js"],
     "persistant": "false"
   },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
 
   "author": "Samuel Jun",
   "permissions": [

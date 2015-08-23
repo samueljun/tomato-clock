@@ -8,7 +8,7 @@ var currentTimeText = document.getElementById('current-time-text');
 var statsLink = document.getElementById('stats-link');
 var pomodoroTechniqueLink = document.getElementById('pomodoro-technique-link');
 
-var pomodoroAlarmId = 'pomodoroClockAlarm';
+var pomodoroAlarmNamespace = 'pomodoroClockAlarm';
 
 var currentTime;
 var interval;
@@ -48,39 +48,47 @@ function msToTime(time) {
 	return minutes + ':' + seconds;
 }
 
+function createNamespaceAlarm(namespace, minutes) {
+	chrome.alarms.create(namespace + '.' + minutes, {
+		delayInMinutes: minutes
+	});
+}
+
+function resetNamespaceAlarms(namespace) {
+	chrome.alarms.getAll(function(alarms) {
+		for (var i = 0; i < alarms.length; i++) {
+			if (alarms[i].startsWith(namespace)) {
+				chrome.alarms.clear(alarms[i].name);
+			}
+		};
+	});
+}
+
 
 
 pomodoroButton.addEventListener('click', function(event) {
 	setTimeInterval(1500000);
-	chrome.alarms.create(pomodoroAlarmId, {
-		delayInMinutes: 25
-	});
+	createNamespaceAlarm(pomodoroAlarmNamespace, 0);
 });
 
 fiveMinuteButton.addEventListener('click', function(event) {
 	setTimeInterval(300000);
-	chrome.alarms.create(pomodoroAlarmId, {
-		delayInMinutes: 5
-	});
+	createNamespaceAlarm(pomodoroAlarmNamespace, 5);
 });
 
 tenMinuteButton.addEventListener('click', function(event) {
 	setTimeInterval(600000);
-	chrome.alarms.create(pomodoroAlarmId, {
-		delayInMinutes: 10
-	});
+	createNamespaceAlarm(pomodoroAlarmNamespace, 10);
 });
 
 fifteenMinuteButton.addEventListener('click', function(event) {
 	setTimeInterval(900000);
-	chrome.alarms.create(pomodoroAlarmId, {
-		delayInMinutes: 15
-	});
+	createNamespaceAlarm(pomodoroAlarmNamespace, 15);
 });
 
 resetTimeoutButton.addEventListener('click', function(event) {
 	resetTimeInterval();
-	chrome.alarms.clear(pomodoroAlarmId);
+	resetNamespaceAlarms(pomodoroAlarmNamespace);
 });
 
 pomodoroTechniqueLink.addEventListener('click', function(event) {
@@ -97,6 +105,12 @@ statsLink.addEventListener('click', function(event) {
 
 
 
-chrome.alarms.get(pomodoroAlarmId, function(alarm) {
-	setTimeInterval(alarm.scheduledTime - Date.now());
+chrome.alarms.getAll(function(alarms) {
+	for (var i = 0; i < alarms.length; i++) {
+		if (alarms[i].startsWith(namespace)) {
+			setTimeInterval(alarms[i].scheduledTime - Date.now());
+			break;
+		}
+	};
 });
+
