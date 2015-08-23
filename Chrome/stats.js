@@ -172,6 +172,7 @@ Stats.prototype.changeStatDates = function(startDate, endDate) {
 		this.finishedPomodorosChart.destroy();
 	}
 	this.finishedPomodorosChart = new Chart(this.ctx).Line(finishedPomodorosChartData);
+
 }
 
 Stats.prototype.resetStatsPage = function() {
@@ -215,7 +216,7 @@ $(document).ready(function() {
 			'Last 30 Days': [moment().subtract(29, 'days'), moment()],
 			'This Month': [moment().startOf('month'), moment().endOf('month')],
 			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-		},
+		}
 	},
 	function(momentStartDate, momentEndDate, label) {
 		// Convert Moment dates to native JS dates
