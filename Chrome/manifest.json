@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Pomodoro Clock",
-  "version": "1.0.2",
+  "version": "1.2",
 
   "description": "A simple extension for Pomodoro Technique users",
   "icons": {

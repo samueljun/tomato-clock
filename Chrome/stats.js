@@ -18,7 +18,6 @@ var Stats = function() {
 	Chart.defaults.global.responsive = true;
 	that.finishedPomodorosChart;
 
-
 	that.resetStatsButton.addEventListener('click', function(event) {
 		chrome.storage.sync.clear();
 		that.resetStatsPage();
