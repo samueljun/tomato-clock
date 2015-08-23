@@ -16,18 +16,16 @@
 
 		<hr>
 
-		<button class="btn btn-warning" id="reset-stats-button">Reset Stats</button>
-
-		<br>
-
 		<div class="form-group">
 			<label class="control-label" for="date-range-picker">Date Range</label>
 			<input class="form-control" id="date-range-picker" type="text" name="daterange" />
 		</div>
-
-		<h3>Totals</h3>
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-sm-8">
+				<canvas id="finished-pomodoro-dates-chart"></canvas>
+			</div>
+			<div class="col-sm-1"></div>
+			<div class="col-sm-3">
 				<table class="table table-bordered">
 					<tbody>
 						<tr class="danger">
@@ -53,8 +51,7 @@
 
 		<hr>
 
-		<h3>Finished Pomodoros</h3>
-		<canvas id="finished-pomodoro-dates-chart"></canvas>
+		<button class="btn btn-warning" id="reset-stats-button">Reset Stats</button>
 	</div>
 
 	<script src="Libraries/Chart.js-1.0.2/Chart.min.js"></script>

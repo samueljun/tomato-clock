@@ -113,4 +113,3 @@ chrome.alarms.getAll(function(alarms) {
 		}
 	};
 });
-
