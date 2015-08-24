@@ -107,9 +107,9 @@ statsLink.addEventListener('click', function(event) {
 
 chrome.alarms.getAll(function(alarms) {
 	for (var i = 0; i < alarms.length; i++) {
-		if (alarms[i].startsWith(namespace)) {
+		if (alarms[i].name.startsWith(pomodoroAlarmNamespace)) {
 			setTimeInterval(alarms[i].scheduledTime - Date.now());
 			break;
 		}
-	};
+	}
 });

@@ -4,8 +4,9 @@
 
 var Stats = function() {
 	var that = this;
-    // Initialize
-    that.timeline = [];
+
+	// Initialize
+	that.timeline = [];
 
 	// Get DOM Elements
 	that.pomodorosCount = document.getElementById('pomodoros-count');
