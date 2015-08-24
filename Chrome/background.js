@@ -31,7 +31,6 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
 				// minutes: 25, // DEBUG
 				date: new Date().toString() // should be initialized to Date whenever interacted with
 			});
-			console.log(timeline);
 
 			// Store timeline
 			chrome.storage.sync.set({

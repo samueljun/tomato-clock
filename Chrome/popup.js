@@ -57,7 +57,7 @@ function createNamespaceAlarm(namespace, minutes) {
 function resetNamespaceAlarms(namespace) {
 	chrome.alarms.getAll(function(alarms) {
 		for (var i = 0; i < alarms.length; i++) {
-			if (alarms[i].startsWith(namespace)) {
+			if (alarms[i].name.startsWith(namespace)) {
 				chrome.alarms.clear(alarms[i].name);
 			}
 		};
