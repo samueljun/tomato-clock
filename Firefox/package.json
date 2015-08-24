@@ -1,6 +1,7 @@
 {
   "title": "Pomodoro Clock",
   "name": "pomodoro-clock",
+  "id": "jid1-Kt2kYYgi32zPuw",
   "version": "1.2.0",
   "description": "An extension for Pomodoro Technique users.",
   "main": "index.js",
