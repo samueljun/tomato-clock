@@ -60,9 +60,9 @@ var toggleButton = ToggleButton({
 	id: 'pomodoro-toggle-button',
 	label: 'Pomodoro',
 	icon: {
-		'16': './tomato-icon-16.png',
-		'32': './tomato-icon-32.png',
-		'64': './tomato-icon-64.png'
+		'16': './Pictures/tomato-icon-16.png',
+		'32': './Pictures/tomato-icon-32.png',
+		'64': './Pictures/tomato-icon-64.png'
 	},
 	onChange: function(state) {
 		if (state.checked) {
