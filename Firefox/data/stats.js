@@ -3,10 +3,10 @@
 //
 
 var Stats = function () {
-    // Initialize
-    var timeline = self.options.timeline;
-    this.processTimeline(timeline);
-    this.sortedTimeline = timeline.sort(this.arrayDateSortAsc);
+	// Initialize
+	var timeline = self.options.timeline;
+	this.processTimeline(timeline);
+	this.sortedTimeline = timeline.sort(this.arrayDateSortAsc);
 
 	// Get DOM Elements
 	this.pomodorosCount = document.getElementById('pomodoros-count');

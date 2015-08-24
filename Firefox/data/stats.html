@@ -9,10 +9,11 @@
 	<!-- CSS -->
 	<link href="Libraries/bootstrap-3.3.5-dist/css/bootstrap.min.css" type="text/css" rel="stylesheet">
 	<link href="Libraries/bootstrap-daterangepicker-master/daterangepicker-bs3.css" type="text/css" rel="stylesheet">
+	<link href="stats.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 	<div class="container">
-		<h1>Pomodoro Clock Stats</h1>
+		<h1>Pomodoro Clock - Stats</h1>
 
 		<hr>
 
@@ -20,28 +21,36 @@
 			<label class="control-label" for="date-range-picker">Date Range</label>
 			<input class="form-control" id="date-range-picker" type="text" name="daterange" />
 		</div>
+		<br>
 		<div class="row">
 			<div class="col-md-8">
-				<canvas id="finished-pomodoro-dates-chart"></canvas>
+				<div>
+					<canvas id="finished-pomodoro-dates-chart"></canvas>
+				</div>
 			</div>
-			<div class="col-md-1"></div>
-			<div class="col-md-3">
-				<table class="table table-bordered">
+			<div class="col-md-4">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Timer</th>
+							<th>#</th>
+						</tr>
+					</thead>
 					<tbody>
-						<tr class="danger">
-							<td>Pomodoros:</td>
+						<tr>
+							<td>Pomodoro</td>
 							<td id="pomodoros-count"></td>
 						</tr>
 						<tr>
-							<td>5 Minute Breaks:</td>
+							<td>5 Minute Break</td>
 							<td id="five-minute-breaks-count"></td>
 						</tr>
 						<tr>
-							<td>10 Minute Breaks:</td>
+							<td>10 Minute Break</td>
 							<td id="ten-minute-breaks-count"></td>
 						</tr>
 						<tr>
-							<td>15 Minute Breaks:</td>
+							<td>15 Minute Break</td>
 							<td id="fifteen-minute-breaks-count"></td>
 						</tr>
 					</tbody>
@@ -50,8 +59,9 @@
 		</div>
 
 		<hr>
-
-		<button class="btn btn-warning" id="reset-stats-button">Reset Stats</button>
+		<form>
+			<button class="btn btn-warning" id="reset-stats-button">Reset Stats</button>
+		</form>
 	</div>
 
 	<script src="Libraries/Chart.js-1.0.2/Chart.min.js"></script>
