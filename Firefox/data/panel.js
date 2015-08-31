@@ -56,10 +56,6 @@ pomodoroButton.addEventListener('click', function(event) {
 fiveMinuteButton.addEventListener('click', function(event) {
 	setTimeInterval(300000);
 	addon.port.emit('set-timeout', 300000);
-
-	// Debugging
-	// setTimeInterval(5000);
-	// addon.port.emit('set-timeout', 5000);
 });
 
 tenMinuteButton.addEventListener('click', function(event) {

@@ -1,102 +1,179 @@
+var chrome = false;
+var firefox = true;
+
+//
+// Timeline Class
+//
+
+var Timeline = function() {
+	var that = this;
+
+	that.promise;
+	that.timeline = [];
+	that.updateTimeline();
+};
+
+//
+// Timeline Functions
+//
+
+Timeline.prototype._processTimeline = function(timeline) {
+	// Convert date strings to native Date objects
+	for (var i = 0; i < timeline.length; i++) {
+		timeline[i].date = new Date(timeline[i].date);
+	}
+};
+
+Timeline.prototype.updateTimeline = function() {
+	if (chrome) {
+		this._updateTimelineChrome();
+	} else if (firefox) {
+		this._updateTimelineFirefox();
+	}
+};
+
+Timeline.prototype._updateTimelineChrome = function() {
+	var that = this;
+
+	that.promise = new Promise(function(resolve, reject) {
+		chrome.storage.sync.get('timeline', function(items) {
+			if (items.hasOwnProperty('timeline')) {
+				that.timeline = items['timeline'];
+				that._processTimeline(that.timeline);
+			}
+
+			resolve();
+		});
+	});
+};
+
+Timeline.prototype._updateTimelineFirefox = function() {
+	var that = this;
+
+	that.promise = new Promise(function(resolve, reject) {
+		that.timeline = self.options.timeline;
+		that._processTimeline(that.timeline);
+
+		resolve();
+	});
+};
+
+Timeline.prototype.getTimeline = function() {
+	return this.timeline;
+};
+
+// Inclusive date range
+Timeline.prototype.getFilteredTimeline = function(startDate, endDate) {
+	var filteredTimeline = [];
+
+	for (var i = 0; i < this.timeline.length; i++) {
+		var currentDate = this.timeline[i].date;
+
+		if (currentDate >= startDate && currentDate <= endDate) {
+			filteredTimeline.push(this.timeline[i]);
+		}
+	}
+
+	return filteredTimeline;
+};
+
+Timeline.prototype.getPromise = function() {
+	return this.promise;
+};
+
+Timeline.prototype.resetTimeline = function() {
+	this.timeline = [];
+
+	if (chrome) {
+		this._resetTimelineChrome();
+	} else if (firefox) {
+		this._resetTimelineFirefox();
+	}
+}
+
+Timeline.prototype._resetTimelineChrome = function() {
+	chrome.storage.sync.clear();
+};
+
+Timeline.prototype._resetTimelineFirefox = function() {
+	self.port.emit('reset-stats');
+}
+
+
+
 //
 // Stats Class
 //
 
-var Stats = function () {
-	// Initialize
-	var timeline = self.options.timeline;
-	this.processTimeline(timeline);
-	this.sortedTimeline = timeline.sort(this.arrayDateSortAsc);
+var Stats = function() {
+	var that = this;
 
 	// Get DOM Elements
-	this.pomodorosCount = document.getElementById('pomodoros-count');
-	this.fiveMinuteBreaksCount = document.getElementById('five-minute-breaks-count');
-	this.tenMinuteBreaksCount = document.getElementById('ten-minute-breaks-count');
-	this.fifteenMinuteBreaksCount = document.getElementById('fifteen-minute-breaks-count');
+	that.pomodorosCount = document.getElementById('pomodoros-count');
+	that.fiveMinuteBreaksCount = document.getElementById('five-minute-breaks-count');
+	that.tenMinuteBreaksCount = document.getElementById('ten-minute-breaks-count');
+	that.fifteenMinuteBreaksCount = document.getElementById('fifteen-minute-breaks-count');
+	that.resetStatsButton = document.getElementById('reset-stats-button');
 
-	this.ctx = document.getElementById('finished-pomodoro-dates-chart').getContext('2d');
+	that.ctx = document.getElementById('finished-pomodoro-dates-chart').getContext('2d');
+	that.finishedPomodorosChart;
 	Chart.defaults.global.responsive = true;
-	this.finishedPomodorosChart;
+
+	that.resetStatsButton.addEventListener('click', function(event) {
+		console.log('yes');
+		that.timeline.resetTimeline();
+		that.resetDateRange();
+	});
+
+	that.timeline = new Timeline();
+	that.timeline.getPromise().then(function() {
+		that.resetDateRange();
+	});
 };
 
 //
 // Stats Functions
 //
 
-Stats.prototype.processTimeline = function(timeline) {
-	// Convert date strings to native Date objects
-	for (var i = 0; i < timeline.length; i++) {
-		timeline[i].date = new Date(timeline[i].date);
-	}
-}
+Stats.prototype.resetDateRange = function() {
+	var momentCurrentDate = moment();
+	var momentLastWeek = moment().subtract(6, 'days');
 
-Stats.prototype.dateSortAsc = function(a, b) {
-	return a - b;
-}
-
-Stats.prototype.dateSortDesc = function(a, b) {
-	return b - a;
-}
-
-Stats.prototype.arrayDateSortAsc = function(a, b) {
-	return new Date(a.date) - new Date(b.date);
-}
-
-Stats.prototype.arrayDateSortDesc = function(a, b) {
-	return new Date(b.date) - new Date(a.date);
+	this.changeStatDates(momentLastWeek.toDate(), momentCurrentDate.toDate());
 }
 
 Stats.prototype.addPomodoroDateToChartData = function(data, date) {
-	var dateString = date.toDateString();
-
 	for (var i = 0; i < data.labels.length; i++) {
-		if (data.labels[i] == dateString) {
+		if (data.labels[i] == date.toDateString()) {
 			data.datasets[0].data[i]++;
 			break;
 		}
 	}
 }
 
-// Inclusive
-Stats.prototype.filterTimelineDates = function(timelineDates, startDate, endDate) {
-	var filteredTimelineDates = [];
-
-	for (var i = 0; i < timelineDates.length; i++) {
-		var date = new Date(timelineDates[i].date);
-
-		if (date >= startDate && date <= endDate) {
-			filteredTimelineDates.push(timelineDates[i]);
-		}
-	}
-
-	return filteredTimelineDates;
-}
-
-Stats.prototype.getDateRangeArray = function(startDate, endDate) {
+Stats.prototype._getDateRangeArray = function(startDate, endDate) {
 	var dateArray = [];
-	var currentDate = new Date(startDate);
 
-	while (currentDate <= endDate) {
-		dateArray.push(currentDate);
-		currentDate.setDate(currentDate.getDate() + 1);
+	while (startDate <= endDate) {
+		dateArray.push(startDate);
+		startDate.setDate(startDate.getDate() + 1);
 	}
 
 	return dateArray;
 }
 
-Stats.prototype.getDateRangeStringArray = function(startDate, endDate) {
+Stats.prototype._getDateRangeStringArray = function(startDate, endDate) {
 	var dateStringArray = [];
-	var currentDate = new Date(startDate);
 
-	while (currentDate <= endDate) {
-		dateStringArray.push(currentDate.toDateString());
-		currentDate.setDate(currentDate.getDate() + 1);
+	while (startDate <= endDate) {
+		dateStringArray.push(startDate.toDateString());
+		startDate.setDate(startDate.getDate() + 1);
 	}
 
 	return dateStringArray;
 }
 
-Stats.prototype.intArray = function(length) {
+Stats.prototype._intArray = function(length) {
 	var x = [];
 	for (var i = 0; i < length; i++) {
 		x[i] = 0;
@@ -111,9 +188,9 @@ Stats.prototype.setStatsText = function(stats) {
 	this.fifteenMinuteBreaksCount.textContent = stats.fifteenMinuteBreaks;
 }
 
-Stats.prototype.updateStatsPage = function(startDate, endDate) {
-	var filteredSortedTimeline = this.filterTimelineDates(this.sortedTimeline, startDate, endDate);
-	var dateRangeStrings = this.getDateRangeStringArray(startDate, endDate);
+Stats.prototype.changeStatDates = function(startDate, endDate) {
+	var filteredTimeline = this.timeline.getFilteredTimeline(startDate, endDate);
+	var dateRangeStrings = this._getDateRangeStringArray(startDate, endDate);
 
 	var finishedPomodorosChartData = {
 		labels: dateRangeStrings,
@@ -126,7 +203,7 @@ Stats.prototype.updateStatsPage = function(startDate, endDate) {
 				pointStrokeColor: '#fff',
 				pointHighlightFill: '#fff',
 				pointHighlightStroke: 'rgba(220,220,220,1)',
-				data: this.intArray(dateRangeStrings.length)
+				data: this._intArray(dateRangeStrings.length)
 			}
 		]
 	};
@@ -139,14 +216,11 @@ Stats.prototype.updateStatsPage = function(startDate, endDate) {
 	};
 
 	// Go through timeline
-	for (var i = 0; i < filteredSortedTimeline.length; i++) {
-		var timeout = filteredSortedTimeline[i].timeout;
-		var date = filteredSortedTimeline[i].date;
-
-		switch (timeout) {
+	for (var i = 0; i < filteredTimeline.length; i++) {
+		switch (filteredTimeline[i].timeout) {
 			case 1500000:
 				stats.pomodoros++;
-				this.addPomodoroDateToChartData(finishedPomodorosChartData, date);
+				this.addPomodoroDateToChartData(finishedPomodorosChartData, filteredTimeline[i].date);
 				break;
 			case 300000:
 				stats.fiveMinuteBreaks++;
@@ -168,6 +242,7 @@ Stats.prototype.updateStatsPage = function(startDate, endDate) {
 	if (this.finishedPomodorosChart) {
 		this.finishedPomodorosChart.destroy();
 	}
+
 	this.finishedPomodorosChart = new Chart(this.ctx).Line(finishedPomodorosChartData);
 }
 
@@ -177,11 +252,11 @@ $(document).ready(function() {
 	var stats = new Stats();
 
 	// Date Picker
-	var currentDate = moment();
-	var lastWeek = moment().subtract(6, 'days');
+	var momentCurrentDate = moment();
+	var momentLastWeek = moment().subtract(6, 'days');
 
 	var $dateRangePicker = $('input[name="daterange"]');
-	$dateRangePicker.val(lastWeek.format('YYYY-MM-DD') + ' to ' + currentDate.format('YYYY-MM-DD'));
+	$dateRangePicker.val(momentLastWeek.format('YYYY-MM-DD') + ' to ' + momentCurrentDate.format('YYYY-MM-DD'));
 
 	$dateRangePicker.daterangepicker({
 		dateLimit: { months: 1 },
@@ -194,15 +269,13 @@ $(document).ready(function() {
 			'Last 30 Days': [moment().subtract(29, 'days'), moment()],
 			'This Month': [moment().startOf('month'), moment().endOf('month')],
 			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-		},
+		}
 	},
-	function(start, end, label) {
+	function(momentStartDate, momentEndDate, label) {
 		// Convert Moment dates to native JS dates
-		var startDate = start.toDate();
-		var endDate = end.toDate();
+		var startDate = momentStartDate.toDate();
+		var endDate = momentEndDate.toDate();
 
-		stats.updateStatsPage(startDate, endDate);
+		stats.changeStatDates(startDate, endDate);
 	});
-
-	stats.updateStatsPage(lastWeek.toDate(), currentDate.toDate());
 });

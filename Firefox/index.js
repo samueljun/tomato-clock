@@ -38,7 +38,6 @@ function timeoutEnd() {
 	});
 
 	addTimeoutToTimeline(initialTimeoutTime);
-
 	resetTimeout();
 }
 
@@ -86,38 +85,38 @@ var panel = panels.Panel({
 // Setup Storage
 if (!ss.storage.timeline) {
 	ss.storage.timeline = [
-		// { timeout: 1500000, date: '2015-07-01' },
-		// { timeout: 1500000, date: '2015-07-02' },
-		// { timeout: 1500000, date: '2015-07-03' },
-		// { timeout: 1500000, date: '2015-07-04' },
-		// { timeout: 1500000, date: '2015-07-05' },
-		// { timeout: 1500000, date: '2015-07-06' },
-		// { timeout: 1500000, date: '2015-07-06' },
-		// { timeout: 1500000, date: '2015-07-06' },
-		// { timeout: 1500000, date: '2015-07-07' },
-		// { timeout: 1500000, date: '2015-07-08' },
-		// { timeout: 1500000, date: '2015-07-09' },
-		// { timeout: 1500000, date: '2015-07-09' },
-		// { timeout: 1500000, date: '2015-07-09' },
-		// { timeout: 1500000, date: '2015-07-09' },
-		// { timeout: 1500000, date: '2015-07-10' },
-		// { timeout: 1500000, date: '2015-07-11' },
-		// { timeout: 1500000, date: '2015-07-13' },
-		// { timeout: 1500000, date: '2015-07-14' },
-		// { timeout: 1500000, date: '2015-07-15' },
-		// { timeout: 1500000, date: '2015-07-17' },
-		// { timeout: 1500000, date: '2015-07-18' },
-		// { timeout: 1500000, date: '2015-07-21' },
-		// { timeout: 1500000, date: '2015-07-22' },
-		// { timeout: 1500000, date: '2015-07-22' },
-		// { timeout: 1500000, date: '2015-07-22' },
-		// { timeout: 1500000, date: '2015-07-23' },
-		// { timeout: 1500000, date: '2015-07-24' },
-		// { timeout: 1500000, date: '2015-07-25' },
-		// { timeout: 1500000, date: '2015-07-27' },
-		// { timeout: 1500000, date: '2015-07-27' },
-		// { timeout: 1500000, date: '2015-07-27' },
-		// { timeout: 1500000, date: '2015-07-28' },
+		{ timeout: 1500000, date: '2015-07-01' },
+		{ timeout: 1500000, date: '2015-07-02' },
+		{ timeout: 1500000, date: '2015-07-03' },
+		{ timeout: 1500000, date: '2015-07-04' },
+		{ timeout: 1500000, date: '2015-07-05' },
+		{ timeout: 1500000, date: '2015-07-06' },
+		{ timeout: 1500000, date: '2015-07-06' },
+		{ timeout: 1500000, date: '2015-07-06' },
+		{ timeout: 1500000, date: '2015-07-07' },
+		{ timeout: 1500000, date: '2015-07-08' },
+		{ timeout: 1500000, date: '2015-07-09' },
+		{ timeout: 1500000, date: '2015-07-09' },
+		{ timeout: 1500000, date: '2015-07-09' },
+		{ timeout: 1500000, date: '2015-07-09' },
+		{ timeout: 1500000, date: '2015-07-10' },
+		{ timeout: 1500000, date: '2015-07-11' },
+		{ timeout: 1500000, date: '2015-07-13' },
+		{ timeout: 1500000, date: '2015-07-14' },
+		{ timeout: 1500000, date: '2015-07-15' },
+		{ timeout: 1500000, date: '2015-07-17' },
+		{ timeout: 1500000, date: '2015-07-18' },
+		{ timeout: 1500000, date: '2015-07-21' },
+		{ timeout: 1500000, date: '2015-07-22' },
+		{ timeout: 1500000, date: '2015-07-22' },
+		{ timeout: 1500000, date: '2015-07-22' },
+		{ timeout: 1500000, date: '2015-07-23' },
+		{ timeout: 1500000, date: '2015-07-24' },
+		{ timeout: 1500000, date: '2015-07-25' },
+		{ timeout: 1500000, date: '2015-07-27' },
+		{ timeout: 1500000, date: '2015-07-27' },
+		{ timeout: 1500000, date: '2015-07-27' },
+		{ timeout: 1500000, date: '2015-07-28' },
 	];
 }
 
@@ -154,7 +153,7 @@ panel.port.on('stats.html', function() {
 	tabs.open({
 		url: 'stats.html',
 		onReady: function(tab) {
-			tab.attach({
+			var worker = tab.attach({
 				contentScriptFile: [
 					'../data/Libraries/Chart.js-1.0.2/Chart.min.js',
 					'../data/Libraries/jquery-2.1.4.min.js',
@@ -165,7 +164,11 @@ panel.port.on('stats.html', function() {
 				contentScriptOptions: {
 					timeline: ss.storage.timeline
 				}
-			})
+			});
+
+			worker.port.on('reset-stats', function() {
+				ss.storage.timeline = [];
+			});
 		}
 	});
 
