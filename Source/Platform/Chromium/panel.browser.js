@@ -9,6 +9,7 @@ function openTab(link) {
 function setBrowserTimer(ms) {
 	var minutes = ms / 60000;
 
+	resetBrowserTimer();
 	chrome.alarms.create(pomodoroAlarmNamespace + '.' + minutes, {
 		delayInMinutes: minutes
 	});
