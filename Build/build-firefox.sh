@@ -18,3 +18,5 @@ cp -R Source/timeline.* $DES/data/
 cp -R Source/Pictures/tomato-icon-48.png $DES/icon.png
 
 echo "*** Pomodoro Clock for Firefox: Done copying files to /Distribution/Firefox"
+
+( cd Distribution/Firefox && jpm xpi && mv *.xpi .. )

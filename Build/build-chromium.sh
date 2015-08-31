@@ -16,3 +16,11 @@ cp -R Source/stats.* $DES/
 cp -R Source/timeline.* $DES/
 
 echo "*** Pomodoro Clock for Chromium: Done copying files to /Distribution/Chromium"
+
+
+
+echo "*** Pomodoro Clock for Chromium: Zipping package"
+
+zip Distribution/pomodoro-clock.chromium.zip Distribution/Chromium/*
+
+echo "*** Pomodoro Clock for Chromium: Done zipping package"
