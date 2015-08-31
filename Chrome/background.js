@@ -27,7 +27,7 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
 
 			// Add alarm to timeline
 			timeline.push({
-				minutes: alarmMinutes,
+				timeout: alarmMinutes * 60000,
 				// minutes: 25, // DEBUG
 				date: new Date().toString() // should be initialized to Date whenever interacted with
 			});
