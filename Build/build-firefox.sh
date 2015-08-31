@@ -19,4 +19,8 @@ cp -R Source/Pictures/tomato-icon-48.png $DES/icon.png
 
 echo "*** Pomodoro Clock for Firefox: Done copying files to /Distribution/Firefox"
 
+echo "*** Pomodoro Clock for Firefox: Creating package"
+
 ( cd Distribution/Firefox && jpm xpi && mv *.xpi .. )
+
+echo "*** Pomodoro Clock for Firefox: Done zipping package"
