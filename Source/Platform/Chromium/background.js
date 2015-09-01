@@ -10,7 +10,7 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
 			iconUrl: 'Pictures/tomato-icon-64.png',
 			title: 'Pomodoro Clock',
 			message: 'Your ' + alarmMinutes + ' minute timer is done!'
-		}
+		};
 
 		if (alarmMinutes === 25) {
 			notificationOptions.message = 'Your Pomodoro timer is done!';
@@ -28,7 +28,7 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
 			// Add alarm to timeline
 			timeline.push({
 				timeout: alarmMinutes * 60000,
-				date: new Date().toString() // should be initialized to Date whenever interacted with
+				date: Date.now().toString() // should be initialized to Date whenever interacted with
 			});
 
 			// Store timeline

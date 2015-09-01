@@ -15,7 +15,7 @@ cp -R Source/panel.* $DES/data/
 cp -R Source/stats.* $DES/data/
 cp -R Source/timeline.* $DES/data/
 
-cp -R Source/Pictures/tomato-icon-48.png $DES/icon.png
+cp Source/Pictures/tomato-icon-48.png $DES/icon.png
 
 echo "*** Pomodoro Clock for Firefox: Done copying files to /Distribution/Firefox"
 

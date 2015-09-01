@@ -21,6 +21,9 @@ echo "*** Pomodoro Clock for Chromium: Done copying files to /Distribution/Chrom
 
 echo "*** Pomodoro Clock for Chromium: Zipping package"
 
-zip Distribution/pomodoro-clock.chromium.zip Distribution/Chromium/*
+pushd $DES
+zip -r pomodoro-clock.chromium.zip *
+mv pomodoro-clock.chromium.zip ..
+popd
 
 echo "*** Pomodoro Clock for Chromium: Done zipping package"
