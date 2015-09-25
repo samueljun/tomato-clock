@@ -17,7 +17,7 @@ var { setTimeout, clearTimeout } = require('sdk/timers');
 //
 
 function resetTimeout() {
-	clearTimeout(timeout);
+	clearTimeout(timeoutID);
 	initialTimeoutTime = 0;
 }
 
@@ -33,7 +33,7 @@ function msToTime(duration) {
 
 function timeoutEnd() {
 	notifications.notify({
-		title: 'Pomodoro Timer',
+		title: 'Pomodoro Clock',
 		text: 'End of ' + msToTime(initialTimeoutTime) + ' timer',
 	});
 
@@ -54,10 +54,24 @@ function addTimeoutToTimeline(initialTimeoutTime) {
 // Setup
 //
 
+// Timeout
+var timeoutID;
+var initialTimeoutTime = 0;
+
+// Setup panel
+var panel = panels.Panel({
+	contentURL: self.data.url('panel.html'),
+	width: 130,
+	height: 300,
+	onHide: function() {
+		toggleButton.state('window', { checked: false });
+	}
+});
+
 // Setup toggle button
 var toggleButton = ToggleButton({
 	id: 'pomodoro-toggle-button',
-	label: 'Pomodoro',
+	label: 'Pomodoro Clock',
 	icon: {
 		'16': './Pictures/tomato-icon-16.png',
 		'32': './Pictures/tomato-icon-32.png',
@@ -72,52 +86,9 @@ var toggleButton = ToggleButton({
 	}
 });
 
-// Setup panel
-var panel = panels.Panel({
-	contentURL: self.data.url('panel.html'),
-	width: 130,
-	height: 300,
-	onHide: function() {
-		toggleButton.state('window', { checked: false });
-	}
-});
-
-// Setup Storage
+// Setup storage
 if (!ss.storage.timeline) {
-	ss.storage.timeline = [
-		{ timeout: 1500000, date: '2015-07-01' },
-		{ timeout: 1500000, date: '2015-07-02' },
-		{ timeout: 1500000, date: '2015-07-03' },
-		{ timeout: 1500000, date: '2015-07-04' },
-		{ timeout: 1500000, date: '2015-07-05' },
-		{ timeout: 1500000, date: '2015-07-06' },
-		{ timeout: 1500000, date: '2015-07-06' },
-		{ timeout: 1500000, date: '2015-07-06' },
-		{ timeout: 1500000, date: '2015-07-07' },
-		{ timeout: 1500000, date: '2015-07-08' },
-		{ timeout: 1500000, date: '2015-07-09' },
-		{ timeout: 1500000, date: '2015-07-09' },
-		{ timeout: 1500000, date: '2015-07-09' },
-		{ timeout: 1500000, date: '2015-07-09' },
-		{ timeout: 1500000, date: '2015-07-10' },
-		{ timeout: 1500000, date: '2015-07-11' },
-		{ timeout: 1500000, date: '2015-07-13' },
-		{ timeout: 1500000, date: '2015-07-14' },
-		{ timeout: 1500000, date: '2015-07-15' },
-		{ timeout: 1500000, date: '2015-07-17' },
-		{ timeout: 1500000, date: '2015-07-18' },
-		{ timeout: 1500000, date: '2015-07-21' },
-		{ timeout: 1500000, date: '2015-07-22' },
-		{ timeout: 1500000, date: '2015-07-22' },
-		{ timeout: 1500000, date: '2015-07-22' },
-		{ timeout: 1500000, date: '2015-07-23' },
-		{ timeout: 1500000, date: '2015-07-24' },
-		{ timeout: 1500000, date: '2015-07-25' },
-		{ timeout: 1500000, date: '2015-07-27' },
-		{ timeout: 1500000, date: '2015-07-27' },
-		{ timeout: 1500000, date: '2015-07-27' },
-		{ timeout: 1500000, date: '2015-07-28' },
-	];
+	ss.storage.timeline = [];
 }
 
 ss.on('OverQuota', function() {
@@ -128,17 +99,11 @@ ss.on('OverQuota', function() {
 
 
 
-// Timeout
-var timeout;
-var initialTimeoutTime = 0;
-
-
-
 // Listen for panel events
 panel.port.on('set-timeout', function(time) {
 	resetTimeout();
 
-	timeout = setTimeout(timeoutEnd, time);
+	timeoutID = setTimeout(timeoutEnd, time);
 	initialTimeoutTime = time;
 });
 

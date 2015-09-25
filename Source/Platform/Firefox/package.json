@@ -2,12 +2,12 @@
   "title": "Pomodoro Clock",
   "name": "pomodoro-clock",
   "id": "jid1-Kt2kYYgi32zPuw@jetpack",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "An extension for Pomodoro Technique users.",
   "main": "index.js",
   "author": "Samuel Jun",
   "engines": {
-    "firefox": ">=38.0a1"
+    "firefox": ">= 38.0a1"
   },
   "license": "GPL-3.0",
 
