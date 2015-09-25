@@ -48,6 +48,11 @@ function addTimeoutToTimeline(initialTimeoutTime) {
 	});
 }
 
+function getRemainingTime() {
+	var date = new Date();
+	return initialTimeoutTime - (date.getTime() - timeoutStartTime);
+}
+
 
 
 //
@@ -57,6 +62,7 @@ function addTimeoutToTimeline(initialTimeoutTime) {
 // Timeout
 var timeoutID;
 var initialTimeoutTime = 0;
+var timeoutStartTime = 0;
 
 // Setup panel
 var panel = panels.Panel({
@@ -65,6 +71,12 @@ var panel = panels.Panel({
 	height: 300,
 	onHide: function() {
 		toggleButton.state('window', { checked: false });
+	},
+	onShow: function() {
+		var remainingTime = getRemainingTime();
+		if (remainingTime > 0) {
+			panel.port.emit('show', remainingTime);
+		}
 	}
 });
 
@@ -105,6 +117,7 @@ panel.port.on('set-timeout', function(time) {
 
 	timeoutID = setTimeout(timeoutEnd, time);
 	initialTimeoutTime = time;
+	timeoutStartTime = (new Date()).getTime();
 });
 
 panel.port.on('reset-timeout', resetTimeout);

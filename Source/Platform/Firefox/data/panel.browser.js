@@ -9,3 +9,7 @@ function setBrowserTimer(ms) {
 function resetBrowserTimer() {
 	addon.port.emit('reset-timeout');
 }
+
+addon.port.on('show', function(time) {
+	setTimeInterval(time);
+});
