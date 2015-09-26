@@ -18,12 +18,12 @@ var { setTimeout, clearTimeout } = require('sdk/timers');
 
 function resetTimeout() {
 	clearTimeout(timeoutID);
-	initialTimeoutTime = 0;
+	timeoutDelay = 0;
 }
 
-function msToTime(duration) {
-	var seconds = parseInt((duration/1000)%60);
-	var minutes = parseInt((duration/(1000*60))%60);
+function millisecondsToTimeText(milliseconds) {
+	var seconds = parseInt((milliseconds / 1000) % 60);
+	var minutes = parseInt((milliseconds / (1000 * 60)) % 60);
 
 	minutes = (minutes < 10) ? '0' + minutes : minutes;
 	seconds = (seconds < 10) ? '0' + seconds : seconds;
@@ -34,23 +34,23 @@ function msToTime(duration) {
 function timeoutEnd() {
 	notifications.notify({
 		title: 'Pomodoro Clock',
-		text: 'End of ' + msToTime(initialTimeoutTime) + ' timer',
+		text: 'End of ' + millisecondsToTimeText(timeoutDelay) + ' timer',
 	});
 
-	addTimeoutToTimeline(initialTimeoutTime);
+	addTimeoutToTimeline(timeoutDelay);
 	resetTimeout();
 }
 
-function addTimeoutToTimeline(initialTimeoutTime) {
+function addTimeoutToTimeline(timeoutDelay) {
 	ss.storage.timeline.push({
-		timeout: initialTimeoutTime,
+		timeout: timeoutDelay,
 		date: new Date()
 	});
 }
 
 function getRemainingTime() {
 	var date = new Date();
-	return initialTimeoutTime - (date.getTime() - timeoutStartTime);
+	return timeoutDelay - (date.getTime() - timeoutStartTime);
 }
 
 
@@ -61,7 +61,7 @@ function getRemainingTime() {
 
 // Timeout
 var timeoutID;
-var initialTimeoutTime = 0;
+var timeoutDelay = 0;
 var timeoutStartTime = 0;
 
 // Setup panel
@@ -112,11 +112,11 @@ ss.on('OverQuota', function() {
 
 
 // Listen for panel events
-panel.port.on('set-timeout', function(time) {
+panel.port.on('set-timeout', function(milliseconds) {
 	resetTimeout();
 
-	timeoutID = setTimeout(timeoutEnd, time);
-	initialTimeoutTime = time;
+	timeoutID = setTimeout(timeoutEnd, milliseconds);
+	timeoutDelay = milliseconds;
 	timeoutStartTime = (new Date()).getTime();
 });
 

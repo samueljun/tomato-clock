@@ -58,7 +58,7 @@ function setBrowserTimer(ms) {
 chrome.alarms.getAll(function(alarms) {
 	for (var i = 0; i < alarms.length; i++) {
 		if (alarms[i].name.startsWith(pomodoroAlarmNamespace)) {
-			setTimeInterval(alarms[i].scheduledTime - Date.now());
+			setPanelInterval(alarms[i].scheduledTime - Date.now());
 			break;
 		}
 	}

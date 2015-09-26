@@ -8,37 +8,38 @@ var currentTimeText = document.getElementById('current-time-text');
 var statsLink = document.getElementById('stats-link');
 var pomodoroTechniqueLink = document.getElementById('pomodoro-technique-link');
 
-var currentTime;
-var interval;
+var intervalID;
+var intervalMillisecondsLeft = 0;
 
-function setTimeInterval(time) {
-	resetTimeInterval();
+function setPanelInterval(milliseconds) {
+	resetPanelInterval();
 
-	currentTime = time;
-	setTimeText(currentTime);
+	intervalMillisecondsLeft = milliseconds;
+	setPanelTimeText(milliseconds);
 
-	interval = setInterval(function() {
-		currentTime -= 1000;
-		setTimeText(currentTime);
+	intervalID = setInterval(function() {
+		intervalMillisecondsLeft -= 1000;
+		setPanelTimeText(intervalMillisecondsLeft);
 
-		if (currentTime <= 0) {
-			clearInterval(interval);
+		if (intervalMillisecondsLeft <= 0) {
+			clearInterval(intervalID);
 		}
 	}, 1000);
 }
 
-function setTimeText(time) {
-	currentTimeText.textContent = msToTime(time);
+function setPanelTimeText(milliseconds) {
+	currentTimeText.textContent = millisecondsToTimeText(milliseconds);
 }
 
-function resetTimeInterval() {
-	setTimeText(0);
-	clearInterval(interval);
+function resetPanelInterval() {
+	setPanelTimeText(0);
+	intervalMillisecondsLeft = 0;
+	clearInterval(intervalID);
 }
 
-function msToTime(time) {
-	var seconds = parseInt((time / 1000) % 60);
-	var minutes = parseInt((time / (1000 * 60)) % 60);
+function millisecondsToTimeText(milliseconds) {
+	var seconds = parseInt((milliseconds / 1000) % 60);
+	var minutes = parseInt((milliseconds / (1000 * 60)) % 60);
 
 	minutes = (minutes < 10) ? '0' + minutes : minutes;
 	seconds = (seconds < 10) ? '0' + seconds : seconds;
@@ -49,27 +50,27 @@ function msToTime(time) {
 
 
 pomodoroButton.addEventListener('click', function(event) {
-	setTimeInterval(1500000);
+	setPanelInterval(1500000);
 	setBrowserTimer(1500000);
 });
 
 fiveMinuteButton.addEventListener('click', function(event) {
-	setTimeInterval(300000);
+	setPanelInterval(300000);
 	setBrowserTimer(300000);
 });
 
 tenMinuteButton.addEventListener('click', function(event) {
-	setTimeInterval(600000);
+	setPanelInterval(600000);
 	setBrowserTimer(600000);
 });
 
 fifteenMinuteButton.addEventListener('click', function(event) {
-	setTimeInterval(900000);
+	setPanelInterval(900000);
 	setBrowserTimer(900000);
 });
 
 resetTimeoutButton.addEventListener('click', function(event) {
-	resetTimeInterval();
+	resetPanelInterval();
 	resetBrowserTimer();
 });
 

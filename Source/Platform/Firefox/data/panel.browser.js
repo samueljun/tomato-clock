@@ -10,6 +10,6 @@ function resetBrowserTimer() {
 	addon.port.emit('reset-timeout');
 }
 
-addon.port.on('show', function(time) {
-	setTimeInterval(time);
+addon.port.on('show', function(milliseconds) {
+	setPanelInterval(milliseconds);
 });
