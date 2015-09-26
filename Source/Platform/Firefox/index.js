@@ -8,18 +8,20 @@ var self = require('sdk/self');
 var ss = require('sdk/simple-storage');
 var tabs = require('sdk/tabs');
 var { ToggleButton } = require('sdk/ui/button/toggle');
-var { setTimeout, clearTimeout } = require('sdk/timers');
+var { setInterval, clearInterval } = require('sdk/timers');
+
+
+
+// Interval
+var intervalID;
+var timer = 0;
+var timerStartTime = 0;
 
 
 
 //
 // Functions
 //
-
-function resetTimeout() {
-	clearTimeout(timeoutID);
-	timeoutDelay = 0;
-}
 
 function millisecondsToTimeText(milliseconds) {
 	var seconds = parseInt((milliseconds / 1000) % 60);
@@ -31,26 +33,49 @@ function millisecondsToTimeText(milliseconds) {
 	return minutes + ':' + seconds;
 }
 
-function timeoutEnd() {
-	notifications.notify({
-		title: 'Pomodoro Clock',
-		text: 'End of ' + millisecondsToTimeText(timeoutDelay) + ' timer',
-	});
-
-	addTimeoutToTimeline(timeoutDelay);
-	resetTimeout();
+function millisecondsToMinutes(milliseconds) {
+	return parseInt(milliseconds / (1000 * 60));
 }
 
-function addTimeoutToTimeline(timeoutDelay) {
+function addTimerToTimeline(milliseconds) {
 	ss.storage.timeline.push({
-		timeout: timeoutDelay,
+		timeout: milliseconds,
 		date: new Date()
 	});
 }
 
 function getRemainingTime() {
 	var date = new Date();
-	return timeoutDelay - (date.getTime() - timeoutStartTime);
+	return timer - (date.getTime() - timerStartTime);
+}
+
+function resetTimer() {
+	clearInterval(intervalID);
+	timer = 0;
+	timerStartTime = 0;
+	toggleButton.badge = null;
+}
+
+function setTimer(milliseconds) {
+	resetTimer();
+	timer = milliseconds;
+	timerStartTime = (new Date()).getTime();
+	toggleButton.badge = millisecondsToMinutes(getRemainingTime());
+
+	intervalID = setInterval(function() {
+		if (getRemainingTime() <= 0) {
+			addTimerToTimeline(timer);
+
+			notifications.notify({
+				title: 'Pomodoro Clock',
+				text: 'End of ' + millisecondsToTimeText(timer) + ' timer',
+			});
+
+			resetTimer();
+		} else {
+			toggleButton.badge = millisecondsToMinutes(getRemainingTime());
+		}
+	}, 1000);
 }
 
 
@@ -58,11 +83,6 @@ function getRemainingTime() {
 //
 // Setup
 //
-
-// Timeout
-var timeoutID;
-var timeoutDelay = 0;
-var timeoutStartTime = 0;
 
 // Setup panel
 var panel = panels.Panel({
@@ -112,15 +132,8 @@ ss.on('OverQuota', function() {
 
 
 // Listen for panel events
-panel.port.on('set-timeout', function(milliseconds) {
-	resetTimeout();
-
-	timeoutID = setTimeout(timeoutEnd, milliseconds);
-	timeoutDelay = milliseconds;
-	timeoutStartTime = (new Date()).getTime();
-});
-
-panel.port.on('reset-timeout', resetTimeout);
+panel.port.on('set-timer', setTimer);
+panel.port.on('reset-timer', resetTimer);
 
 panel.port.on('http://pomodorotechnique.com', function() {
 	tabs.open('http://pomodorotechnique.com');

@@ -3,11 +3,11 @@ function openTab(link) {
 }
 
 function setBrowserTimer(ms) {
-	addon.port.emit('set-timeout', ms);
+	addon.port.emit('set-timer', ms);
 }
 
 function resetBrowserTimer() {
-	addon.port.emit('reset-timeout');
+	addon.port.emit('reset-timer');
 }
 
 addon.port.on('show', function(milliseconds) {

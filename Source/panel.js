@@ -11,6 +11,12 @@ var pomodoroTechniqueLink = document.getElementById('pomodoro-technique-link');
 var intervalID;
 var intervalMillisecondsLeft = 0;
 
+function resetPanelInterval() {
+	setPanelTimeText(0);
+	intervalMillisecondsLeft = 0;
+	clearInterval(intervalID);
+}
+
 function setPanelInterval(milliseconds) {
 	resetPanelInterval();
 
@@ -29,12 +35,6 @@ function setPanelInterval(milliseconds) {
 
 function setPanelTimeText(milliseconds) {
 	currentTimeText.textContent = millisecondsToTimeText(milliseconds);
-}
-
-function resetPanelInterval() {
-	setPanelTimeText(0);
-	intervalMillisecondsLeft = 0;
-	clearInterval(intervalID);
 }
 
 function millisecondsToTimeText(milliseconds) {
