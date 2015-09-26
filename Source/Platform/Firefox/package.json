@@ -1,16 +1,24 @@
 {
-  "title": "Pomodoro Clock",
-  "name": "pomodoro-clock",
-  "id": "jid1-Kt2kYYgi32zPuw@jetpack",
-  "version": "1.2.2",
-  "description": "An extension for Pomodoro Technique users.",
-  "main": "index.js",
-  "author": "Samuel Jun",
-  "engines": {
-    "firefox": ">= 38.0a1"
-  },
-  "license": "GPL-3.0",
+    "title": "Pomodoro Clock",
+    "name": "pomodoro-clock",
+    "id": "jid1-Kt2kYYgi32zPuw@jetpack",
+    "version": "1.2.2",
+    "description": "An extension for Pomodoro Technique users.",
+    "main": "index.js",
+    "author": "Samuel Jun",
+    "engines": {
+        "firefox": ">= 38.0a1"
+    },
+    "license": "GPL-3.0",
 
-  "homepage": "https://github.com/samueljun/Pomodoro-Clock",
-  "permissions": { "private-browsing": true }
+    "homepage": "https://github.com/samueljun/Pomodoro-Clock",
+    "permissions": { "private-browsing": true },
+
+    "preferences": [{
+        "name": "badge",
+        "title": "Minute Badge",
+        "description": "Display a badge indicating the current minute",
+        "type": "bool",
+        "value": true
+    }]
 }

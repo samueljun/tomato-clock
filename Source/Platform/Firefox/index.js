@@ -9,7 +9,7 @@ var ss = require('sdk/simple-storage');
 var tabs = require('sdk/tabs');
 var { ToggleButton } = require('sdk/ui/button/toggle');
 var { setInterval, clearInterval } = require('sdk/timers');
-
+var simplePrefs = require('sdk/simple-prefs');
 
 
 // Interval
@@ -53,14 +53,17 @@ function resetTimer() {
 	clearInterval(intervalID);
 	timer = 0;
 	timerStartTime = 0;
-	toggleButton.badge = null;
+	toggleButton.badge = undefined;
 }
 
 function setTimer(milliseconds) {
 	resetTimer();
 	timer = milliseconds;
 	timerStartTime = (new Date()).getTime();
-	toggleButton.badge = millisecondsToMinutes(getRemainingTime());
+
+	if (simplePrefs.prefs['badge'] === true) {
+		toggleButton.badge = millisecondsToMinutes(getRemainingTime());
+	}
 
 	intervalID = setInterval(function() {
 		if (getRemainingTime() <= 0) {
@@ -73,7 +76,9 @@ function setTimer(milliseconds) {
 
 			resetTimer();
 		} else {
-			toggleButton.badge = millisecondsToMinutes(getRemainingTime());
+			if (simplePrefs.prefs['badge'] === true) {
+				toggleButton.badge = millisecondsToMinutes(getRemainingTime());
+			}
 		}
 	}, 1000);
 }
@@ -131,7 +136,7 @@ ss.on('OverQuota', function() {
 
 
 
-// Listen for panel events
+// Listen for events
 panel.port.on('set-timer', setTimer);
 panel.port.on('reset-timer', resetTimer);
 
@@ -166,4 +171,12 @@ panel.port.on('stats.html', function() {
 	});
 
 	panel.hide();
+});
+
+simplePrefs.on('badge', function() {
+	if (simplePrefs.prefs['badge'] === true) {
+		toggleButton.badge = millisecondsToMinutes(getRemainingTime());
+	} else {
+		toggleButton.badge = undefined;
+	}
 });
