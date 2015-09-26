@@ -54,6 +54,11 @@ function resetTimer() {
 	timer = 0;
 	timerStartTime = 0;
 	toggleButton.badge = undefined;
+	toggleButton.icon = {
+		'16': './Pictures/tomato-icon-inactive-16.png',
+		'32': './Pictures/tomato-icon-inactive-32.png',
+		'64': './Pictures/tomato-icon-inactive-64.png'
+	};
 }
 
 function setTimer(milliseconds) {
@@ -64,6 +69,11 @@ function setTimer(milliseconds) {
 	if (simplePrefs.prefs['badge'] === true) {
 		toggleButton.badge = millisecondsToMinutes(getRemainingTime());
 	}
+	toggleButton.icon = {
+		'16': './Pictures/tomato-icon-16.png',
+		'32': './Pictures/tomato-icon-32.png',
+		'64': './Pictures/tomato-icon-64.png'
+	};
 
 	intervalID = setInterval(function() {
 		if (getRemainingTime() <= 0) {
@@ -110,9 +120,9 @@ var toggleButton = ToggleButton({
 	id: 'pomodoro-toggle-button',
 	label: 'Pomodoro Clock',
 	icon: {
-		'16': './Pictures/tomato-icon-16.png',
-		'32': './Pictures/tomato-icon-32.png',
-		'64': './Pictures/tomato-icon-64.png'
+		'16': './Pictures/tomato-icon-inactive-16.png',
+		'32': './Pictures/tomato-icon-inactive-32.png',
+		'64': './Pictures/tomato-icon-inactive-64.png'
 	},
 	onChange: function(state) {
 		if (state.checked) {
