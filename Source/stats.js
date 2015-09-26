@@ -17,9 +17,10 @@ var Stats = function() {
 	Chart.defaults.global.responsive = true;
 
 	that.resetStatsButton.addEventListener('click', function(event) {
-		console.log('yes');
-		that.timeline.resetTimeline();
-		that.resetDateRange();
+		if (confirm('Are you sure you want to reset your stats?')) {
+			that.timeline.resetTimeline();
+			that.resetDateRange();
+		}
 	});
 
 	that.timeline = new Timeline();
