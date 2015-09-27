@@ -2,7 +2,7 @@
     "title": "Pomodoro Clock",
     "name": "pomodoro-clock",
     "id": "jid1-Kt2kYYgi32zPuw@jetpack",
-    "version": "1.2.2",
+    "version": "1.3.0",
     "description": "An extension for Pomodoro Technique users.",
     "main": "index.js",
     "author": "Samuel Jun",
