@@ -4,6 +4,6 @@
 
 echo "*** Pomodoro Clock: Cleaning"
 
-rm -rf Distribution/*
+rm -rf dist/*
 
 echo "*** Pomodoro Clock: Done cleaning"

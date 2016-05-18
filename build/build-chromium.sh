@@ -4,18 +4,18 @@
 
 echo "*** Pomodoro Clock for Chromium: Copying files"
 
-DES=Distribution/Chromium
+DES=dist/chromium
 rm -rf $DES
 mkdir -p $DES
 
-cp -R Source/Platform/Chromium/* $DES/
-cp -R Source/Libraries $DES/
-cp -R Source/Pictures $DES/
-cp -R Source/panel.* $DES/
-cp -R Source/stats.* $DES/
-cp -R Source/timeline.* $DES/
+cp -R src/platform/chromium/* $DES/
+cp -R src/lib $DES/
+cp -R src/img $DES/
+cp -R src/panel.* $DES/
+cp -R src/stats.* $DES/
+cp -R src/timeline.* $DES/
 
-echo "*** Pomodoro Clock for Chromium: Done copying files to /Distribution/Chromium"
+echo "*** Pomodoro Clock for Chromium: Done copying files to /dist/chromium"
 
 
 
