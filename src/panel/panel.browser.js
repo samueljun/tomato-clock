@@ -1,14 +1,14 @@
 var pomodoroAlarmNamespace = 'pomodoroClockAlarm';
 
 function openTab(link) {
-	chrome.tabs.create({
+	browser.tabs.create({
 		url: link
 	});
 }
 
 function resetBrowserTimer() {
 	var promise = new Promise(function(resolve, reject) {
-		chrome.alarms.getAll(function(alarms) {
+		browser.alarms.getAll(function(alarms) {
 			var promises = [];
 
 			for (var i = 0; i < alarms.length; i++) {
@@ -16,7 +16,7 @@ function resetBrowserTimer() {
 
 				if (alarmName.startsWith(pomodoroAlarmNamespace)) {
 					promises.push(new Promise(function(resolve1, reject1) {
-						chrome.alarms.clear(alarmName, function(wasCleared) {
+						browser.alarms.clear(alarmName, function(wasCleared) {
 							resolve1();
 						});
 					}));
@@ -39,11 +39,11 @@ function setBrowserTimer(ms) {
 	var promise = resetBrowserTimer();
 
 	promise.then(function(value) {
-		chrome.alarms.create(pomodoroAlarmNamespace + '.' + minutes, {
+		browser.alarms.create(pomodoroAlarmNamespace + '.' + minutes, {
 			delayInMinutes: minutes
 		});
 
-		chrome.alarms.getAll(function(alarms) {
+		browser.alarms.getAll(function(alarms) {
 			for (var i = 0; i < alarms.length; i++) {
 				var alarmName = alarms[i].name;
 			}
@@ -55,7 +55,7 @@ function setBrowserTimer(ms) {
 }
 
 // Initialize popup with time text
-chrome.alarms.getAll(function(alarms) {
+browser.alarms.getAll(function(alarms) {
 	for (var i = 0; i < alarms.length; i++) {
 		if (alarms[i].name.startsWith(pomodoroAlarmNamespace)) {
 			setPanelInterval(alarms[i].scheduledTime - Date.now());

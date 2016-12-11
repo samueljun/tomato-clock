@@ -79,5 +79,5 @@ pomodoroTechniqueLink.addEventListener('click', function(event) {
 });
 
 statsLink.addEventListener('click', function(event) {
-	openTab('stats.html');
+	openTab('../stats/stats.html');
 });

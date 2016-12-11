@@ -1,7 +1,7 @@
 var pomodoroAlarmNamespace = 'pomodoroClockAlarm';
 var pomodoroNotificationId = 'pomodoroClockNotification';
 
-chrome.alarms.onAlarm.addListener(function(alarm) {
+browser.alarms.onAlarm.addListener(function(alarm) {
 	if (alarm.name.startsWith(pomodoroAlarmNamespace)) {
 		var alarmNameSplit = alarm.name.split('.');
 		var alarmMinutes = alarmNameSplit[1];
@@ -16,11 +16,11 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
 			notificationOptions.message = 'Your Pomodoro timer is done!';
 		}
 
-		chrome.notifications.create(pomodoroNotificationId, notificationOptions);
+		browser.notifications.create(pomodoroNotificationId, notificationOptions);
 
 		// Setup timeline
 		var timeline = [];
-		chrome.storage.sync.get('timeline', function(items) {
+		browser.storage.sync.get('timeline', function(items) {
 			if (items.hasOwnProperty('timeline')) {
 				timeline = items['timeline'];
 			}
@@ -32,15 +32,15 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
 			});
 
 			// Store timeline
-			chrome.storage.sync.set({
+			browser.storage.sync.set({
 				'timeline': timeline
 			});
 		});
 	}
 });
 
-chrome.notifications.onClicked.addListener(function(notificationId) {
+browser.notifications.onClicked.addListener(function(notificationId) {
 	if (notificationId === pomodoroNotificationId) {
-		chrome.notifications.clear(pomodoroNotificationId);
+		browser.notifications.clear(pomodoroNotificationId);
 	}
 });
