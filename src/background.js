@@ -1,6 +1,6 @@
 const ALARM_NAMESPACE = 'pomodoroClockAlarm';
 const NOTIFICATION_ID = 'pomodoroClockNotification';
-const STORAGE_KEY = 'pomodoroTimeline';
+const STORAGE_KEY = 'timeline';
 const MINUTES_IN_POMODORO = 25;
 
 function addAlarmToTimeline(alarmMinutes) {

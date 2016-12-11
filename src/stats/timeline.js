@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'pomodoroTimeline';
+const STORAGE_KEY = 'timeline';
 
 class Timeline {
 	constructor() {
@@ -26,8 +26,8 @@ class Timeline {
 
 	setTimelineFromStorage() {
 		this.promise = new Promise((resolve, reject) => {
-			this.storage.get(STORAGE_KEY).then(({pomodoroTimeline}) => {
-				this.timeline = (pomodoroTimeline || []).map(timelineAlarm => {
+			this.storage.get(STORAGE_KEY).then(({timeline}) => {
+				this.timeline = (timeline || []).map(timelineAlarm => {
 					timelineAlarm.date = new Date(timelineAlarm.date);
 					return timelineAlarm;
 				});
