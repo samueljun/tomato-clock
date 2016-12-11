@@ -3,6 +3,22 @@ const NOTIFICATION_ID = 'pomodoroClockNotification';
 const STORAGE_KEY = 'pomodoroTimeline';
 const MINUTES_IN_POMODORO = 25;
 
+function addAlarmToTimeline(alarmMinutes) {
+	// If sync storage isn't available, use local storage
+	const storage = browser.storage.sync || browser.storage.local;
+
+	storage.get(STORAGE_KEY).then(storageResults => {
+		const timeline = storageResults[STORAGE_KEY] || [];
+
+		timeline.push({
+			timeout: alarmMinutes * 60000,
+			date: new Date().toString() // should be initialized to Date whenever interacted with
+		});
+
+		storage.set({[STORAGE_KEY]: timeline});
+	});
+}
+
 browser.alarms.onAlarm.addListener(alarm => {
 	if (alarm.name.startsWith(ALARM_NAMESPACE)) {
 		const alarmMinutes = parseInt(alarm.name.split('.')[1]);
@@ -19,17 +35,7 @@ browser.alarms.onAlarm.addListener(alarm => {
 
 		browser.browserAction.setBadgeText({text: ''});
 
-		// Setup timeline in storage
-		browser.storage.sync.get(STORAGE_KEY).then(storageResults => {
-			const timeline = storageResults[STORAGE_KEY] || [];
-
-			timeline.push({
-				timeout: alarmMinutes * 60000,
-				date: new Date().toString() // should be initialized to Date whenever interacted with
-			});
-
-			browser.storage.sync.set({[STORAGE_KEY]: timeline});
-		});
+		addAlarmToTimeline(alarmMinutes);
 	}
 });
 
