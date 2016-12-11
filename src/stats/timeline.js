@@ -39,6 +39,6 @@ class Timeline {
 
 	resetTimeline() {
 		this.timeline = [];
-		this.storage.clear();
+		this.storage.remove(STORAGE_KEY);
 	};
 };
