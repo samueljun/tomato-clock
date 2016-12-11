@@ -1,11 +1,11 @@
-var pomodoroAlarmNamespace = 'pomodoroClockAlarm';
-var pomodoroNotificationId = 'pomodoroClockNotification';
+const ALARM_NAMESPACE = 'pomodoroClockAlarm';
+const NOTIFICATION_ID = 'pomodoroClockNotification';
 
 browser.alarms.onAlarm.addListener(function(alarm) {
-	if (alarm.name.startsWith(pomodoroAlarmNamespace)) {
-		var alarmNameSplit = alarm.name.split('.');
-		var alarmMinutes = alarmNameSplit[1];
-		var notificationOptions = {
+	if (alarm.name.startsWith(ALARM_NAMESPACE)) {
+		const alarmNameSplit = alarm.name.split('.');
+		const alarmMinutes = alarmNameSplit[1];
+		const notificationOptions = {
 			type: 'basic',
 			iconUrl: 'Pictures/tomato-icon-64.png',
 			title: 'Pomodoro Clock',
@@ -16,10 +16,10 @@ browser.alarms.onAlarm.addListener(function(alarm) {
 			notificationOptions.message = 'Your Pomodoro timer is done!';
 		}
 
-		browser.notifications.create(pomodoroNotificationId, notificationOptions);
+		browser.notifications.create(NOTIFICATION_ID, notificationOptions);
 
 		// Setup timeline
-		var timeline = [];
+		const timeline = [];
 		browser.storage.sync.get('timeline', function(items) {
 			if (items.hasOwnProperty('timeline')) {
 				timeline = items['timeline'];
@@ -40,7 +40,7 @@ browser.alarms.onAlarm.addListener(function(alarm) {
 });
 
 browser.notifications.onClicked.addListener(function(notificationId) {
-	if (notificationId === pomodoroNotificationId) {
-		browser.notifications.clear(pomodoroNotificationId);
+	if (notificationId === NOTIFICATION_ID) {
+		browser.notifications.clear(NOTIFICATION_ID);
 	}
 });

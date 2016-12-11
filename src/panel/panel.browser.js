@@ -1,4 +1,4 @@
-var pomodoroAlarmNamespace = 'pomodoroClockAlarm';
+const ALARM_NAMESPACE = 'pomodoroClockAlarm';
 
 function openTab(link) {
 	browser.tabs.create({
@@ -7,58 +7,44 @@ function openTab(link) {
 }
 
 function resetBrowserTimer() {
-	var promise = new Promise(function(resolve, reject) {
+	return new Promise(function(resolve, reject) {
+		browser.browserAction.setBadgeText({text: ''});
+
 		browser.alarms.getAll(function(alarms) {
-			var promises = [];
+			const alarmPromises = [];
 
-			for (var i = 0; i < alarms.length; i++) {
-				var alarmName = alarms[i].name;
-
-				if (alarmName.startsWith(pomodoroAlarmNamespace)) {
-					promises.push(new Promise(function(resolve1, reject1) {
-						browser.alarms.clear(alarmName, function(wasCleared) {
-							resolve1();
-						});
-					}));
+			for (let alarm of alarms) {
+				if (alarm.name.startsWith(ALARM_NAMESPACE)) {
+					alarmPromises.push(browser.alarms.clear(alarm.name));
 				}
 			}
 
-			Promise.all(promises).then(function(value) {
-				resolve();
-			}, function(reason) {
-				resolve();
-			});
+			Promise.all(alarmPromises).then(resolve, reject);
 		});
 	});
-
-	return promise;
 }
 
 function setBrowserTimer(ms) {
-	var minutes = ms / 60000;
-	var promise = resetBrowserTimer();
+	const minutes = ms / 60000;
 
-	promise.then(function(value) {
-		browser.alarms.create(pomodoroAlarmNamespace + '.' + minutes, {
+	resetBrowserTimer().then(function() {
+		browser.browserAction.setBadgeText({text: minutes.toString()});
+		browser.browserAction.setBadgeBackgroundColor({color: '#666'});
+
+		browser.alarms.create(ALARM_NAMESPACE + '.' + minutes, {
 			delayInMinutes: minutes
-		});
-
-		browser.alarms.getAll(function(alarms) {
-			for (var i = 0; i < alarms.length; i++) {
-				var alarmName = alarms[i].name;
-			}
 		});
 	}, function(reason) {
 		console.log('resetBrowserTimer() promise rejected: ' + reason);
 	});
-
 }
 
 // Initialize popup with time text
 browser.alarms.getAll(function(alarms) {
-	for (var i = 0; i < alarms.length; i++) {
-		if (alarms[i].name.startsWith(pomodoroAlarmNamespace)) {
-			setPanelInterval(alarms[i].scheduledTime - Date.now());
+
+	for (let alarm of alarms) {
+		if (alarm.name.startsWith(ALARM_NAMESPACE)) {
+			setPanelInterval(alarm.scheduledTime - Date.now());
 			break;
 		}
 	}
