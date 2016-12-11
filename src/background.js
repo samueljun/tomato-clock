@@ -26,7 +26,7 @@ browser.alarms.onAlarm.addListener(alarm => {
 
 		browser.notifications.create(NOTIFICATION_ID, {
 			type: 'basic',
-			iconUrl: 'Pictures/tomato-icon-64.png',
+			iconUrl: '/img/tomato-icon-64.png',
 			title: 'Pomodoro Clock',
 			message: isAlarmPomodoro ?
 				'Your Pomodoro timer is done!' :
