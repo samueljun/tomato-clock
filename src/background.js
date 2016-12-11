@@ -7,7 +7,7 @@ function addAlarmToTimeline(alarmMinutes) {
 	// If sync storage isn't available, use local storage
 	const storage = browser.storage.sync || browser.storage.local;
 
-	storage.get(STORAGE_KEY).then(storageResults => {
+	storage.get(STORAGE_KEY, storageResults => {
 		const timeline = storageResults[STORAGE_KEY] || [];
 
 		timeline.push({

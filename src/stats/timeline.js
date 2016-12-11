@@ -9,8 +9,10 @@ class Timeline {
 
 	_getTimelinePromise() {
 		return new Promise((resolve, reject) => {
-			this.storage.get(STORAGE_KEY).then(({timeline}) => {
-				this.timeline = (timeline || []).map(timelineAlarm => {
+			this.storage.get(STORAGE_KEY, storageResults => {
+				const timeline = storageResults[STORAGE_KEY] || [];
+
+				this.timeline = timeline.map(timelineAlarm => {
 					timelineAlarm.date = new Date(timelineAlarm.date);
 					return timelineAlarm;
 				});

@@ -60,7 +60,7 @@ class Panel {
 		});
 
 		document.getElementById('stats-link').addEventListener('click', () => {
-			browser.tabs.create({url: '../stats/stats.html'});
+			browser.tabs.create({url: '/src/stats/stats.html'});
 		});
 	}
 
