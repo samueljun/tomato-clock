@@ -1,45 +1,51 @@
-//
-// Timeline Class
-//
+const STORAGE_KEY = 'pomodoroTimeline';
 
-var Timeline = function() {
-	var that = this;
-
-	that.promise;
-	that.timeline = [];
-	that.updateTimeline();
-};
-
-//
-// Timeline Functions
-//
-
-Timeline.prototype._processTimeline = function(timeline) {
-	// Convert date strings to native Date objects
-	for (var i = 0; i < timeline.length; i++) {
-		timeline[i].date = new Date(timeline[i].date);
+class Timeline {
+	constructor() {
+		this.storage = browser.storage.sync || browser.storage.local;
+		this.promise;
+		this.timeline = [];
+		this.setTimelineFromStorage();
 	}
-};
 
-Timeline.prototype.getTimeline = function() {
-	return this.timeline;
-};
+	getTimeline() {
+		return this.timeline;
+	};
 
-// Inclusive date range
-Timeline.prototype.getFilteredTimeline = function(startDate, endDate) {
-	var filteredTimeline = [];
+	getPromise() {
+		return this.promise;
+	}
 
-	for (var i = 0; i < this.timeline.length; i++) {
-		var currentDate = this.timeline[i].date;
-
-		if (currentDate >= startDate && currentDate <= endDate) {
-			filteredTimeline.push(this.timeline[i]);
+	processTimeline(timeline) {
+		// Convert date strings to native Date objects
+		for (let timelineAlarm of timeline) {
+			timelineAlarm.date = new Date(timelineAlarm.date);
 		}
-	}
+	};
 
-	return filteredTimeline;
-};
+	// Inclusive date range
+	getFilteredTimeline(startDate, endDate) {
+		return this.timeline.filter(timelineAlarm => {
+			return timelineAlarm.date >= startDate && timelineAlarm.date <= endDate;
+		});
+	};
 
-Timeline.prototype.getPromise = function() {
-	return this.promise;
+
+	setTimelineFromStorage() {
+		this.promise = new Promise((resolve, reject) => {
+			this.storage.get(STORAGE_KEY).then(({pomodoroTimeline}) => {
+				this.timeline = (pomodoroTimeline || []).map(timelineAlarm => {
+					timelineAlarm.date = new Date(timelineAlarm.date);
+					return timelineAlarm;
+				});
+
+				resolve();
+			});
+		});
+	};
+
+	resetTimeline() {
+		this.timeline = [];
+		this.storage.clear();
+	};
 };
