@@ -16,13 +16,6 @@ class Timeline {
 		return this.promise;
 	}
 
-	processTimeline(timeline) {
-		// Convert date strings to native Date objects
-		for (let timelineAlarm of timeline) {
-			timelineAlarm.date = new Date(timelineAlarm.date);
-		}
-	};
-
 	// Inclusive date range
 	getFilteredTimeline(startDate, endDate) {
 		return this.timeline.filter(timelineAlarm => {
