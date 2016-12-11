@@ -102,7 +102,7 @@ function resetBrowserTimer() {
 	return new Promise((resolve, reject) => {
 		browser.browserAction.setBadgeText({text: ''});
 
-		browser.alarms.getAll((alarms) => {
+		browser.alarms.getAll(alarms => {
 			const alarmPromises = [];
 
 			for (let alarm of alarms) {
@@ -131,7 +131,7 @@ function setBrowserTimer(ms) {
 }
 
 // Initialize popup with time text
-browser.alarms.getAll((alarms) => {
+browser.alarms.getAll(alarms => {
 	for (let alarm of alarms) {
 		if (alarm.name.startsWith(ALARM_NAMESPACE)) {
 			setPanelInterval(alarm.scheduledTime - Date.now());

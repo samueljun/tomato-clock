@@ -1,64 +1,14 @@
-//
-// Stats Class
-//
+function getZeroArray(length) {
+	var x = [];
 
-var Stats = function() {
-	var that = this;
-
-	// Get DOM Elements
-	that.pomodorosCount = document.getElementById('pomodoros-count');
-	that.fiveMinuteBreaksCount = document.getElementById('five-minute-breaks-count');
-	that.tenMinuteBreaksCount = document.getElementById('ten-minute-breaks-count');
-	that.fifteenMinuteBreaksCount = document.getElementById('fifteen-minute-breaks-count');
-	that.resetStatsButton = document.getElementById('reset-stats-button');
-
-	that.ctx = document.getElementById('finished-pomodoro-dates-chart').getContext('2d');
-	that.finishedPomodorosChart;
-	Chart.defaults.global.responsive = true;
-
-	that.resetStatsButton.addEventListener('click', function(event) {
-		if (confirm('Are you sure you want to reset your stats?')) {
-			that.timeline.resetTimeline();
-			that.resetDateRange();
-		}
-	});
-
-	that.timeline = new Timeline();
-	that.timeline.getPromise().then(() => that.resetDateRange());
-};
-
-//
-// Stats Functions
-//
-
-Stats.prototype.resetDateRange = function() {
-	var momentCurrentDate = moment();
-	var momentLastWeek = moment().subtract(6, 'days');
-
-	this.changeStatDates(momentLastWeek.toDate(), momentCurrentDate.toDate());
-}
-
-Stats.prototype.addPomodoroDateToChartData = function(data, date) {
-	for (var i = 0; i < data.labels.length; i++) {
-		if (data.labels[i] == date.toDateString()) {
-			data.datasets[0].data[i]++;
-			break;
-		}
-	}
-}
-
-Stats.prototype._getDateRangeArray = function(startDate, endDate) {
-	var dateArray = [];
-
-	while (startDate <= endDate) {
-		dateArray.push(startDate);
-		startDate.setDate(startDate.getDate() + 1);
+	for (var i = 0; i < length; i++) {
+		x[i] = 0;
 	}
 
-	return dateArray;
+	return x;
 }
 
-Stats.prototype._getDateRangeStringArray = function(startDate, endDate) {
+function getDateRangeStringArray(startDate, endDate) {
 	var dateStringArray = [];
 
 	while (startDate <= endDate) {
@@ -69,89 +19,124 @@ Stats.prototype._getDateRangeStringArray = function(startDate, endDate) {
 	return dateStringArray;
 }
 
-Stats.prototype._intArray = function(length) {
-	var x = [];
-	for (var i = 0; i < length; i++) {
-		x[i] = 0;
-	}
-	return x;
-}
 
-Stats.prototype.setStatsText = function(stats) {
-	this.pomodorosCount.textContent = stats.pomodoros;
-	this.fiveMinuteBreaksCount.textContent = stats.fiveMinuteBreaks;
-	this.tenMinuteBreaksCount.textContent = stats.tenMinuteBreaks;
-	this.fifteenMinuteBreaksCount.textContent = stats.fifteenMinuteBreaks;
-}
 
-Stats.prototype.changeStatDates = function(startDate, endDate) {
-	var filteredTimeline = this.timeline.getFilteredTimeline(startDate, endDate);
-	var dateRangeStrings = this._getDateRangeStringArray(startDate, endDate);
+class Stats {
+	constructor() {
+		// Get DOM Elements
+		this.pomodorosCount = document.getElementById('pomodoros-count');
+		this.fiveMinuteBreaksCount = document.getElementById('five-minute-breaks-count');
+		this.tenMinuteBreaksCount = document.getElementById('ten-minute-breaks-count');
+		this.fifteenMinuteBreaksCount = document.getElementById('fifteen-minute-breaks-count');
+		this.resetStatsButton = document.getElementById('reset-stats-button');
 
-	var finishedPomodorosChartData = {
-		labels: dateRangeStrings,
-		datasets: [
-			{
-				label: 'Pomodoros',
-				fillColor: 'rgba(255,0,0,0.2)',
-				strokeColor: 'rgba(255,0,0,1)',
-				pointColor: 'rgba(255,0,0,1)',
-				pointStrokeColor: '#fff',
-				pointHighlightFill: '#fff',
-				pointHighlightStroke: 'rgba(220,220,220,1)',
-				data: this._intArray(dateRangeStrings.length)
+		this.ctx = document.getElementById('finished-pomodoro-dates-chart').getContext('2d');
+		this.finishedPomodorosChart;
+
+		this.resetStatsButton.addEventListener('click', () => {
+			if (confirm('Are you sure you want to reset your stats?')) {
+				this.timeline.resetTimeline();
+				this.resetDateRange();
 			}
-		]
-	};
+		});
 
-	var stats = {
-		pomodoros: 0,
-		fiveMinuteBreaks: 0,
-		tenMinuteBreaks: 0,
-		fifteenMinuteBreaks: 0
-	};
+		this.timeline = new Timeline();
+		this.timeline.getTimelinePromise().then(() => this.resetDateRange());
+	}
 
-	// Go through timeline
-	for (var i = 0; i < filteredTimeline.length; i++) {
-		switch (filteredTimeline[i].timeout) {
-			case 1500000:
-				stats.pomodoros++;
-				this.addPomodoroDateToChartData(finishedPomodorosChartData, filteredTimeline[i].date);
+	resetDateRange() {
+		const momentCurrentDate = moment();
+		const momentLastWeek = moment().subtract(6, 'days');
+
+		this.changeStatDates(momentLastWeek.toDate(), momentCurrentDate.toDate());
+	}
+
+	addPomodoroDateToChartData(data, date) {
+		for (var i = 0; i < data.labels.length; i++) {
+			if (data.labels[i] == date.toDateString()) {
+				data.datasets[0].data[i]++;
 				break;
-			case 300000:
-				stats.fiveMinuteBreaks++;
-				break;
-			case 600000:
-				stats.tenMinuteBreaks++;
-				break;
-			case 900000:
-				stats.fifteenMinuteBreaks++;
-				break;
-			default:
-				break;
+			}
 		}
 	}
 
-	this.setStatsText(stats);
-
-	// Setup 'Finished Pomodoros' Line Chart
-	if (this.finishedPomodorosChart) {
-		this.finishedPomodorosChart.destroy();
+	setStatsText(stats) {
+		this.pomodorosCount.textContent = stats.pomodoros;
+		this.fiveMinuteBreaksCount.textContent = stats.fiveMinuteBreaks;
+		this.tenMinuteBreaksCount.textContent = stats.tenMinuteBreaks;
+		this.fifteenMinuteBreaksCount.textContent = stats.fifteenMinuteBreaks;
 	}
 
-	this.finishedPomodorosChart = new Chart(this.ctx).Line(finishedPomodorosChartData);
+	changeStatDates(startDate, endDate) {
+		const filteredTimeline = this.timeline.getFilteredTimeline(startDate, endDate);
+		const dateRangeStrings = getDateRangeStringArray(startDate, endDate);
+
+		const finishedPomodorosChartData = {
+			labels: dateRangeStrings,
+			datasets: [
+				{
+					label: 'Pomodoros',
+					fillColor: 'rgba(255,0,0,0.2)',
+					strokeColor: 'rgba(255,0,0,1)',
+					pointColor: 'rgba(255,0,0,1)',
+					pointStrokeColor: '#fff',
+					pointHighlightFill: '#fff',
+					pointHighlightStroke: 'rgba(220,220,220,1)',
+					data: getZeroArray(dateRangeStrings.length)
+				}
+			]
+		};
+
+		const stats = {
+			pomodoros: 0,
+			fiveMinuteBreaks: 0,
+			tenMinuteBreaks: 0,
+			fifteenMinuteBreaks: 0
+		};
+
+		// Go through timeline
+		for (let timelineAlarm of filteredTimeline) {
+			switch (timelineAlarm.timeout) {
+				case 1500000:
+					stats.pomodoros++;
+					this.addPomodoroDateToChartData(finishedPomodorosChartData, timelineAlarm.date);
+					break;
+				case 300000:
+					stats.fiveMinuteBreaks++;
+					break;
+				case 600000:
+					stats.tenMinuteBreaks++;
+					break;
+				case 900000:
+					stats.fifteenMinuteBreaks++;
+					break;
+				default:
+					break;
+			}
+		}
+
+		this.setStatsText(stats);
+
+		// Setup 'Finished Pomodoros' Line Chart
+		if (this.finishedPomodorosChart) {
+			this.finishedPomodorosChart.destroy();
+		}
+
+		this.finishedPomodorosChart = new Chart(this.ctx).Line(finishedPomodorosChartData);
+	}
 }
 
 
 
-$(document).ready(function() {
-	var stats = new Stats();
+$(document).ready(() => {
+	Chart.defaults.global.responsive = true;
+	const stats = new Stats();
 
 	// Date Picker
-	var momentCurrentDate = moment();
-	var momentLastWeek = moment().subtract(6, 'days');
+	const momentCurrentDate = moment();
+	const momentLastWeek = moment().subtract(6, 'days');
 
-	var $dateRangePicker = $('input[name="daterange"]');
+	const $dateRangePicker = $('input[name="daterange"]');
 	$dateRangePicker.val(momentLastWeek.format('YYYY-MM-DD') + ' to ' + momentCurrentDate.format('YYYY-MM-DD'));
 
 	$dateRangePicker.daterangepicker({
@@ -167,10 +152,10 @@ $(document).ready(function() {
 			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
 		}
 	},
-	function(momentStartDate, momentEndDate, label) {
+	(momentStartDate, momentEndDate, label) => {
 		// Convert Moment dates to native JS dates
-		var startDate = momentStartDate.toDate();
-		var endDate = momentEndDate.toDate();
+		const startDate = momentStartDate.toDate();
+		const endDate = momentEndDate.toDate();
 
 		stats.changeStatDates(startDate, endDate);
 	});
