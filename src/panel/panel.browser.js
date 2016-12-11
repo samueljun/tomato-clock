@@ -1,16 +1,14 @@
 const ALARM_NAMESPACE = 'pomodoroClockAlarm';
 
-function openTab(link) {
-	browser.tabs.create({
-		url: link
-	});
+function openTab(url) {
+	browser.tabs.create({url});
 }
 
 function resetBrowserTimer() {
-	return new Promise(function(resolve, reject) {
+	return new Promise((resolve, reject) => {
 		browser.browserAction.setBadgeText({text: ''});
 
-		browser.alarms.getAll(function(alarms) {
+		browser.alarms.getAll((alarms) => {
 			const alarmPromises = [];
 
 			for (let alarm of alarms) {
@@ -25,23 +23,21 @@ function resetBrowserTimer() {
 }
 
 function setBrowserTimer(ms) {
-	const minutes = ms / 60000;
+	const delayInMinutes = ms / 60000;
 
-	resetBrowserTimer().then(function() {
-		browser.browserAction.setBadgeText({text: minutes.toString()});
+	resetBrowserTimer().then(() => {
+		browser.browserAction.setBadgeText({text: delayInMinutes.toString()});
 		browser.browserAction.setBadgeBackgroundColor({color: '#666'});
 
-		browser.alarms.create(ALARM_NAMESPACE + '.' + minutes, {
-			delayInMinutes: minutes
-		});
-	}, function(reason) {
+		const alarmName = `${ALARM_NAMESPACE}.${delayInMinutes}`;
+		browser.alarms.create(alarmName, {delayInMinutes});
+	}, (reason) => {
 		console.log('resetBrowserTimer() promise rejected: ' + reason);
 	});
 }
 
 // Initialize popup with time text
-browser.alarms.getAll(function(alarms) {
-
+browser.alarms.getAll((alarms) => {
 	for (let alarm of alarms) {
 		if (alarm.name.startsWith(ALARM_NAMESPACE)) {
 			setPanelInterval(alarm.scheduledTime - Date.now());

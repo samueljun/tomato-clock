@@ -1,15 +1,24 @@
-var pomodoroButton = document.getElementById('pomodoro-button');
-var fiveMinuteButton = document.getElementById('five-minute-button');
-var tenMinuteButton = document.getElementById('ten-minute-button');
-var fifteenMinuteButton = document.getElementById('fifteen-minute-button');
-var resetTimeoutButton = document.getElementById('reset-timeout-button');
+const minsInMs = {
+	5: 300000,
+	10: 600000,
+	15: 900000,
+	25: 1500000
+}
 
-var currentTimeText = document.getElementById('current-time-text');
-var statsLink = document.getElementById('stats-link');
-var pomodoroTechniqueLink = document.getElementById('pomodoro-technique-link');
+const pomodoroButton = document.getElementById('pomodoro-button');
+const fiveMinuteButton = document.getElementById('five-minute-button');
+const tenMinuteButton = document.getElementById('ten-minute-button');
+const fifteenMinuteButton = document.getElementById('fifteen-minute-button');
+const resetTimeoutButton = document.getElementById('reset-timeout-button');
 
-var intervalID;
-var intervalMillisecondsLeft = 0;
+const currentTimeText = document.getElementById('current-time-text');
+const statsLink = document.getElementById('stats-link');
+const pomodoroTechniqueLink = document.getElementById('pomodoro-technique-link');
+
+
+
+let intervalID;
+let intervalMillisecondsLeft = 0;
 
 function resetPanelInterval() {
 	setPanelTimeText(0);
@@ -38,8 +47,8 @@ function setPanelTimeText(milliseconds) {
 }
 
 function millisecondsToTimeText(milliseconds) {
-	var seconds = parseInt((milliseconds / 1000) % 60);
-	var minutes = parseInt((milliseconds / (1000 * 60)) % 60);
+	let minutes = parseInt((milliseconds / (1000 * 60)) % 60);
+	let seconds = parseInt((milliseconds / 1000) % 60);
 
 	minutes = (minutes < 10) ? '0' + minutes : minutes;
 	seconds = (seconds < 10) ? '0' + seconds : seconds;
@@ -49,35 +58,35 @@ function millisecondsToTimeText(milliseconds) {
 
 
 
-pomodoroButton.addEventListener('click', function(event) {
-	setPanelInterval(1500000);
-	setBrowserTimer(1500000);
+pomodoroButton.addEventListener('click', () => {
+	setPanelInterval(minsInMs['25']);
+	setBrowserTimer(minsInMs['25']);
 });
 
-fiveMinuteButton.addEventListener('click', function(event) {
-	setPanelInterval(300000);
-	setBrowserTimer(300000);
+fiveMinuteButton.addEventListener('click', () => {
+	setPanelInterval(minsInMs['5']);
+	setBrowserTimer(minsInMs['5']);
 });
 
-tenMinuteButton.addEventListener('click', function(event) {
-	setPanelInterval(600000);
-	setBrowserTimer(600000);
+tenMinuteButton.addEventListener('click', () => {
+	setPanelInterval(minsInMs['10']);
+	setBrowserTimer(minsInMs['10']);
 });
 
-fifteenMinuteButton.addEventListener('click', function(event) {
-	setPanelInterval(900000);
-	setBrowserTimer(900000);
+fifteenMinuteButton.addEventListener('click', () => {
+	setPanelInterval(minsInMs['15']);
+	setBrowserTimer(minsInMs['15']);
 });
 
-resetTimeoutButton.addEventListener('click', function(event) {
+resetTimeoutButton.addEventListener('click', () => {
 	resetPanelInterval();
 	resetBrowserTimer();
 });
 
-pomodoroTechniqueLink.addEventListener('click', function(event) {
+pomodoroTechniqueLink.addEventListener('click', () => {
 	openTab('http://pomodorotechnique.com');
 });
 
-statsLink.addEventListener('click', function(event) {
+statsLink.addEventListener('click', () => {
 	openTab('../stats/stats.html');
 });
