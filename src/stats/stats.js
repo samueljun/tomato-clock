@@ -24,9 +24,7 @@ var Stats = function() {
 	});
 
 	that.timeline = new Timeline();
-	that.timeline.getPromise().then(function() {
-		that.resetDateRange();
-	});
+	that.timeline.getPromise().then(() => that.resetDateRange());
 };
 
 //
