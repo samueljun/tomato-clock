@@ -135,6 +135,8 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			background.setInterval(request.data.milliseconds);
 			break;
 		case 'getIntervalScheduledTime':
+			// Hack because of difference in chrome and firefox
+			// Check if polyfill fixes the issue
 			if (sendResponse) {
 				sendResponse(background.getIntervalScheduledTime());
 			}
