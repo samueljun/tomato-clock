@@ -24,13 +24,13 @@
       "256": "/img/tomato-icon-256.png"
     },
     "default_title": "Pomodoro Clock",
-    "default_popup": "/src/panel/panel.html"
+    "default_popup": "/panel/panel.html"
   },
 
   "background": {
     "scripts": [
       "/lib/browser-polyfill.js",
-      "/src/background.js"
+      "background.js"
     ]
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",

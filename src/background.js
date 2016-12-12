@@ -117,6 +117,7 @@ class Background {
 }
 
 
+
 const background = new Background();
 
 browser.notifications.onClicked.addListener(notificationId => {
@@ -135,7 +136,8 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			break;
 		case 'getIntervalScheduledTime':
 			sendResponse(background.getIntervalScheduledTime());
+			break;
 		default:
 			break;
 	}
-})
+});
