@@ -135,7 +135,10 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			background.setInterval(request.data.milliseconds);
 			break;
 		case 'getIntervalScheduledTime':
-			sendResponse(background.getIntervalScheduledTime());
+			if (sendResponse) {
+				sendResponse(background.getIntervalScheduledTime());
+			}
+			return background.getIntervalScheduledTime();
 			break;
 		default:
 			break;
