@@ -1,19 +1,19 @@
 const ALARM_NAMESPACE = 'pomodoroClockAlarm';
-const minsInMs = {
-	5: 300000,
-	10: 600000,
-	15: 900000,
-	25: 1500000
+
+function getSecondsInMilliseconds(seconds) {
+	return seconds * 1000;
+}
+function getMinutesInMilliseconds(minutes) {
+	return minutes * 60000;
 }
 
 function millisecondsToTimeText(milliseconds) {
-	let minutes = parseInt((milliseconds / (1000 * 60)) % 60);
-	let seconds = parseInt((milliseconds / 1000) % 60);
+	const minutes = parseInt((milliseconds / (1000 * 60)) % 60);
+	const seconds = parseInt((milliseconds / 1000) % 60);
+	const minutesString = (minutes < 10) ? `0${minutes}` : minutes.toString();
+	const secondsString = (seconds < 10) ? `0${seconds}` : seconds.toString();
 
-	minutes = (minutes < 10) ? '0' + minutes : minutes;
-	seconds = (seconds < 10) ? '0' + seconds : seconds;
-
-	return minutes + ':' + seconds;
+	return `${minutesString}:${secondsString}`;
 }
 
 
@@ -23,36 +23,44 @@ class Panel {
 		this.currentTimeText = document.getElementById('current-time-text');
 		this.interval = {
 			id: null,
-			millisecondsLeft: 0
+			timeLeft: 0
 		};
+
+		browser.runtime.sendMessage({
+			action: 'getIntervalScheduledTime'
+		}, scheduledTime => {
+			if (scheduledTime) {
+				this.setInterval(scheduledTime - Date.now());
+			}
+		});
 
 		this.setEventListeners();
 	}
 
 	setEventListeners() {
 		document.getElementById('pomodoro-button').addEventListener('click', () => {
-			this.setPanelInterval(minsInMs['25']);
-			this.setBrowserTimer(minsInMs['25']);
+			this.setInterval(getMinutesInMilliseconds(25));
+			this.setBackgroundTimer(getMinutesInMilliseconds(25));
 		});
 
 		document.getElementById('five-minute-button').addEventListener('click', () => {
-			this.setPanelInterval(minsInMs['5']);
-			this.setBrowserTimer(minsInMs['5']);
+			this.setInterval(getMinutesInMilliseconds(5));
+			this.setBackgroundTimer(getMinutesInMilliseconds(5));
 		});
 
 		document.getElementById('ten-minute-button').addEventListener('click', () => {
-			this.setPanelInterval(minsInMs['10']);
-			this.setBrowserTimer(minsInMs['10']);
+			this.setInterval(getMinutesInMilliseconds(10));
+			this.setBackgroundTimer(getMinutesInMilliseconds(10));
 		});
 
 		document.getElementById('fifteen-minute-button').addEventListener('click', () => {
-			this.setPanelInterval(minsInMs['15']);
-			this.setBrowserTimer(minsInMs['15']);
+			this.setInterval(getMinutesInMilliseconds(15));
+			this.setBackgroundTimer(getMinutesInMilliseconds(15));
 		});
 
 		document.getElementById('reset-timeout-button').addEventListener('click', () => {
-			this.resetPanelInterval();
-			this.resetBrowserTimer();
+			this.resetInterval();
+			this.resetBackgroundTimer();
 		});
 
 		document.getElementById('pomodoro-technique-link').addEventListener('click', () => {
@@ -64,64 +72,53 @@ class Panel {
 		});
 	}
 
-	resetPanelInterval() {
-		this.setPanelTimeText(0);
+	resetInterval() {
 		clearInterval(this.interval.id);
-		this.interval.millisecondsLeft = 0;
+		this.interval = {
+			id: null,
+			timeLeft: 0
+		}
+
+		this.setCurrentTimeText(0);
 	}
 
-	setPanelInterval(milliseconds) {
-		this.resetPanelInterval();
-		this.setPanelTimeText(milliseconds);
+	setInterval(milliseconds) {
+		this.resetInterval();
+		this.setCurrentTimeText(milliseconds);
 
 		this.interval = {
 			id: setInterval(() => {
-				let {id, millisecondsLeft} = this.interval;
+				const {interval} = this;
 
-				millisecondsLeft -= 1000;
-				this.setPanelTimeText(millisecondsLeft);
+				interval.timeLeft -= getSecondsInMilliseconds(1);
+				this.setCurrentTimeText(interval.timeLeft);
 
-				if (millisecondsLeft <= 0) {
-					clearInterval(id);
+				if (interval.timeLeft <= 0) {
+					this.resetInterval();
 				}
-			}, 1000),
-			millisecondsLeft: milliseconds
+			}, getSecondsInMilliseconds(1)),
+			timeLeft: milliseconds
 		};
 	}
 
-	setPanelTimeText(milliseconds) {
+	setCurrentTimeText(milliseconds) {
 		this.currentTimeText.textContent = millisecondsToTimeText(milliseconds);
 	}
 
-	resetBrowserTimer() {
-		return new Promise((resolve, reject) => {
-			browser.browserAction.setBadgeText({text: ''});
-
-			browser.alarms.getAll(alarms => {
-				const alarmPromises = [];
-
-				for (let alarm of alarms) {
-					if (alarm.name.startsWith(ALARM_NAMESPACE)) {
-						alarmPromises.push(browser.alarms.clear(alarm.name));
-					}
-				}
-
-				Promise.all(alarmPromises).then(resolve, reject);
-			});
+	resetBackgroundTimer() {
+		browser.runtime.sendMessage({
+			action: 'resetInterval'
 		});
 	}
 
-	setBrowserTimer(ms) {
-		const delayInMinutes = ms / 60000;
+	setBackgroundTimer(milliseconds) {
+		const minutes = milliseconds / 60000;
 
-		this.resetBrowserTimer().then(() => {
-			browser.browserAction.setBadgeBackgroundColor({color: '#666'});
-			browser.browserAction.setBadgeText({text: delayInMinutes.toString()});
-
-			const alarmName = `${ALARM_NAMESPACE}.${delayInMinutes}`;
-			browser.alarms.create(alarmName, {delayInMinutes});
-		}, (reason) => {
-			console.log('resetBrowserTimer() promise rejected: ' + reason);
+		browser.runtime.sendMessage({
+			action: 'setInterval',
+			data: {
+				milliseconds
+			}
 		});
 	}
 }
@@ -130,14 +127,4 @@ class Panel {
 
 document.addEventListener('DOMContentLoaded', () => {
 	const panel = new Panel();
-
-	// Initialize popup with time text
-	browser.alarms.getAll(alarms => {
-		for (let alarm of alarms) {
-			if (alarm.name.startsWith(ALARM_NAMESPACE)) {
-				panel.setPanelInterval(alarm.scheduledTime - Date.now());
-				break;
-			}
-		}
-	});
 });
