@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Pomodoro Clock",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "author": "Samuel Jun",
   "description": "A simple extension for Pomodoro Technique users",
 
