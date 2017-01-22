@@ -8,9 +8,9 @@ Note: Due to a trademark complaint, the extension was renamed from Pomodoro Cloc
 
 [Chrome Web Store](https://chrome.google.com/webstore/detail/tomato-clock/enemipdanmallpjakiehedcgjmibjihj)
 
-# Development
+## Development
 
-## Firefox
+### Firefox
 
 * For live reloading in a clean Firefox instance:
 
@@ -25,7 +25,7 @@ Note: Due to a trademark complaint, the extension was renamed from Pomodoro Cloc
   2. Click `Load Temporary Add-on`
   3. Load the `src` folder
 
-## Chromium
+### Chromium
 
 1. Go to `chrome://extensions/`
 2. Enable developer mode
