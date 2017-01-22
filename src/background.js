@@ -1,7 +1,7 @@
-const ALARM_NAMESPACE = 'pomodoroClockAlarm';
-const NOTIFICATION_ID = 'pomodoroClockNotification';
+const ALARM_NAMESPACE = 'tomatoClockAlarm';
+const NOTIFICATION_ID = 'tomatoClockNotification';
 const STORAGE_KEY = 'timeline';
-const MINUTES_IN_POMODORO = 25;
+const MINUTES_IN_TOMATO = 25;
 
 
 
@@ -65,14 +65,14 @@ class Background {
 
 				if (interval.timeLeft <= 0) {
 					const {minutes: totalMinutes} = millisecondsToMinutesAndSeconds(interval.totalTime);
-					const isAlarmPomodoro = totalMinutes === MINUTES_IN_POMODORO;
+					const isAlarmTomato = totalMinutes === MINUTES_IN_TOMATO;
 
 					browser.notifications.create(NOTIFICATION_ID, {
 						type: 'basic',
 						iconUrl: '/img/tomato-icon-64.png',
-						title: 'Pomodoro Clock',
-						message: isAlarmPomodoro ?
-							'Your Pomodoro timer is done!' :
+						title: 'Tomato Clock',
+						message: isAlarmTomato ?
+							'Your Tomato timer is done!' :
 							`Your ${totalMinutes} minute timer is done!`
 					});
 

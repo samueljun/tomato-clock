@@ -24,14 +24,14 @@ function getDateRangeStringArray(startDate, endDate) {
 class Stats {
 	constructor() {
 		// Get DOM Elements
-		this.pomodorosCount = document.getElementById('pomodoros-count');
+		this.tomatoesCount = document.getElementById('tomatoes-count');
 		this.fiveMinuteBreaksCount = document.getElementById('five-minute-breaks-count');
 		this.tenMinuteBreaksCount = document.getElementById('ten-minute-breaks-count');
 		this.fifteenMinuteBreaksCount = document.getElementById('fifteen-minute-breaks-count');
 		this.resetStatsButton = document.getElementById('reset-stats-button');
 
-		this.ctx = document.getElementById('finished-pomodoro-dates-chart').getContext('2d');
-		this.finishedPomodorosChart;
+		this.ctx = document.getElementById('finished-tomato-dates-chart').getContext('2d');
+		this.finishedTomatoesChart;
 
 		this.resetStatsButton.addEventListener('click', () => {
 			if (confirm('Are you sure you want to reset your stats?')) {
@@ -51,7 +51,7 @@ class Stats {
 		this.changeStatDates(momentLastWeek.toDate(), momentCurrentDate.toDate());
 	}
 
-	addPomodoroDateToChartData(data, date) {
+	addTomatoDateToChartData(data, date) {
 		for (var i = 0; i < data.labels.length; i++) {
 			if (data.labels[i] == date.toDateString()) {
 				data.datasets[0].data[i]++;
@@ -61,7 +61,7 @@ class Stats {
 	}
 
 	setStatsText(stats) {
-		this.pomodorosCount.textContent = stats.pomodoros;
+		this.tomatoesCount.textContent = stats.tomatoes;
 		this.fiveMinuteBreaksCount.textContent = stats.fiveMinuteBreaks;
 		this.tenMinuteBreaksCount.textContent = stats.tenMinuteBreaks;
 		this.fifteenMinuteBreaksCount.textContent = stats.fifteenMinuteBreaks;
@@ -71,11 +71,11 @@ class Stats {
 		const filteredTimeline = this.timeline.getFilteredTimeline(startDate, endDate);
 		const dateRangeStrings = getDateRangeStringArray(startDate, endDate);
 
-		const finishedPomodorosChartData = {
+		const finishedTomatoesChartData = {
 			labels: dateRangeStrings,
 			datasets: [
 				{
-					label: 'Pomodoros',
+					label: 'Tomatoes',
 					fillColor: 'rgba(255,0,0,0.2)',
 					strokeColor: 'rgba(255,0,0,1)',
 					pointColor: 'rgba(255,0,0,1)',
@@ -88,7 +88,7 @@ class Stats {
 		};
 
 		const stats = {
-			pomodoros: 0,
+			tomatoes: 0,
 			fiveMinuteBreaks: 0,
 			tenMinuteBreaks: 0,
 			fifteenMinuteBreaks: 0
@@ -98,8 +98,8 @@ class Stats {
 		for (let timelineAlarm of filteredTimeline) {
 			switch (timelineAlarm.timeout) {
 				case 1500000:
-					stats.pomodoros++;
-					this.addPomodoroDateToChartData(finishedPomodorosChartData, timelineAlarm.date);
+					stats.tomatoes++;
+					this.addTomatoDateToChartData(finishedTomatoesChartData, timelineAlarm.date);
 					break;
 				case 300000:
 					stats.fiveMinuteBreaks++;
@@ -117,12 +117,12 @@ class Stats {
 
 		this.setStatsText(stats);
 
-		// Setup 'Finished Pomodoros' Line Chart
-		if (this.finishedPomodorosChart) {
-			this.finishedPomodorosChart.destroy();
+		// Setup 'Finished Tomatoes' Line Chart
+		if (this.finishedTomatoesChart) {
+			this.finishedTomatoesChart.destroy();
 		}
 
-		this.finishedPomodorosChart = new Chart(this.ctx).Line(finishedPomodorosChartData);
+		this.finishedTomatoesChart = new Chart(this.ctx).Line(finishedTomatoesChartData);
 	}
 }
 

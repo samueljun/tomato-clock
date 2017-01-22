@@ -4,6 +4,6 @@ mkdir dist/
 cp -r src/* dist/
 cp LICENSE.txt README.md dist/
 
-rm pomodoro-clock.zip
-(cd dist/ && zip -r pomodoro-clock *)
-mv dist/pomodoro-clock.zip .
+rm tomato-clock.zip
+(cd dist/ && zip -r tomato-clock *)
+mv dist/tomato-clock.zip .

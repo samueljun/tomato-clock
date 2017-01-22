@@ -1,4 +1,4 @@
-const ALARM_NAMESPACE = 'pomodoroClockAlarm';
+const ALARM_NAMESPACE = 'tomatoClockAlarm';
 
 function getSecondsInMilliseconds(seconds) {
 	return seconds * 1000;
@@ -38,7 +38,7 @@ class Panel {
 	}
 
 	setEventListeners() {
-		document.getElementById('pomodoro-button').addEventListener('click', () => {
+		document.getElementById('tomato-button').addEventListener('click', () => {
 			this.setInterval(getMinutesInMilliseconds(25));
 			this.setBackgroundTimer(getMinutesInMilliseconds(25));
 		});
@@ -61,10 +61,6 @@ class Panel {
 		document.getElementById('reset-timeout-button').addEventListener('click', () => {
 			this.resetInterval();
 			this.resetBackgroundTimer();
-		});
-
-		document.getElementById('pomodoro-technique-link').addEventListener('click', () => {
-			browser.tabs.create({url: 'http://pomodorotechnique.com'});
 		});
 
 		document.getElementById('stats-link').addEventListener('click', () => {

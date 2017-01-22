@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Pomodoro Clock",
+  "name": "Tomato Clock",
   "version": "2.0.3",
   "author": "Samuel Jun",
-  "description": "A simple extension for Pomodoro Technique users",
+  "description": "A simple browser extension for managing your productivity.",
 
   "icons": {
     "16": "/img/tomato-icon-16.png",
@@ -23,7 +23,7 @@
       "128": "/img/tomato-icon-128.png",
       "256": "/img/tomato-icon-256.png"
     },
-    "default_title": "Pomodoro Clock",
+    "default_title": "Tomato Clock",
     "default_popup": "/panel/panel.html"
   },
 
