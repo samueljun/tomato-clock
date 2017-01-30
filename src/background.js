@@ -65,19 +65,10 @@ class Background {
 				timer.timeLeft -= getSecondsInMilliseconds(1);
 
 				if (timer.timeLeft <= 0) {
-					const {minutes: totalMinutes} = millisecondsToMinutesAndSeconds(timer.totalTime);
-					const isAlarmTomato = totalMinutes === MINUTES_IN_TOMATO;
+					const {minutes} = millisecondsToMinutesAndSeconds(timer.totalTime);
 
-					browser.notifications.create(NOTIFICATION_ID, {
-						type: 'basic',
-						iconUrl: '/img/tomato-icon-64.png',
-						title: 'Tomato Clock',
-						message: isAlarmTomato ?
-							'Your Tomato timer is done!' :
-							`Your ${totalMinutes} minute timer is done!`
-					});
-
-					this.addAlarmToTimeline(totalMinutes);
+					this.createBrowserNotification(minutes);
+					this.addAlarmToTimeline(minutes);
 					this.resetTimer();
 				} else {
 					const minutesLeft = millisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
@@ -94,6 +85,19 @@ class Background {
 
 		const {minutes} = millisecondsToMinutesAndSeconds(milliseconds);
 		browser.browserAction.setBadgeText({text: minutes.toString()});
+	}
+
+	createBrowserNotification(totalMinutes) {
+		const isAlarmTomato = totalMinutes === MINUTES_IN_TOMATO;
+
+		browser.notifications.create(NOTIFICATION_ID, {
+			type: 'basic',
+			iconUrl: '/assets/img/tomato-icon-64.png',
+			title: 'Tomato Clock',
+			message: isAlarmTomato ?
+				'Your Tomato timer is done!' :
+				`Your ${totalMinutes} minute timer is done!`
+		});
 	}
 
 	getTimerScheduledTime() {
