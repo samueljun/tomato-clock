@@ -21,16 +21,13 @@ function millisecondsToTimeText(milliseconds) {
 class Panel {
 	constructor() {
 		this.currentTimeText = document.getElementById('current-time-text');
-		this.interval = {
-			id: null,
-			timeLeft: 0
-		};
+		this.timer = {};
 
 		browser.runtime.sendMessage({
-			action: 'getIntervalScheduledTime'
+			action: 'getTimerScheduledTime'
 		}, scheduledTime => {
 			if (scheduledTime) {
-				this.setInterval(scheduledTime - Date.now());
+				this.setTimer(scheduledTime - Date.now());
 			}
 		});
 
@@ -39,27 +36,27 @@ class Panel {
 
 	setEventListeners() {
 		document.getElementById('tomato-button').addEventListener('click', () => {
-			this.setInterval(getMinutesInMilliseconds(25));
+			this.setTimer(getMinutesInMilliseconds(25));
 			this.setBackgroundTimer(getMinutesInMilliseconds(25));
 		});
 
 		document.getElementById('five-minute-button').addEventListener('click', () => {
-			this.setInterval(getMinutesInMilliseconds(5));
+			this.setTimer(getMinutesInMilliseconds(5));
 			this.setBackgroundTimer(getMinutesInMilliseconds(5));
 		});
 
 		document.getElementById('ten-minute-button').addEventListener('click', () => {
-			this.setInterval(getMinutesInMilliseconds(10));
+			this.setTimer(getMinutesInMilliseconds(10));
 			this.setBackgroundTimer(getMinutesInMilliseconds(10));
 		});
 
 		document.getElementById('fifteen-minute-button').addEventListener('click', () => {
-			this.setInterval(getMinutesInMilliseconds(15));
+			this.setTimer(getMinutesInMilliseconds(15));
 			this.setBackgroundTimer(getMinutesInMilliseconds(15));
 		});
 
 		document.getElementById('reset-timeout-button').addEventListener('click', () => {
-			this.resetInterval();
+			this.resetTimer();
 			this.resetBackgroundTimer();
 		});
 
@@ -68,29 +65,34 @@ class Panel {
 		});
 	}
 
-	resetInterval() {
-		clearInterval(this.interval.id);
-		this.interval = {
-			id: null,
+	resetTimer() {
+		clearInterval(this.timer.interval);
+
+		this.timer = {
+			interval: null,
 			timeLeft: 0
 		}
 
 		this.setCurrentTimeText(0);
 	}
 
-	setInterval(milliseconds) {
-		this.resetInterval();
+	getTimer() {
+		return this.timer;
+	}
+
+	setTimer(milliseconds) {
+		this.resetTimer();
 		this.setCurrentTimeText(milliseconds);
 
-		this.interval = {
-			id: setInterval(() => {
-				const {interval} = this;
+		this.timer = {
+			interval: setInterval(() => {
+				const timer = this.getTimer();
 
-				interval.timeLeft -= getSecondsInMilliseconds(1);
-				this.setCurrentTimeText(interval.timeLeft);
+				timer.timeLeft -= getSecondsInMilliseconds(1);
+				this.setCurrentTimeText(timer.timeLeft);
 
-				if (interval.timeLeft <= 0) {
-					this.resetInterval();
+				if (timer.timeLeft <= 0) {
+					this.resetTimer();
 				}
 			}, getSecondsInMilliseconds(1)),
 			timeLeft: milliseconds
@@ -103,7 +105,7 @@ class Panel {
 
 	resetBackgroundTimer() {
 		browser.runtime.sendMessage({
-			action: 'resetInterval'
+			action: 'resetTimer'
 		});
 	}
 
@@ -111,7 +113,7 @@ class Panel {
 		const minutes = milliseconds / 60000;
 
 		browser.runtime.sendMessage({
-			action: 'setInterval',
+			action: 'setTimer',
 			data: {
 				milliseconds
 			}

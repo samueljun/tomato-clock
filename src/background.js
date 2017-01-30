@@ -23,9 +23,9 @@ function millisecondsToMinutesAndSeconds(milliseconds) {
 
 class Background {
 	constructor() {
-		this.interval = {};
-		this.currentBadgeText = '';
-		this.resetInterval();
+		this.timer = {};
+		this.badgeText = '';
+		this.resetTimer();
 	}
 
 	getBadgeText() {
@@ -38,14 +38,15 @@ class Background {
 		this.badgeText = text;
 	}
 
-	getInterval() {
-		return this.interval;
+	getTimer() {
+		return this.timer;
 	}
 
-	resetInterval() {
-		clearInterval(this.interval.id);
-		this.interval = {
-			id: null,
+	resetTimer() {
+		clearInterval(this.timer.interval);
+
+		this.timer = {
+			interval: null,
 			scheduledTime: null,
 			totalTime: 0,
 			timeLeft: 0
@@ -54,17 +55,17 @@ class Background {
 		this.setBadgeText('');
 	}
 
-	setInterval(milliseconds) {
-		this.resetInterval();
+	setTimer(milliseconds) {
+		this.resetTimer();
 
-		this.interval = {
-			id: setInterval(() => {
-				const interval = this.getInterval();
+		this.timer = {
+			interval: setInterval(() => {
+				const timer = this.getTimer();
 
-				interval.timeLeft -= getSecondsInMilliseconds(1);
+				timer.timeLeft -= getSecondsInMilliseconds(1);
 
-				if (interval.timeLeft <= 0) {
-					const {minutes: totalMinutes} = millisecondsToMinutesAndSeconds(interval.totalTime);
+				if (timer.timeLeft <= 0) {
+					const {minutes: totalMinutes} = millisecondsToMinutesAndSeconds(timer.totalTime);
 					const isAlarmTomato = totalMinutes === MINUTES_IN_TOMATO;
 
 					browser.notifications.create(NOTIFICATION_ID, {
@@ -77,9 +78,9 @@ class Background {
 					});
 
 					this.addAlarmToTimeline(totalMinutes);
-					this.resetInterval();
+					this.resetTimer();
 				} else {
-					const minutesLeft = millisecondsToMinutesAndSeconds(interval.timeLeft).minutes.toString();
+					const minutesLeft = millisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
 
 					if (this.getBadgeText() !== minutesLeft) {
 						this.setBadgeText(minutesLeft);
@@ -95,8 +96,8 @@ class Background {
 		browser.browserAction.setBadgeText({text: minutes.toString()});
 	}
 
-	getIntervalScheduledTime() {
-		return this.interval.scheduledTime;
+	getTimerScheduledTime() {
+		return this.timer.scheduledTime;
 	}
 
 	addAlarmToTimeline(alarmMinutes) {
@@ -128,19 +129,19 @@ browser.notifications.onClicked.addListener(notificationId => {
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	switch (request.action) {
-		case 'resetInterval':
-			background.resetInterval();
+		case 'resetTimer':
+			background.resetTimer();
 			break;
-		case 'setInterval':
-			background.setInterval(request.data.milliseconds);
+		case 'setTimer':
+			background.setTimer(request.data.milliseconds);
 			break;
-		case 'getIntervalScheduledTime':
+		case 'getTimerScheduledTime':
 			// Hack because of difference in chrome and firefox
 			// Check if polyfill fixes the issue
 			if (sendResponse) {
-				sendResponse(background.getIntervalScheduledTime());
+				sendResponse(background.getTimerScheduledTime());
 			}
-			return background.getIntervalScheduledTime();
+			return background.getTimerScheduledTime();
 			break;
 		default:
 			break;
