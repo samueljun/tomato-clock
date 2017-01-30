@@ -134,7 +134,7 @@ class Stats {
 							ticks: {
 								maxTicksLimit: 5,
 								suggestedMax: 5,
-								beginAtZero:true
+								beginAtZero: true
 							}
 						}]
 					},
