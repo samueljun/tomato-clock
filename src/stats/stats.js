@@ -1,19 +1,21 @@
 function getZeroArray(length) {
-	var x = [];
+	const zeroArray = [];
 
-	for (var i = 0; i < length; i++) {
-		x[i] = 0;
+	for (let i = 0; i < length; i++) {
+		zeroArray[i] = 0;
 	}
 
-	return x;
+	return zeroArray;
 }
 
 function getDateRangeStringArray(startDate, endDate) {
-	var dateStringArray = [];
+	const dateStringArray = [];
 
-	while (startDate <= endDate) {
-		dateStringArray.push(startDate.toDateString());
-		startDate.setDate(startDate.getDate() + 1);
+	const currentStartDate = new Date(startDate);
+	while (currentStartDate <= endDate) {
+		dateStringArray.push(currentStartDate.toDateString());
+
+		currentStartDate.setDate(currentStartDate.getDate() + 1);
 	}
 
 	return dateStringArray;
@@ -30,8 +32,8 @@ class Stats {
 		this.fifteenMinuteBreaksCount = document.getElementById('fifteen-minute-breaks-count');
 		this.resetStatsButton = document.getElementById('reset-stats-button');
 
-		this.ctx = document.getElementById('finished-tomato-dates-chart').getContext('2d');
-		this.finishedTomatoesChart;
+		this.ctx = document.getElementById('completed-tomato-dates-chart').getContext('2d');
+		this.completedTomatoesChart;
 
 		this.resetStatsButton.addEventListener('click', () => {
 			if (confirm('Are you sure you want to reset your stats?')) {
@@ -45,10 +47,10 @@ class Stats {
 	}
 
 	resetDateRange() {
-		const momentCurrentDate = moment();
 		const momentLastWeek = moment().subtract(6, 'days');
+		const momentToday = moment();
 
-		this.changeStatDates(momentLastWeek.toDate(), momentCurrentDate.toDate());
+		this.changeStatDates(momentLastWeek.toDate(), momentToday.toDate());
 	}
 
 	addTomatoDateToChartData(data, date) {
@@ -71,20 +73,17 @@ class Stats {
 		const filteredTimeline = this.timeline.getFilteredTimeline(startDate, endDate);
 		const dateRangeStrings = getDateRangeStringArray(startDate, endDate);
 
-		const finishedTomatoesChartData = {
+		const completedTomatoesChartData = {
 			labels: dateRangeStrings,
-			datasets: [
-				{
-					label: 'Tomatoes',
-					fillColor: 'rgba(255,0,0,0.2)',
-					strokeColor: 'rgba(255,0,0,1)',
-					pointColor: 'rgba(255,0,0,1)',
-					pointStrokeColor: '#fff',
-					pointHighlightFill: '#fff',
-					pointHighlightStroke: 'rgba(220,220,220,1)',
-					data: getZeroArray(dateRangeStrings.length)
-				}
-			]
+			datasets: [{
+				label: 'Tomatoes',
+				fill: true,
+				borderColor: 'rgba(255,0,0,1)',
+				backgroundColor: 'rgba(255,0,0,0.2)',
+				pointBorderColor: '#fff',
+				pointBackgroundColor: 'rgba(255,0,0,1)',
+				data: getZeroArray(dateRangeStrings.length)
+			}]
 		};
 
 		const stats = {
@@ -99,7 +98,7 @@ class Stats {
 			switch (timelineAlarm.timeout) {
 				case 1500000:
 					stats.tomatoes++;
-					this.addTomatoDateToChartData(finishedTomatoesChartData, timelineAlarm.date);
+					this.addTomatoDateToChartData(completedTomatoesChartData, timelineAlarm.date);
 					break;
 				case 300000:
 					stats.fiveMinuteBreaks++;
@@ -117,12 +116,34 @@ class Stats {
 
 		this.setStatsText(stats);
 
-		// Setup 'Finished Tomatoes' Line Chart
-		if (this.finishedTomatoesChart) {
-			this.finishedTomatoesChart.destroy();
+		// Setup 'Completed Tomatoes' Line Chart
+		if (this.completedTomatoesChart) {
+			this.completedTomatoesChart.config.data = completedTomatoesChartData;
+			this.completedTomatoesChart.update();
+		} else {
+			this.completedTomatoesChart = new Chart(this.ctx, {
+				type: 'line',
+				data: completedTomatoesChartData,
+				options: {
+					tooltips: {
+						intersect: false,
+						mode: 'nearest'
+					},
+					scales: {
+						yAxes: [{
+							ticks: {
+								maxTicksLimit: 5,
+								suggestedMax: 5,
+								beginAtZero:true
+							}
+						}]
+					},
+					legend: {
+						position: 'bottom'
+					}
+				}
+			});
 		}
-
-		this.finishedTomatoesChart = new Chart(this.ctx).Line(finishedTomatoesChartData);
 	}
 }
 
@@ -133,16 +154,12 @@ $(document).ready(() => {
 	const stats = new Stats();
 
 	// Date Picker
-	const momentCurrentDate = moment();
 	const momentLastWeek = moment().subtract(6, 'days');
+	const momentToday = moment();
 
-	const $dateRangePicker = $('input[name="daterange"]');
-	$dateRangePicker.val(momentLastWeek.format('YYYY-MM-DD') + ' to ' + momentCurrentDate.format('YYYY-MM-DD'));
-
-	$dateRangePicker.daterangepicker({
-		dateLimit: { months: 1 },
-		format: 'YYYY-MM-DD',
-		separator: ' to ',
+	$('input[name="daterange"]').daterangepicker({
+		startDate: momentLastWeek,
+		endDate: momentToday,
 		ranges: {
 			'Today': [moment(), moment()],
 			'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -151,8 +168,7 @@ $(document).ready(() => {
 			'This Month': [moment().startOf('month'), moment().endOf('month')],
 			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
 		}
-	},
-	(momentStartDate, momentEndDate, label) => {
+	}, (momentStartDate, momentEndDate, label) => {
 		// Convert Moment dates to native JS dates
 		const startDate = momentStartDate.toDate();
 		const endDate = momentEndDate.toDate();
