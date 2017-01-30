@@ -25,6 +25,7 @@ class Background {
 	constructor() {
 		this.timer = {};
 		this.badgeText = '';
+		this.notificationSound = new Audio('/assets/sounds/Portal2_sfx_button_positive.m4a');
 		this.resetTimer();
 	}
 
@@ -90,14 +91,17 @@ class Background {
 	createBrowserNotification(totalMinutes) {
 		const isAlarmTomato = totalMinutes === MINUTES_IN_TOMATO;
 
-		browser.notifications.create(NOTIFICATION_ID, {
-			type: 'basic',
-			iconUrl: '/assets/img/tomato-icon-64.png',
-			title: 'Tomato Clock',
-			message: isAlarmTomato ?
-				'Your Tomato timer is done!' :
-				`Your ${totalMinutes} minute timer is done!`
-		});
+		this.notificationSound.onended = () => {
+			browser.notifications.create(NOTIFICATION_ID, {
+				type: 'basic',
+				iconUrl: '/assets/img/tomato-icon-64.png',
+				title: 'Tomato Clock',
+				message: isAlarmTomato ?
+					'Your Tomato timer is done!' :
+					`Your ${totalMinutes} minute timer is done!`
+			});
+		};
+		this.notificationSound.play();
 	}
 
 	getTimerScheduledTime() {
