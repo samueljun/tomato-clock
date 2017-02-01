@@ -91,16 +91,17 @@ class Background {
 	createBrowserNotification(totalMinutes) {
 		const isAlarmTomato = totalMinutes === MINUTES_IN_TOMATO;
 
-		this.notificationSound.onended = () => {
-			browser.notifications.create(NOTIFICATION_ID, {
-				type: 'basic',
-				iconUrl: '/assets/img/tomato-icon-64.png',
-				title: 'Tomato Clock',
-				message: isAlarmTomato ?
-					'Your Tomato timer is done!' :
-					`Your ${totalMinutes} minute timer is done!`
-			});
-		};
+		// this.notificationSound.onended = () => {
+		browser.notifications.create(NOTIFICATION_ID, {
+			type: 'basic',
+			iconUrl: '/assets/img/tomato-icon-64.png',
+			title: 'Tomato Clock',
+			message: isAlarmTomato ?
+				'Your Tomato timer is done!' :
+				`Your ${totalMinutes} minute timer is done!`
+		});
+		// };
+
 		this.notificationSound.play();
 	}
 
