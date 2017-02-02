@@ -40,22 +40,17 @@ class Panel {
 			this.setBackgroundTimer(getMinutesInMilliseconds(25));
 		});
 
-		document.getElementById('five-minute-button').addEventListener('click', () => {
+		document.getElementById('short-break-button').addEventListener('click', () => {
 			this.setTimer(getMinutesInMilliseconds(5));
 			this.setBackgroundTimer(getMinutesInMilliseconds(5));
 		});
 
-		document.getElementById('ten-minute-button').addEventListener('click', () => {
-			this.setTimer(getMinutesInMilliseconds(10));
-			this.setBackgroundTimer(getMinutesInMilliseconds(10));
-		});
-
-		document.getElementById('fifteen-minute-button').addEventListener('click', () => {
+		document.getElementById('long-break-button').addEventListener('click', () => {
 			this.setTimer(getMinutesInMilliseconds(15));
 			this.setBackgroundTimer(getMinutesInMilliseconds(15));
 		});
 
-		document.getElementById('reset-timeout-button').addEventListener('click', () => {
+		document.getElementById('reset-button').addEventListener('click', () => {
 			this.resetTimer();
 			this.resetBackgroundTimer();
 		});
