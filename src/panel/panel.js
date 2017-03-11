@@ -30,10 +30,15 @@ class Panel {
 	
 	updateTimeBlockDisplay(serializedTimeBlocks) {
 		if (serializedTimeBlocks) {
-			serializedTimeBlocks = JSON.parse(serializedTimeBlocks);
-			for(var pos=0; pos<6; pos++) {
+			const timeBlocks = JSON.parse(serializedTimeBlocks);
+			if(timeBlocks.length > 5) {
+				$("#second-row").show();
+			} else {
+				$("#second-row").hide();
+			}
+			for(var pos=0; pos<12; pos++) {
 				const block = $('#queue-pos-' + pos);
-				const time = serializedTimeBlocks[pos];
+				const time = timeBlocks[pos];
 				block.removeClass('btn-danger btn-info btn-primary');
 				if(time == getMinutesInMilliseconds(DEFAULTS[TOMATO_TIME_KEY])) {
 					block.addClass('btn-danger');

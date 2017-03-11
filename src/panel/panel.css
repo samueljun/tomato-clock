@@ -25,12 +25,20 @@
 	padding-top: 4px;
 }
 
-.top-row-left {
+.top-row-outer {
 	float: left;
-	width: 33%;
+	width: 25%;
 }
 
-.top-row-right {
-	float: right;
+.top-row-center {
+	float: left;
+	width: 50%;
 }
+
+.large {
+	padding: 5px 0px;
+	font-size: 30px;
+	color: black;
+}
+
 
