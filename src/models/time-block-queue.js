@@ -10,6 +10,12 @@ class TimeBlockQueue {
 		this.checkForAndExecuteNextTimeBlock(timer); 
 	}
 	
+	remove(index) {
+		if(index >= 0) {
+			this.timeBlocks.splice(index, 1);
+		}
+	}
+	
 	checkForAndExecuteNextTimeBlock(timer) {
 		if(!timer.isRunning()) {
 			var milliseconds = this.timeBlocks.shift();

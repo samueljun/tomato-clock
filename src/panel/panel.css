@@ -15,8 +15,14 @@
 }
 
 .time-block {
-	margin: 2px 0px;
+	margin: 2px 2px;
+	width: calc(100%/6 - 4px);
 	height: 25px;
+	border: 1px grey dotted;
+}
+
+.queue {
+	padding-top: 4px;
 }
 
 .top-row-left {

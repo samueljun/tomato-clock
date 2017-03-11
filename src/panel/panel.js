@@ -1,6 +1,6 @@
 class Panel {
 	constructor() {
-		this.currentTimeText = document.getElementById('current-time-text');
+		this.currentTimeText = $('#current-time-text');
 		this.timer = new Timer();
 		
 		const messagePromise = browser.runtime.sendMessage({
@@ -32,16 +32,15 @@ class Panel {
 		if (serializedTimeBlocks) {
 			serializedTimeBlocks = JSON.parse(serializedTimeBlocks);
 			for(var pos=0; pos<6; pos++) {
-				const block = document.getElementById('queue-pos-' + pos);
+				const block = $('#queue-pos-' + pos);
 				const time = serializedTimeBlocks[pos];
+				block.removeClass('btn-danger btn-info btn-primary');
 				if(time == getMinutesInMilliseconds(MINUTES_IN_TOMATO)) {
-					block.style.background = 'red'
+					block.addClass('btn-danger');
 				} else if(time == getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK)) {
-					block.style.background = 'grey'
+					block.addClass('btn-info');
 				} else if(time == getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK)) {
-					block.style.background = 'blue'
-				} else {
-					block.style.background = ''
+					block.addClass('btn-primary');
 				}
 			}
 		}
@@ -64,41 +63,45 @@ class Panel {
 	}
 
 	setEventListeners() {
-		document.getElementById('tomato-button').addEventListener('click', () => {
+		$('#tomato-button').click(() => {
 			this.setTimers(MINUTES_IN_TOMATO);
 		});
 
-		document.getElementById('short-break-button').addEventListener('click', () => {
+		$('#short-break-button').click(() => {
 			this.setTimers(MINUTES_IN_SHORT_BREAK);
 		});
 
-		document.getElementById('long-break-button').addEventListener('click', () => {
+		$('#long-break-button').click(() => {
 			this.setTimers(MINUTES_IN_LONG_BREAK);
 		});
 		
-		document.getElementById('append-tomato-button').addEventListener('click', () => {
+		$('#append-tomato-button').click(() => {
 			this.appendTimeBlock(MINUTES_IN_TOMATO);
 		});
 
-		document.getElementById('append-short-break-button').addEventListener('click', () => {
+		$('#append-short-break-button').click(() => {
 			this.appendTimeBlock(MINUTES_IN_SHORT_BREAK);
 		});
 
-		document.getElementById('append-long-break-button').addEventListener('click', () => {
+		$('#append-long-break-button').click(() => {
 			this.appendTimeBlock(MINUTES_IN_LONG_BREAK);
 		});
 
-		document.getElementById('reset-button').addEventListener('click', () => {
+		$('#reset-button').click(() => {
 			this.resetTimers();
 		});
 
-		document.getElementById('stats-link').addEventListener('click', () => {
+		$('#stats-link').click(() => {
 			browser.tabs.create({url: '/stats/stats.html'});
+		});
+		
+		$('.time-block').click((event) => {
+			this.removeTimeBlock(parseInt($(event.target).attr('id').replace('queue-pos-', '')));
 		});
 	}
 
 	setCurrentTimeText(milliseconds) {
-		this.currentTimeText.textContent = millisecondsToTimeText(milliseconds);
+		this.currentTimeText.text(millisecondsToTimeText(milliseconds));
 	}
 
 	resetTimers() {
@@ -106,7 +109,6 @@ class Panel {
 			action: 'reset'
 		});
 		messagePromise.then(function(data) {
-			console.log(data);
 			this.updateTimer(data.serializedTimer);
 			this.updateTimeBlockDisplay(data.serializedTimeBlocks);
 		}.bind(this), function(error) { console.log(error);});
@@ -129,6 +131,18 @@ class Panel {
 			action: 'appendTimeBlock',
 			data: {
 				milliseconds
+			}
+		});
+		messagePromise.then(function(data) {
+			this.updateTimeBlockDisplay(data.serializedTimeBlocks);
+		}.bind(this), function(error) { console.log(error);});
+	}
+	
+	removeTimeBlock(index) {
+		const messagePromise = browser.runtime.sendMessage({
+			action: 'removeTimeBlock',
+			data: {
+				index
 			}
 		});
 		messagePromise.then(function(data) {

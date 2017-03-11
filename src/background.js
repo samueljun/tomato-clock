@@ -34,6 +34,10 @@ class Background {
 					this.timeBlockQueue.append(this.timer, request.data.milliseconds);
 					return this.returnTimerAndBlocksAsData(sendResponse);
 					break;
+				case 'removeTimeBlock':
+					this.timeBlockQueue.remove(request.data.index);
+					return this.returnTimerAndBlocksAsData(sendResponse);
+					break;
 				case 'getBackgroundTimer':
 					return this.returnTimerAndBlocksAsData(sendResponse);
 					break;
