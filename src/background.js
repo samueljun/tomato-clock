@@ -19,75 +19,29 @@ function millisecondsToMinutesAndSeconds(milliseconds) {
 	};
 }
 
-
-
-class Background {
+class Communicator {
+	
 	constructor() {
-		this.timer = {};
-		this.badgeText = '';
 		this.notificationSound = new Audio('/assets/sounds/Portal2_sfx_button_positive.m4a');
-		this.resetTimer();
+		this.badgeText = "";
+		this.initNotificationHandling();
 	}
-
-	getBadgeText() {
-		return this.badgeText;
+	
+	initNotificationHandling() {
+		browser.notifications.onClicked.addListener(notificationId => {
+			if (notificationId === NOTIFICATION_ID) {
+				browser.notifications.clear(notificationId);
+			}
+		});
 	}
+	
+	onTimerFinished(timer) {
+		const {minutes} = millisecondsToMinutesAndSeconds(timer.totalTime);
 
-	setBadgeText(text) {
-		browser.browserAction.setBadgeBackgroundColor({color: '#666'});
-		browser.browserAction.setBadgeText({text});
-		this.badgeText = text;
+		this.createBrowserNotification(minutes);
+		this.addAlarmToTimeline(minutes);
 	}
-
-	getTimer() {
-		return this.timer;
-	}
-
-	resetTimer() {
-		clearInterval(this.timer.interval);
-
-		this.timer = {
-			interval: null,
-			scheduledTime: null,
-			totalTime: 0,
-			timeLeft: 0
-		};
-
-		this.setBadgeText('');
-	}
-
-	setTimer(milliseconds) {
-		this.resetTimer();
-
-		this.timer = {
-			interval: setInterval(() => {
-				const timer = this.getTimer();
-
-				timer.timeLeft -= getSecondsInMilliseconds(1);
-
-				if (timer.timeLeft <= 0) {
-					const {minutes} = millisecondsToMinutesAndSeconds(timer.totalTime);
-
-					this.createBrowserNotification(minutes);
-					this.addAlarmToTimeline(minutes);
-					this.resetTimer();
-				} else {
-					const minutesLeft = millisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
-
-					if (this.getBadgeText() !== minutesLeft) {
-						this.setBadgeText(minutesLeft);
-					}
-				}
-			}, getSecondsInMilliseconds(1)),
-			scheduledTime: Date.now() + milliseconds,
-			totalTime: milliseconds,
-			timeLeft: milliseconds
-		};
-
-		const {minutes} = millisecondsToMinutesAndSeconds(milliseconds);
-		browser.browserAction.setBadgeText({text: minutes.toString()});
-	}
-
+	
 	createBrowserNotification(totalMinutes) {
 		const isAlarmTomato = totalMinutes === MINUTES_IN_TOMATO;
 
@@ -104,11 +58,7 @@ class Background {
 
 		this.notificationSound.play();
 	}
-
-	getTimerScheduledTime() {
-		return this.timer.scheduledTime;
-	}
-
+	
 	addAlarmToTimeline(alarmMinutes) {
 		// If sync storage isn't available, use local storage
 		const storage = browser.storage.sync || browser.storage.local;
@@ -117,7 +67,7 @@ class Background {
 			const timeline = storageResults[STORAGE_KEY] || [];
 
 			timeline.push({
-				timeout: alarmMinutes * 60000,
+				timeout: getMinutesInMilliseconds(alarmMinutes),
 				date: new Date().toString() // should be initialized to Date whenever interacted with
 			});
 
@@ -126,33 +76,141 @@ class Background {
 	}
 }
 
+class Timer {
+		
+	constructor() {
+		this.interval = null;
+		this.beginTime = 0;
+		this.endTime = 0;
+		this.totalTime = 0;
+		
+		this.minuteChangeEventHandlers = [];
+		this.finishedEventHandlers = [];
+		this.resetEventHandlers = [];
+	}
+	
+	getTimerScheduledTime() {
+		return this.endTime;
+	}
+	
+	isRunning() {
+		return this.interval === null;
+	}
+	
+	registerMinuteChangeEventHandler(eventHandler) {
+		this.minuteChangeEventHandlers.push(eventHandler);
+	}
+	
+	notifyMinuteChangedEventHandlers() {
+		this.minuteChangeEventHandlers.forEach(function(eventHandler) {
+			eventHandler.onMinuteChanged(this);
+		});
+	}
+	
+	registerFinishedEventHandler(eventHandler) {
+		this.finishedEventHandlers.push(eventHandler);
+	}
+	
+	notifyFinishedEventHandlers() {
+		try {
+			var _this = this;
+			this.finishedEventHandlers.forEach(function(eventHandler) {
+				eventHandler.onTimerFinished(_this);
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	}
+	
+	registerCanceledEventHandler(eventHandler) {
+		this.canceledEventHandlers.push(eventHandler);
+	}
+	
+	notifyCanceledEventHandlers() {
+		try {
+			var _this = this;
+			this.canceledEventHandlers.forEach(function(eventHandler) {
+				eventHandler.onTimerCanceled(_this);
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	}
+	
+	set(milliseconds) {
+		this.reset();
+		this.beginTime = Date.now();
+		this.endTime = this.beginTime + milliseconds;
+		this.totalTime = milliseconds;
+		
+		const minutes = millisecondsToMinutesAndSeconds(milliseconds).minutes.toString();
+		this.setBadgeText(minutes);
+		
+		this.interval = setInterval(() => {
+			var timeLeft = this.endTime - Date.now();
 
+			if (timeLeft <= 0) {
+				this.notifyFinishedEventHandlers();
+				this.reset();
+			} else {
+				const minutesLeft = millisecondsToMinutesAndSeconds(timeLeft).minutes.toString();
+
+				if (browser.browserAction.getBadgeText({}) !== minutesLeft) {
+					this.setBadgeText(minutesLeft);
+				}
+			}
+		}, 1000);
+	}
+	
+	setBadgeText(text) {
+		browser.browserAction.setBadgeBackgroundColor({color: '#666'});
+		browser.browserAction.setBadgeText({text});
+		this.badgeText = text;
+	}
+	
+	reset() {
+		clearInterval(this.interval);
+		this.interval = null;
+		this.beginTime = null;
+		this.endTime = 0;
+		this.totalTime = 0;
+
+		this.setBadgeText('');
+	}
+}
+
+class Background {
+	constructor() {
+		this.timer = new Timer();
+		this.communicator = new Communicator();
+		this.timer.registerFinishedEventHandler(this.communicator);
+		this.initMessageHandling();
+	}
+	
+	initMessageHandling() {
+
+		browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+			switch (request.action) {
+				case 'resetTimer':
+					this.timer.reset();
+					break;
+				case 'setTimer':
+					background.timer.set(request.data.milliseconds);
+					break;
+				case 'getTimerScheduledTime':
+					// Hack because of difference in chrome and firefox
+					// Check if polyfill fixes the issue
+					if (sendResponse) {
+						sendResponse(this.timer.getTimerScheduledTime());
+					}
+					return this.timer.getTimerScheduledTime();
+					break;
+				default:
+					console.log("Message not supported.");
+					break;
+			}
+		});
+	}
+}
 
 const background = new Background();
-
-browser.notifications.onClicked.addListener(notificationId => {
-	if (notificationId === NOTIFICATION_ID) {
-		browser.notifications.clear(notificationId);
-	}
-});
-
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-	switch (request.action) {
-		case 'resetTimer':
-			background.resetTimer();
-			break;
-		case 'setTimer':
-			background.setTimer(request.data.milliseconds);
-			break;
-		case 'getTimerScheduledTime':
-			// Hack because of difference in chrome and firefox
-			// Check if polyfill fixes the issue
-			if (sendResponse) {
-				sendResponse(background.getTimerScheduledTime());
-			}
-			return background.getTimerScheduledTime();
-			break;
-		default:
-			break;
-	}
-});
