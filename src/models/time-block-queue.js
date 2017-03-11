@@ -5,9 +5,11 @@ class TimeBlockQueue {
 		this.startedNextTimeBlockEventHandlers = [];
 	}
 
-	append(timer, milliseconds) {
-		this.timeBlocks.push(milliseconds);		
-		this.checkForAndExecuteNextTimeBlock(timer); 
+	append(timer, type) {
+		if(this.timeBlocks.length < 12) {
+			this.timeBlocks.push(type);
+			this.checkForAndExecuteNextTimeBlock(timer);
+		}
 	}
 	
 	remove(index) {
@@ -18,8 +20,8 @@ class TimeBlockQueue {
 	
 	checkForAndExecuteNextTimeBlock(timer) {
 		if(!timer.isRunning()) {
-			var milliseconds = this.timeBlocks.shift();
-			timer.set(milliseconds);
+			const type = this.timeBlocks.shift();
+			timer.set(type);
 			this.notifyStartedNextTimeBlockEventHandlers(); 
 		}
 	}

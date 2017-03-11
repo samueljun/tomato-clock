@@ -38,13 +38,13 @@ class Panel {
 			}
 			for(var pos=0; pos<12; pos++) {
 				const block = $('#queue-pos-' + pos);
-				const time = timeBlocks[pos];
+				const type = timeBlocks[pos];
 				block.removeClass('btn-danger btn-info btn-primary');
-				if(time == getMinutesInMilliseconds(DEFAULTS[TOMATO_TIME_KEY])) {
+				if(type == TOMATO_TIME_KEY) {
 					block.addClass('btn-danger');
-				} else if(time == getMinutesInMilliseconds(DEFAULTS[SHORT_BREAK_KEY])) {
+				} else if(type == SHORT_BREAK_KEY) {
 					block.addClass('btn-info');
-				} else if(time == getMinutesInMilliseconds(DEFAULTS[LONG_BREAK_KEY])) {
+				} else if(type == LONG_BREAK_KEY) {
 					block.addClass('btn-primary');
 				}
 			}
@@ -118,22 +118,20 @@ class Panel {
 	}
 
 	setTimers(type) {
-		const milliseconds = getMinutesInMilliseconds(DEFAULTS[type]);
-		this.timer.set(milliseconds);
+		this.timer.set(type);
 		browser.runtime.sendMessage({
 			action: 'setTimer',
 			data: {
-				milliseconds
+				type
 			}
 		});
 	}
 	
 	appendTimeBlock(type) {
-		const milliseconds = getMinutesInMilliseconds(DEFAULTS[type]);
 		const messagePromise = browser.runtime.sendMessage({
 			action: 'appendTimeBlock',
 			data: {
-				milliseconds
+				type
 			}
 		});
 		messagePromise.then(function(data) {

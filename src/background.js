@@ -23,7 +23,7 @@ class Background {
 		browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			switch (request.action) {
 				case 'setTimer':
-					this.timer.set(request.data.milliseconds);
+					this.timer.set(request.data.type);
 					break;
 				case 'reset':
 					this.timer.reset();
@@ -31,7 +31,7 @@ class Background {
 					return this.returnTimerAndBlocksAsData(sendResponse);
 					break;
 				case 'appendTimeBlock':
-					this.timeBlockQueue.append(this.timer, request.data.milliseconds);
+					this.timeBlockQueue.append(this.timer, request.data.type);
 					return this.returnTimerAndBlocksAsData(sendResponse);
 					break;
 				case 'removeTimeBlock':

@@ -39,7 +39,7 @@ class Communicator {
 	}
 	
 	createBrowserNotification(totalMinutes) {
-		const isAlarmTomato = totalMinutes === MINUTES_IN_TOMATO;
+		const isAlarmTomato = totalMinutes === DEFAULTS[TOMATO_TIME_KEY];
 
 		// this.notificationSound.onended = () => {
 		browser.notifications.create(NOTIFICATION_ID, {
@@ -59,7 +59,7 @@ class Communicator {
 		// If sync storage isn't available, use local storage
 		const storage = browser.storage.sync || browser.storage.local;
 
-		storage.get(STORAGE_KEY, storageResults => {
+		storage.get(STORAGE_KEY).then(storageResults => {
 			const timeline = storageResults[STORAGE_KEY] || [];
 
 			timeline.push({

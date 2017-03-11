@@ -6,6 +6,7 @@ class Timer {
 		this.endTime = 0;
 		this.totalTime = 0;
 		this.timeLeft = 0;
+		this.type = "";
 		
 		this.startedEventHandlers = [];
 		this.updatedEventHandlers = [];
@@ -33,12 +34,14 @@ class Timer {
 		return this.endTime;
 	}
 	
-	set(milliseconds) {
+	set(type) {
+		const milliseconds = getMinutesInMilliseconds(DEFAULTS[type]);
 		this.reset();
 		this.beginTime = Date.now();
 		this.endTime = this.beginTime + milliseconds;
 		this.totalTime = milliseconds;
 		this.timeLeft = this.totalTime;
+		this.type = type;
 		
 		this.notifyStartedEventHandlers();
 		
@@ -52,6 +55,7 @@ class Timer {
 		this.endTime = 0;
 		this.totalTime = 0;
 		this.timeLeft = 0;
+		this.type = "";
 
 		this.notifyCanceledEventHandlers();
 	}
@@ -90,7 +94,7 @@ class Timer {
 	
 	notifyEventHandlers(handlers, methodname) {
 		try {
-			var _this = this;
+			const _this = this;
 			handlers.forEach(function(eventHandler) {
 				eventHandler[methodname].call(eventHandler, _this);
 			});
@@ -100,21 +104,23 @@ class Timer {
 	}
 	
 	toJSON() {
-		var obj = {
+		const obj = {
 			beginTime: this.beginTime,
 			endTime: this.endTime,
 			totalTime: this.totalTime,
-			timeLeft: this.timeLeft
+			timeLeft: this.timeLeft,
+			type: this.type
 		};
 		return JSON.stringify(obj);
 	}
 	
 	fromJSON(json) {
-		var obj = JSON.parse(json);
+		const obj = JSON.parse(json);
 		this.beginTime = obj.beginTime;
 		this.endTime = obj.endTime;
 		this.totalTime = obj.totalTime;
 		this.timeLeft = obj.timeLeft;
+		this.type = obj.type;
 		
 		if(this.endTime>Date.now()) {
 			this.initializeInterval();
