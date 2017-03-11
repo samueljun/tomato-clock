@@ -1,29 +1,57 @@
 class TimeBlockQueue {
 		
 	constructor() {
+		this.isDefaultQueue = false;
 		this.timeBlocks = [];
 		this.startedNextTimeBlockEventHandlers = [];
+		this.queueFinishedEventHandlers = [];
+		this.storage = new Storage();
 	}
 
 	append(timer, type) {
+		this.isDefaultQueue = false;
+		return this._append(timer, type);
+	}
+	
+	_append(timer, type) {
 		if(this.timeBlocks.length < 12) {
-			this.timeBlocks.push(type);
-			this.checkForAndExecuteNextTimeBlock(timer);
+			if(Array.isArray(type)) {
+				this.timeBlocks.push(...type); 
+			} else {
+				this.timeBlocks.push(type);
+			}
+			return this.checkForAndExecuteNextTimeBlock(timer);
 		}
 	}
 	
 	remove(index) {
+		this.isDefaultQueue = false;
 		if(index >= 0) {
 			this.timeBlocks.splice(index, 1);
 		}
 	}
 	
 	checkForAndExecuteNextTimeBlock(timer) {
-		if(!timer.isRunning()) {
-			const type = this.timeBlocks.shift();
-			timer.set(type);
-			this.notifyStartedNextTimeBlockEventHandlers(); 
-		}
+		return new Promise((resolve, reject) => {
+			if(!timer.isRunning() && this.timeBlocks.length>0) {
+				var type = this.timeBlocks.shift();
+				timer.set(type).then(() => { 
+					if(this.isDefaultQueue && this.timeBlocks.length==0) {
+						this.setDefaultQueue(timer).then(() => {
+							this.notifyStartedNextTimeBlockEventHandlers();
+						});
+					} else {
+						this.notifyStartedNextTimeBlockEventHandlers();
+					}
+					resolve()
+				});				
+			} else {
+				if(!timer.isRunning() && this.timeBlocks.length==0) {
+					this.notifyQueueFinishedEventHandlers();
+				}
+				resolve();
+			}
+		});
 	}
 	
 	onTimerFinished(timer) {
@@ -38,6 +66,14 @@ class TimeBlockQueue {
 		this.notifyEventHandlers(this.startedNextTimeBlockEventHandlers, "onStartedNextTimeBlock");
 	}
 	
+	registerQueueFinishedEventHandler(eventHandler) {
+		this.queueFinishedEventHandlers.push(eventHandler);
+	}
+		
+	notifyQueueFinishedEventHandlers() {
+		this.notifyEventHandlers(this.queueFinishedEventHandlers, "onQueueFinished");
+	}
+	
 	notifyEventHandlers(handlers, methodname) {
 		try {
 			var _this = this;
@@ -47,6 +83,17 @@ class TimeBlockQueue {
 		} catch (err) {
 			console.log(handlers, methodname, err); 
 		}
+	}
+	
+	setDefaultQueue(timer) {
+		this.isDefaultQueue = true;
+		return new Promise((resolve, reject) => {
+			this.storage.getDefaultQueue().then((defaultQueue) => {
+				this._append(timer, defaultQueue).then(() => {
+					resolve();
+				});
+			});
+		});
 	}
 	
 	toJSON() {

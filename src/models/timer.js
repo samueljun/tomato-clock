@@ -1,6 +1,7 @@
 class Timer {
 		
 	constructor() {
+		this.storage = new Storage();
 		this.interval = null;
 		this.beginTime = 0;
 		this.endTime = 0;
@@ -35,17 +36,22 @@ class Timer {
 	}
 	
 	set(type) {
-		const milliseconds = getMinutesInMilliseconds(DEFAULTS[type]);
-		this.reset();
-		this.beginTime = Date.now();
-		this.endTime = this.beginTime + milliseconds;
-		this.totalTime = milliseconds;
-		this.timeLeft = this.totalTime;
-		this.type = type;
-		
-		this.notifyStartedEventHandlers();
-		
-		this.initializeInterval();
+		return new Promise((resolve, reject) => {
+			this.storage.getTime(type).then((time) => {
+				const milliseconds = getMinutesInMilliseconds(time);
+				this.reset();
+				this.beginTime = Date.now();
+				this.endTime = this.beginTime + milliseconds;
+				this.totalTime = milliseconds;
+				this.timeLeft = this.totalTime;
+				this.type = type;
+				
+				this.notifyStartedEventHandlers();
+				
+				this.initializeInterval();
+				resolve();
+			});
+		});	
 	}
 	
 	reset() {

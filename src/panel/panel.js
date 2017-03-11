@@ -2,6 +2,7 @@ class Panel {
 	constructor() {
 		this.currentTimeText = $('#current-time-text');
 		this.timer = new Timer();
+		this.storage = new Storage();
 		
 		const messagePromise = browser.runtime.sendMessage({
 			action: 'getBackgroundTimer'
@@ -100,6 +101,9 @@ class Panel {
 			browser.tabs.create({url: '/stats/stats.html'});
 		});
 		
+		$('#default-queue-link').click(() => {
+			this.setDefaultQueue();
+		});
 		$('.time-block').click((event) => {
 			this.removeTimeBlock(parseInt($(event.target).attr('id').replace('queue-pos-', '')));
 		});
@@ -136,8 +140,17 @@ class Panel {
 				type
 			}
 		});
+	}
+	
+	setDefaultQueue() {
+		const messagePromise = browser.runtime.sendMessage({
+			action: 'reset'
+		});
 		messagePromise.then(function(data) {
-			this.updateTimeBlockDisplay(data.serializedTimeBlocks);
+			const messagePromise = browser.runtime.sendMessage({
+				action: 'setDefaultQueue',
+			});
+			messagePromise.then(() =>{}, function(error) { console.log(error);});
 		}.bind(this), function(error) { console.log(error);});
 	}
 	
@@ -157,7 +170,7 @@ class Panel {
 function initMessageHandling(panel) {
 	browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		switch (request.action) {
-			case 'nextTimeBlock':
+			case 'update':
 				panel.updateTimer(request.data.serializedTimer);
 				panel.updateTimeBlockDisplay(request.data.serializedTimeBlocks);
 				break;

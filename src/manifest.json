@@ -32,6 +32,7 @@
       "/lib/browser-polyfill.min.js",
 	  "config.js",
 	  "utils.js",
+	  "storage.js",
 	  "models/timer.js",
 	  "models/time-block-queue.js",
 	  "communicator.js",
@@ -39,6 +40,10 @@
     ]
   },
 
+  "options_ui": {
+    "page": "settings/settings.html"
+  },
+  
   "permissions": [
     "alarms",
     "notifications",

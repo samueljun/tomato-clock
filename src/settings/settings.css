@@ -1,0 +1,67 @@
+html, body {
+	margin: 0;
+	padding:0;
+}
+.container {
+	margin: 0;
+	padding:0;
+	background-color: rgb(251,251,251);
+}
+
+.row {
+	width: 100%;
+	border-bottom: 1px rgb(200,200,200) solid;
+
+	margin: 0;
+	padding: 3px 0px;
+	clear: both; 
+}
+
+.column {
+	width: 50%;
+	float: left;
+	vertical-align: middle;
+	height: auto;
+}
+
+.info-buttons {
+	margin: 10px 0px 10px 0px;
+}
+
+
+.time-25 {
+	background-color: red;
+}
+
+.container.main{
+	width: 250px;
+}
+
+.time-block {
+	margin: 2px 2px;
+	width: calc(100%/12 - 4px);
+	height: 25px;
+	border: 1px grey dotted;
+}
+
+.queue {
+	padding-top: 4px;
+}
+
+.top-row-left {
+	float: left;
+	width: 33%;
+}
+
+.top-row-right {
+	float: right;
+}
+
+.text-box {
+	padding-top: 6px;
+}
+
+.inner-column{
+	padding-left: 10px;
+	float: left;
+}
