@@ -19,3 +19,11 @@ const COLORS = {
 	[LONG_BREAK_KEY]: {r:2, g:117, b:216},
 	'default': {r:0, g:0, b:0},
 }
+
+const FINISHED_MESSAGES = 'Your session is over!';
+
+const START_MESSAGES = {
+	[TOMATO_TIME_KEY]: 'Start your Tomato now. Let\'s do this!',
+	[SHORT_BREAK_KEY]: 'Time for a short break. Clear your mind!',
+	[LONG_BREAK_KEY]: 'Lay back and relax. You\'ve earned it! '
+}

@@ -16,6 +16,8 @@ class Communicator {
 	
 	onTimerStarted(timer) {
 		this.updateBadgeText(timer);
+		const message = START_MESSAGES[timer.type];
+		this.createBrowserNotification(message);
 	}
 	
 	onTimerUpdated(timer) {
@@ -23,32 +25,31 @@ class Communicator {
 	}
 	
 	updateBadgeText(timer) {
-		const minutesLeft = millisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
-		this.setBadgeText(minutesLeft);
+		const minutesLeft = millisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString() || "";
+		const color = COLORS[timer.type];
+		this.setBadgeText(minutesLeft, color);
 	}
-	
-	onTimerFinished(timer) {
-		const {minutes} = millisecondsToMinutesAndSeconds(timer.totalTime);
 
-		this.createBrowserNotification(minutes);
+	onTimerFinished(timer, time, type) {
+		const {minutes} = millisecondsToMinutesAndSeconds(time);
 		this.addAlarmToTimeline(minutes);
 	}
 	
 	onTimerCanceled(timer) {
-		this.setBadgeText("");
+		this.setBadgeText("", COLORS['default']);
 	}
 	
-	createBrowserNotification(totalMinutes) {
-		const isAlarmTomato = totalMinutes === DEFAULTS[TOMATO_TIME_KEY];
-
+	onQueueFinished(timer) {
+		this.createBrowserNotification(FINISHED_MESSAGES);
+	}
+	
+	createBrowserNotification(message) {
 		// this.notificationSound.onended = () => {
 		browser.notifications.create(NOTIFICATION_ID, {
 			type: 'basic',
 			iconUrl: '/assets/img/tomato-icon-64.png',
 			title: 'Tomato Clock',
-			message: isAlarmTomato ?
-				'Your Tomato timer is done!' :
-				`Your ${totalMinutes} minute timer is done!`
+			message: message
 		});
 		// };
 
@@ -71,8 +72,8 @@ class Communicator {
 		});
 	}
 	
-	setBadgeText(text) {
-		browser.browserAction.setBadgeBackgroundColor({color: '#666'});
+	setBadgeText(text, color) {
+		browser.browserAction.setBadgeBackgroundColor({color: colorToCSS(color)});
 		browser.browserAction.setBadgeText({text});
 		this.badgeText = text;
 	}
