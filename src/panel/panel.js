@@ -25,7 +25,7 @@ class Panel {
 
 		browser.runtime.sendMessage({
 			action: 'getTimerScheduledTime'
-		}, scheduledTime => {
+		}).then(scheduledTime => {
 			if (scheduledTime) {
 				this.setTimer(scheduledTime - Date.now());
 			}

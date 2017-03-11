@@ -1,4 +1,4 @@
-/* webextension-polyfill - v0.1.0 - Thu Feb 02 2017 02:10:45 */
+/* webextension-polyfill - v0.1.0 - Sat Mar 11 2017 22:19:48 */
 /* -*- Mode: indent-tabs-mode: nil; js-indent-level: 2 -*- */
 /* vim: set sts=2 sw=2 et tw=80: */
 /* This Source Code Form is subject to the terms of the Mozilla Public
@@ -13,518 +13,518 @@ if (typeof browser === "undefined") {
   // never actually need to be called, this allows the polyfill to be included
   // in Firefox nearly for free.
   const wrapAPIs = () => {
-    const apiMetadata = {
-      "alarms": {
-        "clear": {
-          "minArgs": 0,
-          "maxArgs": 1
-        },
-        "clearAll": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "get": {
-          "minArgs": 0,
-          "maxArgs": 1
-        },
-        "getAll": {
-          "minArgs": 0,
-          "maxArgs": 0
-        }
-      },
-      "bookmarks": {
-        "create": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "export": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "get": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getChildren": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getRecent": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getTree": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "getSubTree": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "import": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "move": {
-          "minArgs": 2,
-          "maxArgs": 2
-        },
-        "remove": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "removeTree": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "search": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "update": {
-          "minArgs": 2,
-          "maxArgs": 2
-        }
-      },
-      "browserAction": {
-        "getBadgeBackgroundColor": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getBadgeText": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getPopup": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getTitle": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "setIcon": {
-          "minArgs": 1,
-          "maxArgs": 1
-        }
-      },
-      "commands": {
-        "getAll": {
-          "minArgs": 0,
-          "maxArgs": 0
-        }
-      },
-      "contextMenus": {
-        "update": {
-          "minArgs": 2,
-          "maxArgs": 2
-        },
-        "remove": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "removeAll": {
-          "minArgs": 0,
-          "maxArgs": 0
-        }
-      },
-      "cookies": {
-        "get": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getAll": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getAllCookieStores": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "remove": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "set": {
-          "minArgs": 1,
-          "maxArgs": 1
-        }
-      },
-      "downloads": {
-        "download": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "cancel": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "erase": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getFileIcon": {
-          "minArgs": 1,
-          "maxArgs": 2
-        },
-        "open": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "pause": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "removeFile": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "resume": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "search": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "show": {
-          "minArgs": 1,
-          "maxArgs": 1
-        }
-      },
-      "extension": {
-        "isAllowedFileSchemeAccess": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "isAllowedIncognitoAccess": {
-          "minArgs": 0,
-          "maxArgs": 0
-        }
-      },
-      "history": {
-        "addUrl": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getVisits": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "deleteAll": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "deleteRange": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "deleteUrl": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "search": {
-          "minArgs": 1,
-          "maxArgs": 1
-        }
-      },
-      "i18n": {
-        "detectLanguage": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getAcceptLanguages": {
-          "minArgs": 0,
-          "maxArgs": 0
-        }
-      },
-      "idle": {
-        "queryState": {
-          "minArgs": 1,
-          "maxArgs": 1
-        }
-      },
-      "management": {
-        "get": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getAll": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "getSelf": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "uninstallSelf": {
-          "minArgs": 0,
-          "maxArgs": 1
-        }
-      },
-      "notifications": {
-        "clear": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "create": {
-          "minArgs": 1,
-          "maxArgs": 2
-        },
-        "getAll": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "getPermissionLevel": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "update": {
-          "minArgs": 2,
-          "maxArgs": 2
-        }
-      },
-      "pageAction": {
-        "getPopup": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getTitle": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "hide": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "setIcon": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "show": {
-          "minArgs": 0,
-          "maxArgs": 0
-        }
-      },
-      "runtime": {
-        "getBackgroundPage": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "getBrowserInfo": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "getPlatformInfo": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "openOptionsPage": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "requestUpdateCheck": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "sendMessage": {
-          "minArgs": 1,
-          "maxArgs": 3
-        },
-        "sendNativeMessage": {
-          "minArgs": 2,
-          "maxArgs": 2
-        },
-        "setUninstallURL": {
-          "minArgs": 1,
-          "maxArgs": 1
-        }
-      },
-      "storage": {
-        "local": {
-          "clear": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "get": {
-            "minArgs": 0,
-            "maxArgs": 1
-          },
-          "getBytesInUse": {
-            "minArgs": 0,
-            "maxArgs": 1
-          },
-          "remove": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "set": {
-            "minArgs": 1,
-            "maxArgs": 1
-          }
-        },
-        "managed": {
-          "get": {
-            "minArgs": 0,
-            "maxArgs": 1
-          },
-          "getBytesInUse": {
-            "minArgs": 0,
-            "maxArgs": 1
-          }
-        },
-        "sync": {
-          "clear": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "get": {
-            "minArgs": 0,
-            "maxArgs": 1
-          },
-          "getBytesInUse": {
-            "minArgs": 0,
-            "maxArgs": 1
-          },
-          "remove": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "set": {
-            "minArgs": 1,
-            "maxArgs": 1
-          }
-        }
-      },
-      "tabs": {
-        "create": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "captureVisibleTab": {
-          "minArgs": 0,
-          "maxArgs": 2
-        },
-        "detectLanguage": {
-          "minArgs": 0,
-          "maxArgs": 1
-        },
-        "duplicate": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "executeScript": {
-          "minArgs": 1,
-          "maxArgs": 2
-        },
-        "get": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getCurrent": {
-          "minArgs": 0,
-          "maxArgs": 0
-        },
-        "getZoom": {
-          "minArgs": 0,
-          "maxArgs": 1
-        },
-        "getZoomSettings": {
-          "minArgs": 0,
-          "maxArgs": 1
-        },
-        "highlight": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "insertCSS": {
-          "minArgs": 1,
-          "maxArgs": 2
-        },
-        "move": {
-          "minArgs": 2,
-          "maxArgs": 2
-        },
-        "reload": {
-          "minArgs": 0,
-          "maxArgs": 2
-        },
-        "remove": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "query": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "removeCSS": {
-          "minArgs": 1,
-          "maxArgs": 2
-        },
-        "sendMessage": {
-          "minArgs": 2,
-          "maxArgs": 3
-        },
-        "setZoom": {
-          "minArgs": 1,
-          "maxArgs": 2
-        },
-        "setZoomSettings": {
-          "minArgs": 1,
-          "maxArgs": 2
-        },
-        "update": {
-          "minArgs": 1,
-          "maxArgs": 2
-        }
-      },
-      "webNavigation": {
-        "getAllFrames": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "getFrame": {
-          "minArgs": 1,
-          "maxArgs": 1
-        }
-      },
-      "webRequest": {
-        "handlerBehaviorChanged": {
-          "minArgs": 0,
-          "maxArgs": 0
-        }
-      },
-      "windows": {
-        "create": {
-          "minArgs": 0,
-          "maxArgs": 1
-        },
-        "get": {
-          "minArgs": 1,
-          "maxArgs": 2
-        },
-        "getAll": {
-          "minArgs": 0,
-          "maxArgs": 1
-        },
-        "getCurrent": {
-          "minArgs": 0,
-          "maxArgs": 1
-        },
-        "getLastFocused": {
-          "minArgs": 0,
-          "maxArgs": 1
-        },
-        "remove": {
-          "minArgs": 1,
-          "maxArgs": 1
-        },
-        "update": {
-          "minArgs": 2,
-          "maxArgs": 2
-        }
-      }
-    };
+    const apiMetadata = {    
+      "alarms": {    
+        "clear": {    
+          "minArgs": 0,    
+          "maxArgs": 1    
+        },    
+        "clearAll": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "get": {    
+          "minArgs": 0,    
+          "maxArgs": 1    
+        },    
+        "getAll": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        }    
+      },    
+      "bookmarks": {    
+        "create": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "export": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "get": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getChildren": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getRecent": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getTree": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "getSubTree": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "import": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "move": {    
+          "minArgs": 2,    
+          "maxArgs": 2    
+        },    
+        "remove": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "removeTree": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "search": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "update": {    
+          "minArgs": 2,    
+          "maxArgs": 2    
+        }    
+      },    
+      "browserAction": {    
+        "getBadgeBackgroundColor": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getBadgeText": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getPopup": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getTitle": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "setIcon": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        }    
+      },    
+      "commands": {    
+        "getAll": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        }    
+      },    
+      "contextMenus": {    
+        "update": {    
+          "minArgs": 2,    
+          "maxArgs": 2    
+        },    
+        "remove": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "removeAll": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        }    
+      },    
+      "cookies": {    
+        "get": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getAll": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getAllCookieStores": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "remove": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "set": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        }    
+      },    
+      "downloads": {    
+        "download": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "cancel": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "erase": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getFileIcon": {    
+          "minArgs": 1,    
+          "maxArgs": 2    
+        },    
+        "open": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "pause": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "removeFile": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "resume": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "search": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "show": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        }    
+      },    
+      "extension": {    
+        "isAllowedFileSchemeAccess": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "isAllowedIncognitoAccess": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        }    
+      },    
+      "history": {    
+        "addUrl": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getVisits": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "deleteAll": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "deleteRange": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "deleteUrl": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "search": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        }    
+      },    
+      "i18n": {    
+        "detectLanguage": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getAcceptLanguages": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        }    
+      },    
+      "idle": {    
+        "queryState": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        }    
+      },    
+      "management": {    
+        "get": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getAll": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "getSelf": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "uninstallSelf": {    
+          "minArgs": 0,    
+          "maxArgs": 1    
+        }    
+      },    
+      "notifications": {    
+        "clear": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "create": {    
+          "minArgs": 1,    
+          "maxArgs": 2    
+        },    
+        "getAll": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "getPermissionLevel": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "update": {    
+          "minArgs": 2,    
+          "maxArgs": 2    
+        }    
+      },    
+      "pageAction": {    
+        "getPopup": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getTitle": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "hide": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "setIcon": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "show": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        }    
+      },    
+      "runtime": {    
+        "getBackgroundPage": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "getBrowserInfo": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "getPlatformInfo": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "openOptionsPage": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "requestUpdateCheck": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "sendMessage": {    
+          "minArgs": 1,    
+          "maxArgs": 3    
+        },    
+        "sendNativeMessage": {    
+          "minArgs": 2,    
+          "maxArgs": 2    
+        },    
+        "setUninstallURL": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        }    
+      },    
+      "storage": {    
+        "local": {    
+          "clear": {    
+            "minArgs": 0,    
+            "maxArgs": 0    
+          },    
+          "get": {    
+            "minArgs": 0,    
+            "maxArgs": 1    
+          },    
+          "getBytesInUse": {    
+            "minArgs": 0,    
+            "maxArgs": 1    
+          },    
+          "remove": {    
+            "minArgs": 1,    
+            "maxArgs": 1    
+          },    
+          "set": {    
+            "minArgs": 1,    
+            "maxArgs": 1    
+          }    
+        },    
+        "managed": {    
+          "get": {    
+            "minArgs": 0,    
+            "maxArgs": 1    
+          },    
+          "getBytesInUse": {    
+            "minArgs": 0,    
+            "maxArgs": 1    
+          }    
+        },    
+        "sync": {    
+          "clear": {    
+            "minArgs": 0,    
+            "maxArgs": 0    
+          },    
+          "get": {    
+            "minArgs": 0,    
+            "maxArgs": 1    
+          },    
+          "getBytesInUse": {    
+            "minArgs": 0,    
+            "maxArgs": 1    
+          },    
+          "remove": {    
+            "minArgs": 1,    
+            "maxArgs": 1    
+          },    
+          "set": {    
+            "minArgs": 1,    
+            "maxArgs": 1    
+          }    
+        }    
+      },    
+      "tabs": {    
+        "create": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "captureVisibleTab": {    
+          "minArgs": 0,    
+          "maxArgs": 2    
+        },    
+        "detectLanguage": {    
+          "minArgs": 0,    
+          "maxArgs": 1    
+        },    
+        "duplicate": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "executeScript": {    
+          "minArgs": 1,    
+          "maxArgs": 2    
+        },    
+        "get": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getCurrent": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        },    
+        "getZoom": {    
+          "minArgs": 0,    
+          "maxArgs": 1    
+        },    
+        "getZoomSettings": {    
+          "minArgs": 0,    
+          "maxArgs": 1    
+        },    
+        "highlight": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "insertCSS": {    
+          "minArgs": 1,    
+          "maxArgs": 2    
+        },    
+        "move": {    
+          "minArgs": 2,    
+          "maxArgs": 2    
+        },    
+        "reload": {    
+          "minArgs": 0,    
+          "maxArgs": 2    
+        },    
+        "remove": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "query": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "removeCSS": {    
+          "minArgs": 1,    
+          "maxArgs": 2    
+        },    
+        "sendMessage": {    
+          "minArgs": 2,    
+          "maxArgs": 3    
+        },    
+        "setZoom": {    
+          "minArgs": 1,    
+          "maxArgs": 2    
+        },    
+        "setZoomSettings": {    
+          "minArgs": 1,    
+          "maxArgs": 2    
+        },    
+        "update": {    
+          "minArgs": 1,    
+          "maxArgs": 2    
+        }    
+      },    
+      "webNavigation": {    
+        "getAllFrames": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "getFrame": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        }    
+      },    
+      "webRequest": {    
+        "handlerBehaviorChanged": {    
+          "minArgs": 0,    
+          "maxArgs": 0    
+        }    
+      },    
+      "windows": {    
+        "create": {    
+          "minArgs": 0,    
+          "maxArgs": 1    
+        },    
+        "get": {    
+          "minArgs": 1,    
+          "maxArgs": 2    
+        },    
+        "getAll": {    
+          "minArgs": 0,    
+          "maxArgs": 1    
+        },    
+        "getCurrent": {    
+          "minArgs": 0,    
+          "maxArgs": 1    
+        },    
+        "getLastFocused": {    
+          "minArgs": 0,    
+          "maxArgs": 1    
+        },    
+        "remove": {    
+          "minArgs": 1,    
+          "maxArgs": 1    
+        },    
+        "update": {    
+          "minArgs": 2,    
+          "maxArgs": 2    
+        }    
+      }    
+    };
 
     /**
      * A WeakMap subclass which creates and stores a value for any key which does
