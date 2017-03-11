@@ -30,6 +30,10 @@
   "background": {
     "scripts": [
       "/lib/browser-polyfill.min.js",
+	  "config.js",
+	  "utils.js",
+	  "models/timer.js",
+	  "models/communicator.js",
       "background.js"
     ]
   },
