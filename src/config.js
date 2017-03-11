@@ -9,3 +9,9 @@ const DEFAULTS = {
 	[SHORT_BREAK_KEY]: 5,
 	[LONG_BREAK_KEY]: 15
 }
+const COLORS = {
+	[TOMATO_TIME_KEY]: {r:217, g:83, b:79},
+	[SHORT_BREAK_KEY]: {r:91, g:192, b:222},
+	[LONG_BREAK_KEY]: {r:2, g:117, b:216},
+	'default': {r:0, g:0, b:0},
+}

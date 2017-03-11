@@ -24,3 +24,7 @@ function millisecondsToTimeText(milliseconds) {
 function wrapId() {
 	return "#"+[].join.call(arguments, "-");
 }
+
+function colorToCSS(color) {
+	return 'rgb('+color.r+','+color.g+','+color.b+')';
+}

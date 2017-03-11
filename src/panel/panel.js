@@ -52,6 +52,7 @@ class Panel {
 	}
 	
 	onTimerStarted(timer) {
+		$('#current-time-text').css('color', colorToCSS(COLORS[timer.type] || COLORS['default']));
 		this.setCurrentTimeText(timer.timeLeft);
 	}
 	
@@ -60,6 +61,7 @@ class Panel {
 	}
 	
 	onTimerFinished(timer) {
+		$('#current-time-text').css('color', '');
 		this.setCurrentTimeText(0);
 	}
 	
