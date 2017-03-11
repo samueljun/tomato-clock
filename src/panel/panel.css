@@ -2,3 +2,29 @@
 	margin: 10px 0px 10px 0px;
 }
 
+.btn-group-justified > a:nth-of-type(even) {
+  width: .15%;
+}
+
+.time-25 {
+	background-color: red;
+}
+
+.container.main{
+	width: 250px;
+}
+
+.time-block {
+	margin: 2px 0px;
+	height: 25px;
+}
+
+.top-row-left {
+	float: left;
+	width: 33%;
+}
+
+.top-row-right {
+	float: right;
+}
+

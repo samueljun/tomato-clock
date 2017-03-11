@@ -34,6 +34,7 @@
 	  "utils.js",
 	  "models/timer.js",
 	  "models/communicator.js",
+	  "models/time-block-queue.js",
       "background.js"
     ]
   },

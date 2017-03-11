@@ -1,6 +1,6 @@
 class Timer {
 		
-	constructor(timer) {
+	constructor() {
 		this.interval = null;
 		this.beginTime = 0;
 		this.endTime = 0;
@@ -11,29 +11,14 @@ class Timer {
 		this.updatedEventHandlers = [];
 		this.finishedEventHandlers = [];
 		this.canceledEventHandlers = [];
-		
-		if(timer) {
-			this.initializeTimer(timer);
-		}
 	}
-	
-	initializeTimer(timer) {
-		this.beginTime = timer.beginTime;
-		this.endTime = timer.endTime;
-		this.totalTime = timer.totalTime;
-		this.timeLeft = timer.timeLeft;
-		
-		if(this.endTime>Date.now()) {
-			this.initializeInterval();
-		}
-	}
-	
+
 	initializeInterval() {
 		this.interval = setInterval(() => {
 			this.timeLeft = this.endTime - Date.now();
 			if (this.timeLeft <= 0) {
-				this.notifyFinishedEventHandlers();
 				this.reset();
+				this.notifyFinishedEventHandlers();
 			} else {
 				this.notifyUpdatedEventHandlers();
 			}
@@ -41,7 +26,7 @@ class Timer {
 	}
 	
 	isRunning() {
-		return this.interval === null;
+		return this.interval !== null;
 	}
 	
 	getTimerScheduledTime() {
@@ -61,7 +46,6 @@ class Timer {
 	}
 	
 	reset() {
-		console.log("Reset Timer.");
 		clearInterval(this.interval);
 		this.interval = null;
 		this.beginTime = null;
@@ -112,6 +96,28 @@ class Timer {
 			});
 		} catch (err) {
 			console.log(handlers, methodname, err); 
+		}
+	}
+	
+	toJSON() {
+		var obj = {
+			beginTime: this.beginTime,
+			endTime: this.endTime,
+			totalTime: this.totalTime,
+			timeLeft: this.timeLeft
+		};
+		return JSON.stringify(obj);
+	}
+	
+	fromJSON(json) {
+		var obj = JSON.parse(json);
+		this.beginTime = obj.beginTime;
+		this.endTime = obj.endTime;
+		this.totalTime = obj.totalTime;
+		this.timeLeft = obj.timeLeft;
+		
+		if(this.endTime>Date.now()) {
+			this.initializeInterval();
 		}
 	}
 	

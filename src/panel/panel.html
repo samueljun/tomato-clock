@@ -9,20 +9,49 @@
 	<link href="panel.css" type="text/css" rel="stylesheet">
 </head>
 <body>
-	<div class="container">
+	<div class="container main">
 		<div class="text-center">
-			<h3>
-				<span id="current-time-text">00:00</span>
-			</h3>
-			<button class="btn btn-block btn-danger" id="tomato-button" tabindex="1">Tomato</button>
-			<button class="btn btn-block btn-default" id="short-break-button">Short Break</button>
-			<button class="btn btn-block btn-default" id="long-break-button">Long Break</button>
-			<button class="btn btn-block btn-warning" id="reset-button">Reset</button>
-
-			<div class="info-buttons">
-				<button class="btn btn-link" id="stats-link" title="Stats">
-					<span class="glyphicon glyphicon-stats"></span>
-				</button>
+			<div>
+				<div class="top-row-left">
+					<a class="btn btn-link" id="stats-link" title="Stats">
+						<span class="glyphicon glyphicon-stats"></span>
+					</a>	
+				</div>
+				<div class="top-row-left">
+					<h3>
+						<span id="current-time-text">00:00</span>
+					</h3>
+				</div>
+				<div class="top-row-left">
+					<a class="btn btn-link" id="stats-link" title="Stats">
+						<span class="glyphicon glyphicon-stats"></span>
+					</a>
+				</div>
+			</div>
+			<div class="btn-group btn-group-justified btn-block">
+				<a class="btn btn-danger" id="tomato-button" tabindex="1">Tomato</a>
+				<a class="btn btn-danger" id="append-tomato-button">+</a>
+			</div>
+			<div class="btn-group btn-group-justified btn-block">
+				<a class="btn btn-default" id="short-break-button">Short Break</a>
+				<a class="btn btn-default" id="append-short-break-button">+</a>
+			</div>
+			<div class="btn-group btn-group-justified btn-block">
+				<a class="btn btn-default" id="long-break-button">Long Break</a>
+				<a class="btn btn-default" id="append-long-break-button">+</a>
+			</div>
+			<div class="btn-group btn-group-justified btn-block">
+				<a class="btn btn-warning" id="reset-button">Reset</a>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-2 time-block" id="queue-pos-0"></div>
+					<div class="col-xs-2 time-block" id="queue-pos-1"></div>
+					<div class="col-xs-2 time-block" id="queue-pos-2"></div>
+					<div class="col-xs-2 time-block" id="queue-pos-3"></div>
+					<div class="col-xs-2 time-block" id="queue-pos-4"></div>
+					<div class="col-xs-2 time-block" id="queue-pos-5"></div>
+				</div>
 			</div>
 		</div>
 	</div>
