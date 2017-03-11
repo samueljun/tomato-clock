@@ -20,3 +20,7 @@ function millisecondsToTimeText(milliseconds) {
 
 	return `${minutesString}:${secondsString}`;
 }
+
+function wrapId() {
+	return "#"+[].join.call(arguments, "-");
+}

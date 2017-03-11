@@ -35,11 +35,11 @@ class Panel {
 				const block = $('#queue-pos-' + pos);
 				const time = serializedTimeBlocks[pos];
 				block.removeClass('btn-danger btn-info btn-primary');
-				if(time == getMinutesInMilliseconds(MINUTES_IN_TOMATO)) {
+				if(time == getMinutesInMilliseconds(DEFAULTS[TOMATO_TIME_KEY])) {
 					block.addClass('btn-danger');
-				} else if(time == getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK)) {
+				} else if(time == getMinutesInMilliseconds(DEFAULTS[SHORT_BREAK_KEY])) {
 					block.addClass('btn-info');
-				} else if(time == getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK)) {
+				} else if(time == getMinutesInMilliseconds(DEFAULTS[LONG_BREAK_KEY])) {
 					block.addClass('btn-primary');
 				}
 			}
@@ -63,29 +63,27 @@ class Panel {
 	}
 
 	setEventListeners() {
-		$('#tomato-button').click(() => {
-			this.setTimers(MINUTES_IN_TOMATO);
-		});
-
-		$('#short-break-button').click(() => {
-			this.setTimers(MINUTES_IN_SHORT_BREAK);
-		});
-
-		$('#long-break-button').click(() => {
-			this.setTimers(MINUTES_IN_LONG_BREAK);
-		});
+		const _this = this;
 		
-		$('#append-tomato-button').click(() => {
-			this.appendTimeBlock(MINUTES_IN_TOMATO);
-		});
-
-		$('#append-short-break-button').click(() => {
-			this.appendTimeBlock(MINUTES_IN_SHORT_BREAK);
-		});
-
-		$('#append-long-break-button').click(() => {
-			this.appendTimeBlock(MINUTES_IN_LONG_BREAK);
-		});
+		const registerClickEvent = (type) => {
+			$(wrapId(type, 'button')).click(() => {
+				_this.setTimers(type);
+			});
+		}
+		
+		registerClickEvent(TOMATO_TIME_KEY);
+		registerClickEvent(SHORT_BREAK_KEY);
+		registerClickEvent(LONG_BREAK_KEY);
+		
+		const registerAppendClickEvent = (type) => {
+			$(wrapId('append', type, 'button')).click(() => {
+				_this.appendTimeBlock(type);
+			});
+		}
+		
+		registerAppendClickEvent(TOMATO_TIME_KEY);
+		registerAppendClickEvent(SHORT_BREAK_KEY);
+		registerAppendClickEvent(LONG_BREAK_KEY);
 
 		$('#reset-button').click(() => {
 			this.resetTimers();
@@ -114,8 +112,8 @@ class Panel {
 		}.bind(this), function(error) { console.log(error);});
 	}
 
-	setTimers(minutes) {
-		const milliseconds = getMinutesInMilliseconds(minutes);
+	setTimers(type) {
+		const milliseconds = getMinutesInMilliseconds(DEFAULTS[type]);
 		this.timer.set(milliseconds);
 		browser.runtime.sendMessage({
 			action: 'setTimer',
@@ -125,8 +123,8 @@ class Panel {
 		});
 	}
 	
-	appendTimeBlock(minutes) {
-		const milliseconds = getMinutesInMilliseconds(minutes);
+	appendTimeBlock(type) {
+		const milliseconds = getMinutesInMilliseconds(DEFAULTS[type]);
 		const messagePromise = browser.runtime.sendMessage({
 			action: 'appendTimeBlock',
 			data: {
