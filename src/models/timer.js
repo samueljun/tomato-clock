@@ -28,7 +28,7 @@ class Timer {
 	}
 	
 	isRunning() {
-		return this.interval !== null;
+		return this.timeLeft>0;
 	}
 	
 	getTimerScheduledTime() {
