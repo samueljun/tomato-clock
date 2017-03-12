@@ -28,3 +28,13 @@ function wrapId() {
 function colorToCSS(color) {
 	return 'rgb('+color.r+','+color.g+','+color.b+')';
 }
+
+//http://stackoverflow.com/a/5624139/3865594
+function componentToHex(comp) {
+    var hex = comp.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function colorToCSS(color) {
+    return "#" + componentToHex(color.r) + componentToHex(color.g) + componentToHex(color.b);
+}
