@@ -19,8 +19,8 @@ class Timer {
 		this.interval = setInterval(() => {
 			this.timeLeft = this.endTime - Date.now();
 			if (this.timeLeft <= 0) {
-				this.reset();
 				this.notifyFinishedEventHandlers();
+				this.reset();
 			} else {
 				this.notifyUpdatedEventHandlers();
 			}

@@ -30,8 +30,8 @@ class Communicator {
 		this.setBadgeText(minutesLeft, color);
 	}
 
-	onTimerFinished(timer, time, type) {
-		const {minutes} = millisecondsToMinutesAndSeconds(time);
+	onTimerFinished(timer) {
+		const {minutes} = millisecondsToMinutesAndSeconds(timer.totalTime);
 		this.addAlarmToTimeline(minutes);
 	}
 	
