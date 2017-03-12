@@ -44,7 +44,7 @@ class Storage {
 		});
 	}
 	
-	setRepeat(value) {
+	setRepeatDefaultQueue(value) {
 		return new Promise((resolve, reject) => {
 			this.storage.set({[REPEAT_KEY]: value}).then(() => {
 				resolve();
@@ -52,7 +52,7 @@ class Storage {
 		});
 	}
 	
-	getRepeat() {
+	getRepeatDefaultQueue() {
 		return new Promise((resolve, reject) => {
 			this.storage.get([REPEAT_KEY]).then(storageResults => {
 				var value = storageResults[REPEAT_KEY] || DEFAULTS[REPEAT_KEY];

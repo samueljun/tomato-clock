@@ -20,7 +20,7 @@ class Settings {
 	}
 	
 	updateRepeatInput() {
-		this.storage.getRepeat().then((value) => {
+		this.storage.getRepeatDefaultQueue().then((value) => {
 			$(wrapId("repeat")).prop('checked', value);
 		});
 	}
@@ -50,7 +50,7 @@ class Settings {
 		registerClickEvent(LONG_BREAK_KEY);
 		
 		$(wrapId('repeat')).change((event) => {
-			this.storage.setRepeat(event.target.checked);
+			this.storage.setRepeatDefaultQueue(event.target.checked);
 		});
 				
 		$('.time-block').click((event) => {

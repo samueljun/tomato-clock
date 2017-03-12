@@ -37,8 +37,14 @@ class TimeBlockQueue {
 				var type = this.timeBlocks.shift();
 				timer.set(type).then(() => { 
 					if(this.isDefaultQueue && this.timeBlocks.length==0) {
-						this.setDefaultQueue(timer).then(() => {
-							this.notifyStartedNextTimeBlockEventHandlers();
+						this.storage.getRepeatDefaultQueue().then(repeat => {
+							if(repeat) {
+								this.setDefaultQueue(timer).then(() => {
+									this.notifyStartedNextTimeBlockEventHandlers();
+								});
+							} else {
+								this.notifyStartedNextTimeBlockEventHandlers();
+							}
 						});
 					} else {
 						this.notifyStartedNextTimeBlockEventHandlers();
