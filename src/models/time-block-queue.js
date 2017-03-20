@@ -1,6 +1,6 @@
-class TimeBlockQueue {
-		
+class TimeBlockQueue {	
 	constructor() {
+		this.maxQueueLength = 12;
 		this.isDefaultQueue = false;
 		this.timeBlocks = [];
 		this.startedNextTimeBlockEventHandlers = [];
@@ -9,18 +9,77 @@ class TimeBlockQueue {
 
 	append(timer, type) {
 		this.isDefaultQueue = false;
-		return this._append(timer, type);
+		return this._appendWhenQueueNotFull(timer, type);
 	}
 	
-	_append(timer, type) {
-		if(this.timeBlocks.length < 12) {
+	rerunDefaultQueueIfActivated(timer) {
+		Storage.loadRepeatDefaultQueue().then(repeat => {
+			if(repeat) {
+				this.activateDefaultQueue(timer).then(() => {
+					this.notifyStartedNextTimeBlockEventHandlers();
+				});
+			} else {
+				this.notifyStartedNextTimeBlockEventHandlers();
+			}
+		});
+	}
+	
+	activateDefaultQueue(timer) {
+		this.isDefaultQueue = true;
+		return new Promise((resolve, reject) => {
+			Storage.loadDefaultQueue().then((defaultQueue) => {
+				this._appendWhenQueueNotFull(timer, defaultQueue).then(() => {
+					resolve();
+				});
+			});
+		});
+	}
+	
+	_appendWhenQueueNotFull(timer, type) {
+		if(this.timeBlocks.length < this.maxQueueLength) {
 			if(Array.isArray(type)) {
 				this.timeBlocks.push(...type); 
 			} else {
 				this.timeBlocks.push(type);
 			}
-			return this.checkForAndExecuteNextTimeBlock(timer);
+			return this.executeNextTimeBlockWhenReady(timer);
 		}
+	}
+	
+	executeNextTimeBlockWhenReady(timer) {
+		return new Promise((resolve, reject) => {
+			if(this.nextTimeBlockShallBeExecuted(timer)) {
+				timer.set(this.getNextTimeBlock()).then(() => { 
+					if(this.isLastBlockOfQueueExectued()) {
+						this.rerunDefaultQueueIfActivated(timer);
+					} else {
+						this.notifyStartedNextTimeBlockEventHandlers();
+					}
+					resolve();
+				});
+			} else {
+				if(this.wasLastBlockOfQueueExecuted(timer)) {
+					this.notifyQueueFinishedEventHandlers();
+				}
+				resolve();
+			}
+		});
+	}
+	
+	nextTimeBlockShallBeExecuted(timer) {
+		return !timer.isRunning() && this.timeBlocks.length>0;
+	}
+	
+	getNextTimeBlock() {
+		return this.timeBlocks.shift();
+	}
+	
+	isLastBlockOfQueueExectued() {
+		return this.isDefaultQueue && this.timeBlocks.length==0
+	}
+	
+	wasLastBlockOfQueueExecuted(timer) {
+		return !timer.isRunning() && this.timeBlocks.length==0
 	}
 	
 	remove(index) {
@@ -29,38 +88,9 @@ class TimeBlockQueue {
 			this.timeBlocks.splice(index, 1);
 		}
 	}
-	
-	checkForAndExecuteNextTimeBlock(timer) {
-		return new Promise((resolve, reject) => {
-			if(!timer.isRunning() && this.timeBlocks.length>0) {
-				var type = this.timeBlocks.shift();
-				timer.set(type).then(() => { 
-					if(this.isDefaultQueue && this.timeBlocks.length==0) {
-						Storage.loadRepeatDefaultQueue().then(repeat => {
-							if(repeat) {
-								this.activateDefaultQueue(timer).then(() => {
-									this.notifyStartedNextTimeBlockEventHandlers();
-								});
-							} else {
-								this.notifyStartedNextTimeBlockEventHandlers();
-							}
-						});
-					} else {
-						this.notifyStartedNextTimeBlockEventHandlers();
-					}
-					resolve()
-				});				
-			} else {
-				if(!timer.isRunning() && this.timeBlocks.length==0) {
-					this.notifyQueueFinishedEventHandlers();
-				}
-				resolve();
-			}
-		});
-	}
 		
 	onTimerFinished(timer) {
-		this.checkForAndExecuteNextTimeBlock(timer);
+		this.executeNextTimeBlockWhenReady(timer);
 	}
 	
 	registerStartedNextTimeBlockEventHandler(eventHandler) {
@@ -88,17 +118,6 @@ class TimeBlockQueue {
 		} catch (err) {
 			console.log(handlers, methodname, err); 
 		}
-	}
-	
-	activateDefaultQueue(timer) {
-		this.isDefaultQueue = true;
-		return new Promise((resolve, reject) => {
-			Storage.loadDefaultQueue().then((defaultQueue) => {
-				this._append(timer, defaultQueue).then(() => {
-					resolve();
-				});
-			});
-		});
 	}
 	
 	toJSON() {
