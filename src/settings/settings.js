@@ -1,6 +1,5 @@
 class Settings {
 	constructor() {
-		this.storage = new Storage();
 		this.updateInputs();
 		this.setEventListeners();
 		this.updateTimeBlockDisplay();
@@ -14,13 +13,13 @@ class Settings {
 	}
 	
 	updateTimeInput(type) {
-		this.storage.getTime(type).then((time) => {
+		Storage.loadTime(type).then((time) => {
 			$(wrapId(type)).val(time);
 		});
 	}
 	
 	updateRepeatInput() {
-		this.storage.getRepeatDefaultQueue().then((value) => {
+		Storage.loadRepeatDefaultQueue().then((value) => {
 			$(wrapId("repeat")).prop('checked', value);
 		});
 	}
@@ -50,7 +49,7 @@ class Settings {
 		registerClickEvent(LONG_BREAK_KEY);
 		
 		$(wrapId('repeat')).change((event) => {
-			this.storage.setRepeatDefaultQueue(event.target.checked);
+			Storage.saveRepeatDefaultQueue(event.target.checked);
 		});
 				
 		$('.time-block').click((event) => {
@@ -61,15 +60,15 @@ class Settings {
 	updateTime(type) {
 		var time = $('#'+type).val();
 		if(time) {
-			this.storage.setTime(type, time);
+			Storage.saveTime(type, time);
 		}
 	}
 	
 	appendBlock(type) {
-		this.storage.getDefaultQueue().then((defaultQueue) => {
+		Storage.loadDefaultQueue().then((defaultQueue) => {
 			if(defaultQueue.length<12) {
 				defaultQueue.push(type);
-				this.storage.setDefaultQueue(defaultQueue).then(() => {
+				Storage.saveDefaultQueue(defaultQueue).then(() => {
 					this.updateTimeBlockDisplay();
 				});
 			}
@@ -77,10 +76,10 @@ class Settings {
 	}
 	
 	removeTimeBlock(index) {
-		this.storage.getDefaultQueue().then((defaultQueue) => {
+		Storage.loadDefaultQueue().then((defaultQueue) => {
 			if(index>=0 && index<defaultQueue.length) {
 				defaultQueue.splice(index, 1);
-				this.storage.setDefaultQueue(defaultQueue).then(() => {
+				Storage.saveDefaultQueue(defaultQueue).then(() => {
 					this.updateTimeBlockDisplay();
 				});
 			}
@@ -90,7 +89,7 @@ class Settings {
 
 	
 	updateTimeBlockDisplay() {
-		this.storage.getDefaultQueue().then((defaultQueue) => {
+		Storage.loadDefaultQueue().then((defaultQueue) => {
 			for(var pos=0; pos<12; pos++) {
 				var block = $(document.getElementById('queue-pos-' + pos));
 				var blockType = defaultQueue[pos];

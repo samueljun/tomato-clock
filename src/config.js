@@ -1,6 +1,6 @@
 const ALARM_NAMESPACE = 'tomatoClockAlarm';
 const NOTIFICATION_ID = 'tomatoClockNotification';
-const STORAGE_KEY = 'timeline';
+const TIMELINE_KEY = 'timeline';
 const DEFAULT_QUEUE_KEY = "default-queue";
 const TOMATO_TIME_KEY = "tomato-time";
 const SHORT_BREAK_KEY = "short-break-time";

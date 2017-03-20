@@ -2,7 +2,6 @@ class Panel {
 	constructor() {
 		this.currentTimeText = $('#current-time-text');
 		this.timer = new Timer();
-		this.storage = new Storage();
 		
 		const messagePromise = browser.runtime.sendMessage({
 			action: 'getBackgroundTimer'

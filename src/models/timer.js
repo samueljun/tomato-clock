@@ -1,7 +1,6 @@
 class Timer {
 		
 	constructor() {
-		this.storage = new Storage();
 		this.interval = null;
 		this.beginTime = 0;
 		this.endTime = 0;
@@ -37,7 +36,7 @@ class Timer {
 	
 	set(type) {
 		return new Promise((resolve, reject) => {
-			this.storage.getTime(type).then((time) => {
+			Storage.loadTime(type).then((time) => {
 				const milliseconds = getMinutesInMilliseconds(time);
 				this.reset();
 				this.beginTime = Date.now();

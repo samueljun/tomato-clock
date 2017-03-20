@@ -5,7 +5,6 @@ class TimeBlockQueue {
 		this.timeBlocks = [];
 		this.startedNextTimeBlockEventHandlers = [];
 		this.queueFinishedEventHandlers = [];
-		this.storage = new Storage();
 	}
 
 	append(timer, type) {
@@ -37,9 +36,9 @@ class TimeBlockQueue {
 				var type = this.timeBlocks.shift();
 				timer.set(type).then(() => { 
 					if(this.isDefaultQueue && this.timeBlocks.length==0) {
-						this.storage.getRepeatDefaultQueue().then(repeat => {
+						Storage.loadRepeatDefaultQueue().then(repeat => {
 							if(repeat) {
-								this.setDefaultQueue(timer).then(() => {
+								this.activateDefaultQueue(timer).then(() => {
 									this.notifyStartedNextTimeBlockEventHandlers();
 								});
 							} else {
@@ -59,7 +58,7 @@ class TimeBlockQueue {
 			}
 		});
 	}
-	
+		
 	onTimerFinished(timer) {
 		this.checkForAndExecuteNextTimeBlock(timer);
 	}
@@ -91,10 +90,10 @@ class TimeBlockQueue {
 		}
 	}
 	
-	setDefaultQueue(timer) {
+	activateDefaultQueue(timer) {
 		this.isDefaultQueue = true;
 		return new Promise((resolve, reject) => {
-			this.storage.getDefaultQueue().then((defaultQueue) => {
+			Storage.loadDefaultQueue().then((defaultQueue) => {
 				this._append(timer, defaultQueue).then(() => {
 					resolve();
 				});
@@ -110,3 +109,4 @@ class TimeBlockQueue {
 		this.timeBlocks = [];
 	}
 }
+

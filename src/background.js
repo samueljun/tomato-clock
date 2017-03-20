@@ -32,7 +32,7 @@ class Background {
 		browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			switch (request.action) {
 				case 'setDefaultQueue':
-					this.timeBlockQueue.setDefaultQueue(this.timer).then(() => {
+					this.timeBlockQueue.activateDefaultQueue(this.timer).then(() => {
 						this.requestUIUpdate();
 					});
 					break;

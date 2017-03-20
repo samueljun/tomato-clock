@@ -1,21 +1,32 @@
 class Storage {
-		
-	constructor() {
-		this.storage = browser.storage.sync ||  browser.storage.local;
-		//this.storage.clear();
+
+	static getNativeStorage() {
+		return browser.storage.sync ||  browser.storage.local;;
 	}
-	
-	setDefaultQueue(queue) {
+
+	static loadRepeatDefaultQueue() {
+		const storage = Storage.getNativeStorage();
 		return new Promise((resolve, reject) => {
-			this.storage.set({[DEFAULT_QUEUE_KEY]: JSON.stringify(queue)}).then(() => {
+			storage.get([REPEAT_KEY]).then(storageResults => {
+				const value = storageResults[REPEAT_KEY] || DEFAULTS[REPEAT_KEY];
+				resolve(value);
+			});
+		});
+	}
+
+	static saveRepeatDefaultQueue(value) {
+		const storage = Storage.getNativeStorage();
+		return new Promise((resolve, reject) => {
+			storage.set({[REPEAT_KEY]: value}).then(() => {
 				resolve();
 			});
 		});
 	}
-	
-	getDefaultQueue() {
+		
+	static loadDefaultQueue() {
+		const storage = Storage.getNativeStorage();
 		return new Promise((resolve, reject) => {
-			this.storage.get(DEFAULT_QUEUE_KEY).then(storageResults => {
+			storage.get(DEFAULT_QUEUE_KEY).then(storageResults => {
 				var defaultQueue = [];
 				if(storageResults && storageResults[DEFAULT_QUEUE_KEY]) {
 					defaultQueue = JSON.parse(storageResults[DEFAULT_QUEUE_KEY]);
@@ -27,42 +38,51 @@ class Storage {
 		});
 	}
 
-	setTime(type, time) {
+	static saveDefaultQueue(queue) {
+		const storage = Storage.getNativeStorage();
 		return new Promise((resolve, reject) => {
-			this.storage.set({[type]: time}).then(() => {
+			storage.set({[DEFAULT_QUEUE_KEY]: JSON.stringify(queue)}).then(() => {
 				resolve();
 			});
 		});
 	}
-	
-	getTime(type) {
+
+	static loadTime(type) {
+		const storage = Storage.getNativeStorage();
 		return new Promise((resolve, reject) => {
-			this.storage.get(type).then(storageResults => {
+			storage.get(type).then(storageResults => {
 				var time = JSON.parse(storageResults[type] || DEFAULTS[type].toString());
 				resolve(time);
 			});
 		});
 	}
-	
-	setRepeatDefaultQueue(value) {
+
+	static saveTime(type, time) {
+		const storage = Storage.getNativeStorage();
 		return new Promise((resolve, reject) => {
-			this.storage.set({[REPEAT_KEY]: value}).then(() => {
+			storage.set({[type]: time}).then(() => {
 				resolve();
 			});
 		});
 	}
 	
-	getRepeatDefaultQueue() {
+	static loadTimeline() {
+		const storage = Storage.getNativeStorage();
 		return new Promise((resolve, reject) => {
-			this.storage.get([REPEAT_KEY]).then(storageResults => {
-				var value = storageResults[REPEAT_KEY] || DEFAULTS[REPEAT_KEY];
-				resolve(value);
+			storage.get(TIMELINE_KEY).then(storageResults => {
+				const timeline = storageResults[TIMELINE_KEY] || [];
+				resolve(timeline);
 			});
 		});
 	}
 	
-	_get() {
-		
+	static saveTimeline(timeline) {
+		const storage = Storage.getNativeStorage();
+		return new Promise((resolve, reject) => {
+			storage.set({[TIMELINE_KEY]: timeline}).then(() => {
+				resolve();
+			});
+		});
 	}
 	
 }
