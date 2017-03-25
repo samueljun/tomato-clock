@@ -1,6 +1,7 @@
 const STORAGE_KEY = 'timeline';
 
 class Timeline {
+	
 	constructor() {
 		this.storage = browser.storage.sync || browser.storage.local;
 		this.timeline = [];
@@ -9,7 +10,7 @@ class Timeline {
 
 	_getTimelinePromise() {
 		return new Promise((resolve, reject) => {
-			this.Storage.load(STORAGE_KEY, storageResults => {
+			this.storage.get(STORAGE_KEY, storageResults => {
 				const timeline = storageResults[STORAGE_KEY] || [];
 
 				this.timeline = timeline.map(timelineAlarm => {

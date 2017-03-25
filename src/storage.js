@@ -66,6 +66,18 @@ class Storage {
 		});
 	}
 	
+	static addAlarmToTimeline(timeBlockType, interval) {
+		const storage = Storage.getNativeStorage();
+		Storage.loadTimeline().then(timeline => {
+			timeline.push({
+				type: timeBlockType,
+				interval: interval,
+				date: new Date().toString() // should be initialized to Date whenever interacted with
+			});
+			Storage.saveTimeline(timeline);
+		});
+	}
+	
 	static loadTimeline() {
 		const storage = Storage.getNativeStorage();
 		return new Promise((resolve, reject) => {
@@ -84,5 +96,5 @@ class Storage {
 			});
 		});
 	}
-	
+
 }

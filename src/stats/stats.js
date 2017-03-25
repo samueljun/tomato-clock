@@ -27,9 +27,8 @@ class Stats {
 	constructor() {
 		// Get DOM Elements
 		this.tomatoesCount = document.getElementById('tomatoes-count');
-		this.fiveMinuteBreaksCount = document.getElementById('five-minute-breaks-count');
-		this.tenMinuteBreaksCount = document.getElementById('ten-minute-breaks-count');
-		this.fifteenMinuteBreaksCount = document.getElementById('fifteen-minute-breaks-count');
+		this.shortBreaksCount = document.getElementById('five-minute-breaks-count');
+		this.longBreaksCount = document.getElementById('ten-minute-breaks-count');
 		this.resetStatsButton = document.getElementById('reset-stats-button');
 
 		this.ctx = document.getElementById('completed-tomato-dates-chart').getContext('2d');
@@ -64,9 +63,8 @@ class Stats {
 
 	setStatsText(stats) {
 		this.tomatoesCount.textContent = stats.tomatoes;
-		this.fiveMinuteBreaksCount.textContent = stats.fiveMinuteBreaks;
-		this.tenMinuteBreaksCount.textContent = stats.tenMinuteBreaks;
-		this.fifteenMinuteBreaksCount.textContent = stats.fifteenMinuteBreaks;
+		this.shortBreaksCount.textContent = stats.shortBreaks;
+		this.longBreaksCount.textContent = stats.longBreaks;
 	}
 
 	changeStatDates(startDate, endDate) {
@@ -88,26 +86,22 @@ class Stats {
 
 		const stats = {
 			tomatoes: 0,
-			fiveMinuteBreaks: 0,
-			tenMinuteBreaks: 0,
-			fifteenMinuteBreaks: 0
+			shortBreaks: 0,
+			longBreaks: 0
 		};
 
 		// Go through timeline
 		for (let timelineAlarm of filteredTimeline) {
-			switch (timelineAlarm.timeout) {
-				case 1500000:
+			switch (timelineAlarm.type) {
+				case TOMATO_TIME_KEY:
 					stats.tomatoes++;
 					this.addTomatoDateToChartData(completedTomatoesChartData, timelineAlarm.date);
 					break;
-				case 300000:
-					stats.fiveMinuteBreaks++;
+				case SHORT_BREAK_KEY:
+					stats.shortBreaks++;
 					break;
-				case 600000:
-					stats.tenMinuteBreaks++;
-					break;
-				case 900000:
-					stats.fifteenMinuteBreaks++;
+				case LONG_BREAK_KEY:
+					stats.longBreaks++;
 					break;
 				default:
 					break;
