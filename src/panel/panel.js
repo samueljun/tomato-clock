@@ -8,14 +8,14 @@ class Panel {
 		}); 
 		
 		messagePromise.then(function(data) {
-			this.updateTimer(data.serializedTimer);
+			this.setTimer(data.serializedTimer);
 			this.updateTimeBlockDisplay(data.serializedTimeBlocks);
 		}.bind(this), function(error) { console.log(error);});
 
 		this.setEventListeners();
 	}
 	
-	updateTimer(serializedTimer) {
+	setTimer(serializedTimer) {
 		if (serializedTimer) {
 			this.timer.reset();
 			this.timer = new Timer(serializedTimer);
@@ -26,6 +26,8 @@ class Panel {
 			this.onTimerStarted(this.timer);
 		}
 	}
+	
+	
 	
 	updateTimeBlockDisplay(serializedTimeBlocks) {
 		if (serializedTimeBlocks) {
@@ -116,7 +118,7 @@ class Panel {
 			action: 'reset'
 		});
 		messagePromise.then(function(data) {
-			this.updateTimer(data.serializedTimer);
+			this.setTimer(data.serializedTimer);
 			this.updateTimeBlockDisplay(data.serializedTimeBlocks);
 		}.bind(this), function(error) { console.log(error);});
 	}
@@ -124,7 +126,7 @@ class Panel {
 	setTimers(type) {
 		this.timer.set(type);
 		browser.runtime.sendMessage({
-			action: 'setTimer',
+			action: 'update',
 			data: {
 				type
 			}
@@ -169,7 +171,7 @@ function initMessageHandling(panel) {
 	browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		switch (request.action) {
 			case 'update':
-				panel.updateTimer(request.data.serializedTimer);
+				panel.setTimer(request.data.serializedTimer);
 				panel.updateTimeBlockDisplay(request.data.serializedTimeBlocks);
 				break;
 		}

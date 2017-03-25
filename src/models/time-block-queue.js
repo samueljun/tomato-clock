@@ -42,19 +42,14 @@ class TimeBlockQueue {
 			} else {
 				this.timeBlocks.push(type);
 			}
-			return this.executeNextTimeBlockWhenReady(timer);
+			return this.executeNextTimeBlockIfReady(timer);
 		}
 	}
 	
-	executeNextTimeBlockWhenReady(timer) {
+	executeNextTimeBlockIfReady(timer) {
 		return new Promise((resolve, reject) => {
 			if(this.nextTimeBlockShallBeExecuted(timer)) {
-				timer.set(this.getNextTimeBlock()).then(() => { 
-					if(this.isLastBlockOfQueueExectued()) {
-						this.rerunDefaultQueueIfActivated(timer);
-					} else {
-						this.notifyStartedNextTimeBlockEventHandlers();
-					}
+				this.executeNextTimeBlock(timer).then(() => {
 					resolve();
 				});
 			} else {
@@ -63,6 +58,19 @@ class TimeBlockQueue {
 				}
 				resolve();
 			}
+		});
+	}
+	
+	executeNextTimeBlock(timer) {
+		return new Promise((resolve, reject) => {
+			timer.set(this.getNextTimeBlock()).then(() => { 
+				if(this.isLastBlockOfQueueExectued()) {
+					this.rerunDefaultQueueIfActivated(timer);
+				} else {
+					this.notifyStartedNextTimeBlockEventHandlers();
+				}
+				resolve();
+			});
 		});
 	}
 	
@@ -90,7 +98,7 @@ class TimeBlockQueue {
 	}
 		
 	onTimerFinished(timer) {
-		this.executeNextTimeBlockWhenReady(timer);
+		this.executeNextTimeBlockIfReady(timer);
 	}
 	
 	registerStartedNextTimeBlockEventHandler(eventHandler) {
