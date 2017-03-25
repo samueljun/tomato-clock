@@ -17,10 +17,6 @@ class NotificationHandler {
 		const message = START_MESSAGES[timer.type];
 		this.createBrowserNotification(message);
 	}
-
-	onTimerFinished(timer) {
-		this.addAlarmToTimeline(timer.type);
-	}
 	
 	onQueueFinished(timer) {
 		this.createBrowserNotification(FINISHED_MESSAGES);
@@ -37,14 +33,4 @@ class NotificationHandler {
 		this.notificationSound.play();
 	}
 	
-	addAlarmToTimeline(timeBlockType) {
-		Storage.loadTimeline().then(timeline => {
-			timeline.push({
-				type: timeBlockType,
-				date: new Date().toString() // should be initialized to Date whenever interacted with
-			});
-			Storage.saveTimeline(timeline);
-		});
-	}
-
 } 

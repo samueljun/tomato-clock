@@ -11,12 +11,16 @@ class Background {
 		this.timer.registerUpdatedEventHandler(this.badge);
 		this.timer.registerCanceledEventHandler(this.badge);
 		this.timer.registerStartedEventHandler(this.notificationHandler);
-		this.timer.registerFinishedEventHandler(this.notificationHandler);
+		this.timer.registerFinishedEventHandler(this);
 		this.timer.registerFinishedEventHandler(this.timeBlockQueue);
 		
 		this.timeBlockQueue.registerStartedNextTimeBlockEventHandler(this);
 
 		this.initMessageHandling();
+	}
+	
+	onTimerFinished(timer) {
+		Storage.addAlarmToTimeline(timer.type, timer.totalTime);
 	}
 	
 	onStartedNextTimeBlock() {
