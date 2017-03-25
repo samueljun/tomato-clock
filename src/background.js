@@ -1,15 +1,17 @@
 class Background {
 	constructor() {
-		this.communicator = new Communicator();
+		this.notificationHandler = new NotificationHandler();
+		this.badge = new Badge();
 		this.timer = new Timer();
 		this.timeBlockQueue = new TimeBlockQueue();
 		
-		this.timeBlockQueue.registerQueueFinishedEventHandler(this.communicator);
+		this.timeBlockQueue.registerQueueFinishedEventHandler(this.notificationHandler);
 		
-		this.timer.registerStartedEventHandler(this.communicator);
-		this.timer.registerUpdatedEventHandler(this.communicator);
-		this.timer.registerFinishedEventHandler(this.communicator);
-		this.timer.registerCanceledEventHandler(this.communicator);
+		this.timer.registerStartedEventHandler(this.badge);
+		this.timer.registerUpdatedEventHandler(this.badge);
+		this.timer.registerCanceledEventHandler(this.badge);
+		this.timer.registerStartedEventHandler(this.notificationHandler);
+		this.timer.registerFinishedEventHandler(this.notificationHandler);
 		this.timer.registerFinishedEventHandler(this.timeBlockQueue);
 		
 		this.timeBlockQueue.registerStartedNextTimeBlockEventHandler(this);
@@ -57,7 +59,7 @@ class Background {
 					return this.returnTimerAndBlocksAsData(sendResponse);
 					break;
 				default:
-					console.log("Message not supported.");
+					console.log("Message '"+request.action+"' not supported.");
 					break;
 			}
 		});

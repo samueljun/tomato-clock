@@ -1,8 +1,7 @@
-class Communicator {
+class NotificationHandler {
 	
 	constructor() {
 		this.notificationSound = new Audio('/assets/sounds/Portal2_sfx_button_positive.m4a');
-		this.badgeText = "";
 		this.initNotificationHandling();
 	}
 	
@@ -15,27 +14,12 @@ class Communicator {
 	}
 	
 	onTimerStarted(timer) {
-		this.updateBadgeText(timer);
 		const message = START_MESSAGES[timer.type];
 		this.createBrowserNotification(message);
-	}
-	
-	onTimerUpdated(timer) {
-		this.updateBadgeText(timer);
-	}
-	
-	updateBadgeText(timer) {
-		const minutesLeft = millisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString() || "";
-		const color = COLORS[timer.type];
-		this.setBadgeText(minutesLeft, color);
 	}
 
 	onTimerFinished(timer) {
 		this.addAlarmToTimeline(timer.type);
-	}
-	
-	onTimerCanceled(timer) {
-		this.setBadgeText("", COLORS['default']);
 	}
 	
 	onQueueFinished(timer) {
@@ -62,10 +46,5 @@ class Communicator {
 			Storage.saveTimeline(timeline);
 		});
 	}
-	
-	setBadgeText(text, color) {
-		browser.browserAction.setBadgeBackgroundColor({color: colorToCSS(color)});
-		browser.browserAction.setBadgeText({text});
-		this.badgeText = text;
-	}
+
 } 

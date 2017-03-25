@@ -35,7 +35,8 @@
 	  "storage.js",
 	  "models/timer.js",
 	  "models/time-block-queue.js",
-	  "communicator.js",
+	  "notification-handler.js",
+	  "badge.js",
       "background.js"
     ]
   },
