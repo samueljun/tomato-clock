@@ -18,8 +18,7 @@ class Panel {
 	updateTimer(serializedTimer) {
 		if (serializedTimer) {
 			this.timer.reset();
-			this.timer = new Timer();
-			this.timer.fromJSON(serializedTimer);
+			this.timer = new Timer(serializedTimer);
 			this.timer.registerStartedEventHandler(this);
 			this.timer.registerUpdatedEventHandler(this);
 			this.timer.registerFinishedEventHandler(this);

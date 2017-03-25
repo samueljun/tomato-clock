@@ -1,29 +1,42 @@
 class Timer {
 		
-	constructor() {
+	constructor(json) {
 		this.interval = null;
 		this.beginTime = 0;
 		this.endTime = 0;
 		this.totalTime = 0;
 		this.timeLeft = 0;
 		this.type = "";
+		this.updateInterval = 100;
 		
 		this.startedEventHandlers = [];
 		this.updatedEventHandlers = [];
 		this.finishedEventHandlers = [];
 		this.canceledEventHandlers = [];
+		
+		if(json) {
+			this.fromJSON(json);
+		}
 	}
 
 	initializeInterval() {
 		this.interval = setInterval(() => {
-			this.timeLeft = this.endTime - Date.now();
-			if (this.timeLeft <= 0) {
-				this.notifyFinishedEventHandlers();
-				this.reset();
-			} else {
-				this.notifyUpdatedEventHandlers();
-			}
-		}, 100);
+			this.update();
+		}, this.updateInterval);
+	}
+	
+	update() {
+		this.timeLeft = this.endTime - Date.now();
+		if(this.timerIsFinished()) {
+			this.notifyFinishedEventHandlers();
+			this.reset();
+		} else {
+			this.notifyUpdatedEventHandlers();
+		}
+	}
+	
+	timerIsFinished() {
+		return this.timeLeft <= 0;
 	}
 	
 	isRunning() {
