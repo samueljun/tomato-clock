@@ -159,25 +159,21 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	}
 });
 
-browser.commands.onCommand.addListener((command) => { 
+browser.commands.onCommand.addListener(command => {
 	switch (command) {
-		case 'start-timer':
-		background.setTimer(getMinutesInMilliseconds(MINUTES_IN_TOMATO));
-		break;
-		
-		case 'reset-timer':
-		background.resetTimer();
-		break;
-		
+		case 'start-tomato':
+			background.setTimer(getMinutesInMilliseconds(MINUTES_IN_TOMATO));
+			break;
 		case 'start-shortbreak':
-		background.setTimer(getMinutesInMilliseconds(MINUTES_IN_SHORTBREAK));
-		break;
-		
+			background.setTimer(getMinutesInMilliseconds(MINUTES_IN_SHORTBREAK));
+			break;
 		case 'start-longbreak':
-		background.setTimer(getMinutesInMilliseconds(MINUTES_IN_LONGBREAK));
-		break;
-		
+			background.setTimer(getMinutesInMilliseconds(MINUTES_IN_LONGBREAK));
+			break;
+		case 'reset-timer':
+			background.resetTimer();
+			break;
 		default:
-		break;
+			break;
 	}
 });

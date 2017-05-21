@@ -39,31 +39,31 @@
     "notifications",
     "storage"
   ],
-  
+
   "commands": {
-	"start-timer": {
-	  "suggested_key": {
-	    "default": "Alt+1"
-	  },
-	  "description": "Start a new tomato timer."
-	},
-	"reset-timer": {
-	  "suggested_key": {
-	    "default": "Alt+4"
-	  },
-	  "description": "Reset the current tomato timer."
-	},
-	"start-shortbreak": {
-	  "suggested_key": {
-	    "default": "Alt+2"
-	  },
-	  "description": "Start a new short break."
-	},
-	"start-longbreak": {
-	  "suggested_key": {
-	    "default": "Alt+3"
-	  },
-	  "description": "Start a new long break."
-	}
+    "start-tomato": {
+      "suggested_key": {
+        "default": "Alt+Shift+1"
+      },
+      "description": "Start a new tomato timer."
+    },
+    "start-shortbreak": {
+      "suggested_key": {
+        "default": "Alt+Shift+2"
+      },
+      "description": "Start a new short break."
+    },
+    "start-longbreak": {
+      "suggested_key": {
+        "default": "Alt+Shift+3"
+      },
+      "description": "Start a new long break."
+    },
+    "reset-timer": {
+      "suggested_key": {
+        "default": "Alt+Shift+4"
+      },
+      "description": "Reset the current timer."
+    }
   }
 }
