@@ -5,6 +5,12 @@
   "author": "Samuel Jun",
   "description": "A simple browser extension for managing your productivity.",
 
+  "applications": {
+    "gecko": {
+      "id": "tomatoclock@samueljun.com"
+    }
+  },
+
   "icons": {
     "16": "/assets/img/tomato-icon-16.png",
     "32": "/assets/img/tomato-icon-32.png",
