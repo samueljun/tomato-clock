@@ -9,7 +9,7 @@ class Timeline {
 
 	_getTimelinePromise() {
 		return new Promise((resolve, reject) => {
-			this.storage.get(STORAGE_KEY, storageResults => {
+			this.storage.get(STORAGE_KEY).then(storageResults => {
 				const timeline = storageResults[STORAGE_KEY] || [];
 
 				this.timeline = timeline.map(timelineAlarm => {
