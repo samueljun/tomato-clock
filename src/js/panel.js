@@ -16,18 +16,18 @@ class Panel {
 
 	setEventListeners() {
 		document.getElementById('tomato-button').addEventListener('click', () => {
-			this.setTimer(getMinutesInMilliseconds(25));
-			this.setBackgroundTimer(getMinutesInMilliseconds(25));
+			this.setTimer(getMinutesInMilliseconds(MINUTES_IN_TOMATO));
+			this.setBackgroundTimer(getMinutesInMilliseconds(MINUTES_IN_TOMATO));
 		});
 
 		document.getElementById('short-break-button').addEventListener('click', () => {
-			this.setTimer(getMinutesInMilliseconds(5));
-			this.setBackgroundTimer(getMinutesInMilliseconds(5));
+			this.setTimer(getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK));
+			this.setBackgroundTimer(getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK));
 		});
 
 		document.getElementById('long-break-button').addEventListener('click', () => {
-			this.setTimer(getMinutesInMilliseconds(15));
-			this.setBackgroundTimer(getMinutesInMilliseconds(15));
+			this.setTimer(getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK));
+			this.setBackgroundTimer(getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK));
 		});
 
 		document.getElementById('reset-button').addEventListener('click', () => {
