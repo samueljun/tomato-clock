@@ -39,6 +39,7 @@
       "/js/constants.js",
       "/js/utils.js",
       "/js/badge.js",
+      "/js/notifications.js",
       "/js/timeline.js",
       "/js/timer.js",
       "/js/background.js"

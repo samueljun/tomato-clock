@@ -2,10 +2,11 @@ class Timer {
 	constructor() {
 		this.timer = {};
 		this.badge = new Badge();
-		this.notificationSound = new Audio('/assets/sounds/Portal2_sfx_button_positive.m4a');
+		this.notifications = new Notifications();
 		this.timeline = new Timeline();
 
 		this.resetTimer();
+		this.setListeners();
 	}
 
 	getTimer() {
@@ -37,7 +38,7 @@ class Timer {
 				if (timer.timeLeft <= 0) {
 					const {minutes} = getMillisecondsToMinutesAndSeconds(timer.totalTime);
 
-					this.createBrowserNotification(minutes);
+					this.notifications.createBrowserNotification(minutes);
 					this.timeline.addAlarmToTimeline(minutes);
 					this.resetTimer();
 				} else {
@@ -57,24 +58,49 @@ class Timer {
 		this.badge.setBadgeText(minutes.toString());
 	}
 
-	createBrowserNotification(totalMinutes) {
-		const isAlarmTomato = totalMinutes === MINUTES_IN_TOMATO;
-
-		// this.notificationSound.onended = () => {
-		browser.notifications.create(NOTIFICATION_ID, {
-			type: 'basic',
-			iconUrl: '/assets/img/tomato-icon-64.png',
-			title: 'Tomato Clock',
-			message: isAlarmTomato ?
-				'Your Tomato timer is done!' :
-				`Your ${totalMinutes} minute timer is done!`
-		});
-		// };
-
-		this.notificationSound.play();
-	}
-
 	getTimerScheduledTime() {
 		return this.timer.scheduledTime;
+	}
+
+	setListeners() {
+		browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+			switch (request.action) {
+				case RUNTIME_ACTION.RESET_TIMER:
+					this.resetTimer();
+					break;
+				case RUNTIME_ACTION.SET_TIMER:
+					this.setTimer(request.data.milliseconds);
+					break;
+				case RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME:
+					// Hack because of difference in chrome and firefox
+					// Check if polyfill fixes the issue
+					if (sendResponse) {
+						sendResponse(this.getTimerScheduledTime());
+					}
+					return this.getTimerScheduledTime();
+					break;
+				default:
+					break;
+			}
+		});
+
+		browser.commands.onCommand.addListener(command => {
+			switch (command) {
+				case 'start-tomato':
+					this.setTimer(getMinutesInMilliseconds(MINUTES_IN_TOMATO));
+					break;
+				case 'start-shortbreak':
+					this.setTimer(getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK));
+					break;
+				case 'start-longbreak':
+					this.setTimer(getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK));
+					break;
+				case 'reset-timer':
+					this.resetTimer();
+					break;
+				default:
+					break;
+			}
+		});
 	}
 }
