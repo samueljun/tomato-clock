@@ -36,6 +36,8 @@
   "background": {
     "scripts": [
       "/lib/browser-polyfill.min.js",
+      "constants.js",
+      "utils.js",
       "/stats/timeline.js",
       "background.js"
     ]

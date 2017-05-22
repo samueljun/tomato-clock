@@ -1,27 +1,3 @@
-const ALARM_NAMESPACE = 'tomatoClockAlarm';
-const NOTIFICATION_ID = 'tomatoClockNotification';
-const MINUTES_IN_TOMATO = 25;
-const MINUTES_IN_SHORTBREAK = 5;
-const MINUTES_IN_LONGBREAK = 15;
-
-
-
-function getSecondsInMilliseconds(seconds) {
-	return seconds * 1000;
-}
-function getMinutesInMilliseconds(minutes) {
-	return minutes * 60000;
-}
-
-function getMillisecondsToMinutesAndSeconds(milliseconds) {
-	return {
-		minutes: parseInt((milliseconds / (1000 * 60)) % 60),
-		seconds: parseInt((milliseconds / 1000) % 60)
-	};
-}
-
-
-
 class Background {
 	constructor() {
 		this.timer = {};
