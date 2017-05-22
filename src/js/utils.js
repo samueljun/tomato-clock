@@ -20,3 +20,26 @@ function getMillisecondsToTimeText(milliseconds) {
 
 	return `${minutesString}:${secondsString}`;
 }
+
+function getZeroArray(length) {
+	const zeroArray = [];
+
+	for (let i = 0; i < length; i++) {
+		zeroArray[i] = 0;
+	}
+
+	return zeroArray;
+}
+
+function getDateRangeStringArray(startDate, endDate) {
+	const dateStringArray = [];
+
+	const currentStartDate = new Date(startDate);
+	while (currentStartDate <= endDate) {
+		dateStringArray.push(currentStartDate.toDateString());
+
+		currentStartDate.setDate(currentStartDate.getDate() + 1);
+	}
+
+	return dateStringArray;
+}
