@@ -1,5 +1,3 @@
-const STORAGE_KEY = 'timeline';
-
 class Timeline {
 	constructor() {
 		this.storage = browser.storage.sync || browser.storage.local;

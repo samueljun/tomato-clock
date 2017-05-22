@@ -1,23 +1,3 @@
-const ALARM_NAMESPACE = 'tomatoClockAlarm';
-
-function getSecondsInMilliseconds(seconds) {
-	return seconds * 1000;
-}
-function getMinutesInMilliseconds(minutes) {
-	return minutes * 60000;
-}
-
-function millisecondsToTimeText(milliseconds) {
-	const minutes = parseInt((milliseconds / (1000 * 60)) % 60);
-	const seconds = parseInt((milliseconds / 1000) % 60);
-	const minutesString = (minutes < 10) ? `0${minutes}` : minutes.toString();
-	const secondsString = (seconds < 10) ? `0${seconds}` : seconds.toString();
-
-	return `${minutesString}:${secondsString}`;
-}
-
-
-
 class Panel {
 	constructor() {
 		this.currentTimeText = document.getElementById('current-time-text');
@@ -95,7 +75,7 @@ class Panel {
 	}
 
 	setCurrentTimeText(milliseconds) {
-		this.currentTimeText.textContent = millisecondsToTimeText(milliseconds);
+		this.currentTimeText.textContent = getMillisecondsToTimeText(milliseconds);
 	}
 
 	resetBackgroundTimer() {
