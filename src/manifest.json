@@ -30,16 +30,16 @@
       "256": "/assets/img/tomato-icon-256.png"
     },
     "default_title": "Tomato Clock",
-    "default_popup": "/panel/panel.html"
+    "default_popup": "/html/panel.html"
   },
 
   "background": {
     "scripts": [
       "/lib/browser-polyfill.min.js",
-      "constants.js",
-      "utils.js",
-      "/stats/timeline.js",
-      "background.js"
+      "/js/constants.js",
+      "/js/utils.js",
+      "/js/timeline.js",
+      "/js/background.js"
     ]
   },
 

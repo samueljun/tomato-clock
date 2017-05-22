@@ -56,7 +56,7 @@ class Panel {
 		});
 
 		document.getElementById('stats-link').addEventListener('click', () => {
-			browser.tabs.create({url: '/stats/stats.html'});
+			browser.tabs.create({url: '/html/stats.html'});
 		});
 	}
 
