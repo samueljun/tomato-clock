@@ -4,7 +4,7 @@ class Panel {
 		this.timer = {};
 
 		browser.runtime.sendMessage({
-			action: 'getTimerScheduledTime'
+			action: RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME
 		}).then(scheduledTime => {
 			if (scheduledTime) {
 				this.setTimer(scheduledTime - Date.now());
@@ -80,7 +80,7 @@ class Panel {
 
 	resetBackgroundTimer() {
 		browser.runtime.sendMessage({
-			action: 'resetTimer'
+			action: RUNTIME_ACTION.RESET_TIMER
 		});
 	}
 
@@ -88,7 +88,7 @@ class Panel {
 		const minutes = milliseconds / 60000;
 
 		browser.runtime.sendMessage({
-			action: 'setTimer',
+			action: RUNTIME_ACTION.SET_TIMER,
 			data: {
 				milliseconds
 			}

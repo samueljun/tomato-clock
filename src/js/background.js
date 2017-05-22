@@ -102,13 +102,13 @@ browser.notifications.onClicked.addListener(notificationId => {
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	switch (request.action) {
-		case 'resetTimer':
+		case RUNTIME_ACTION.RESET_TIMER:
 			background.resetTimer();
 			break;
-		case 'setTimer':
+		case RUNTIME_ACTION.SET_TIMER:
 			background.setTimer(request.data.milliseconds);
 			break;
-		case 'getTimerScheduledTime':
+		case RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME:
 			// Hack because of difference in chrome and firefox
 			// Check if polyfill fixes the issue
 			if (sendResponse) {
