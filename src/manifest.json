@@ -38,6 +38,7 @@
       "/lib/browser-polyfill.min.js",
       "/js/constants.js",
       "/js/utils.js",
+      "/js/badge.js",
       "/js/timeline.js",
       "/js/background.js"
     ]

@@ -1,21 +1,11 @@
 class Background {
 	constructor() {
 		this.timer = {};
-		this.badgeText = '';
+		this.badge = new Badge();
 		this.notificationSound = new Audio('/assets/sounds/Portal2_sfx_button_positive.m4a');
 		this.timeline = new Timeline();
 
 		this.resetTimer();
-	}
-
-	getBadgeText() {
-		return this.badgeText;
-	}
-
-	setBadgeText(text) {
-		browser.browserAction.setBadgeBackgroundColor({color: '#666'});
-		browser.browserAction.setBadgeText({text});
-		this.badgeText = text;
 	}
 
 	getTimer() {
@@ -32,7 +22,7 @@ class Background {
 			timeLeft: 0
 		};
 
-		this.setBadgeText('');
+		this.badge.setBadgeText('');
 	}
 
 	setTimer(milliseconds) {
@@ -53,8 +43,8 @@ class Background {
 				} else {
 					const minutesLeft = getMillisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
 
-					if (this.getBadgeText() !== minutesLeft) {
-						this.setBadgeText(minutesLeft);
+					if (this.badge.getBadgeText() !== minutesLeft) {
+						this.badge.setBadgeText(minutesLeft);
 					}
 				}
 			}, getSecondsInMilliseconds(1)),
@@ -64,7 +54,7 @@ class Background {
 		};
 
 		const {minutes} = getMillisecondsToMinutesAndSeconds(milliseconds);
-		browser.browserAction.setBadgeText({text: minutes.toString()});
+		this.badge.setBadgeText(minutes.toString());
 	}
 
 	createBrowserNotification(totalMinutes) {
@@ -87,7 +77,6 @@ class Background {
 	getTimerScheduledTime() {
 		return this.timer.scheduledTime;
 	}
-
 }
 
 
