@@ -59,13 +59,13 @@
       },
       "description": "Start a new tomato timer."
     },
-    "start-shortbreak": {
+    "start-short-break": {
       "suggested_key": {
         "default": "Alt+Shift+2"
       },
       "description": "Start a new short break."
     },
-    "start-longbreak": {
+    "start-long-break": {
       "suggested_key": {
         "default": "Alt+Shift+3"
       },

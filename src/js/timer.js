@@ -89,10 +89,10 @@ class Timer {
 				case 'start-tomato':
 					this.setTimer(getMinutesInMilliseconds(MINUTES_IN_TOMATO));
 					break;
-				case 'start-shortbreak':
+				case 'start-short-break':
 					this.setTimer(getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK));
 					break;
-				case 'start-longbreak':
+				case 'start-long-break':
 					this.setTimer(getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK));
 					break;
 				case 'reset-timer':
