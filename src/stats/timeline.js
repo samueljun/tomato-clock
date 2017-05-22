@@ -37,6 +37,17 @@ class Timeline {
 		});
 	}
 
+	addAlarmToTimeline(alarmMinutes) {
+		const timeline = this.getTimeline();
+
+		timeline.push({
+			timeout: alarmMinutes * 60000,
+			date: new Date().toString() // should be initialized to Date whenever interacted with
+		});
+
+		this.storage.set({[STORAGE_KEY]: timeline});
+	}
+
 	resetTimeline() {
 		this.timeline = [];
 		this.storage.remove(STORAGE_KEY);

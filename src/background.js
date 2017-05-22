@@ -1,6 +1,5 @@
 const ALARM_NAMESPACE = 'tomatoClockAlarm';
 const NOTIFICATION_ID = 'tomatoClockNotification';
-const STORAGE_KEY = 'timeline';
 const MINUTES_IN_TOMATO = 25;
 const MINUTES_IN_SHORTBREAK = 5;
 const MINUTES_IN_LONGBREAK = 15;
@@ -28,6 +27,8 @@ class Background {
 		this.timer = {};
 		this.badgeText = '';
 		this.notificationSound = new Audio('/assets/sounds/Portal2_sfx_button_positive.m4a');
+		this.timeline = new Timeline();
+
 		this.resetTimer();
 	}
 
@@ -71,7 +72,7 @@ class Background {
 					const {minutes} = millisecondsToMinutesAndSeconds(timer.totalTime);
 
 					this.createBrowserNotification(minutes);
-					this.addAlarmToTimeline(minutes);
+					this.timeline.addAlarmToTimeline(minutes);
 					this.resetTimer();
 				} else {
 					const minutesLeft = millisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
@@ -111,21 +112,6 @@ class Background {
 		return this.timer.scheduledTime;
 	}
 
-	addAlarmToTimeline(alarmMinutes) {
-		// If sync storage isn't available, use local storage
-		const storage = browser.storage.sync || browser.storage.local;
-
-		storage.get(STORAGE_KEY, storageResults => {
-			const timeline = storageResults[STORAGE_KEY] || [];
-
-			timeline.push({
-				timeout: alarmMinutes * 60000,
-				date: new Date().toString() // should be initialized to Date whenever interacted with
-			});
-
-			storage.set({[STORAGE_KEY]: timeline});
-		});
-	}
 }
 
 
