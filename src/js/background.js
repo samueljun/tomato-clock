@@ -127,10 +127,10 @@ browser.commands.onCommand.addListener(command => {
 			background.setTimer(getMinutesInMilliseconds(MINUTES_IN_TOMATO));
 			break;
 		case 'start-shortbreak':
-			background.setTimer(getMinutesInMilliseconds(MINUTES_IN_SHORTBREAK));
+			background.setTimer(getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK));
 			break;
 		case 'start-longbreak':
-			background.setTimer(getMinutesInMilliseconds(MINUTES_IN_LONGBREAK));
+			background.setTimer(getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK));
 			break;
 		case 'reset-timer':
 			background.resetTimer();
