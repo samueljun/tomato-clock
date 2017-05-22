@@ -13,7 +13,7 @@ function getMinutesInMilliseconds(minutes) {
 	return minutes * 60000;
 }
 
-function millisecondsToMinutesAndSeconds(milliseconds) {
+function getMillisecondsToMinutesAndSeconds(milliseconds) {
 	return {
 		minutes: parseInt((milliseconds / (1000 * 60)) % 60),
 		seconds: parseInt((milliseconds / 1000) % 60)
@@ -69,13 +69,13 @@ class Background {
 				timer.timeLeft -= getSecondsInMilliseconds(1);
 
 				if (timer.timeLeft <= 0) {
-					const {minutes} = millisecondsToMinutesAndSeconds(timer.totalTime);
+					const {minutes} = getMillisecondsToMinutesAndSeconds(timer.totalTime);
 
 					this.createBrowserNotification(minutes);
 					this.timeline.addAlarmToTimeline(minutes);
 					this.resetTimer();
 				} else {
-					const minutesLeft = millisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
+					const minutesLeft = getMillisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
 
 					if (this.getBadgeText() !== minutesLeft) {
 						this.setBadgeText(minutesLeft);
@@ -87,7 +87,7 @@ class Background {
 			timeLeft: milliseconds
 		};
 
-		const {minutes} = millisecondsToMinutesAndSeconds(milliseconds);
+		const {minutes} = getMillisecondsToMinutesAndSeconds(milliseconds);
 		browser.browserAction.setBadgeText({text: minutes.toString()});
 	}
 
