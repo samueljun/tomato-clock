@@ -7,8 +7,8 @@ class Timeline {
 
 	_getTimelinePromise() {
 		return new Promise((resolve, reject) => {
-			this.storage.get(STORAGE_KEY).then(storageResults => {
-				const timeline = storageResults[STORAGE_KEY] || [];
+			this.storage.get(STORAGE_KEY_TIMELINE).then(storageResults => {
+				const timeline = storageResults[STORAGE_KEY_TIMELINE] || [];
 
 				this.timeline = timeline.map(timelineAlarm => {
 					timelineAlarm.date = new Date(timelineAlarm.date);
@@ -43,11 +43,11 @@ class Timeline {
 			date: new Date().toString() // should be initialized to Date whenever interacted with
 		});
 
-		this.storage.set({[STORAGE_KEY]: timeline});
+		this.storage.set({[STORAGE_KEY_TIMELINE]: timeline});
 	}
 
 	resetTimeline() {
 		this.timeline = [];
-		this.storage.remove(STORAGE_KEY);
+		this.storage.remove(STORAGE_KEY_TIMELINE);
 	}
 };
