@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Tomato Clock",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "author": "Samuel Jun",
   "description": "A simple browser extension for managing your productivity.",
 
