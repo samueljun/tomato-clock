@@ -38,8 +38,8 @@ class Stats {
 
 	setStatsText(stats) {
 		this.tomatoesCount.textContent = stats.tomatoes;
-		this.shortBreaksCount.textContent = stats.fiveMinuteBreaks;
-		this.longBreaksCount.textContent = stats.fifteenMinuteBreaks;
+		this.shortBreaksCount.textContent = stats.shortBreaks;
+		this.longBreaksCount.textContent = stats.longBreaks;
 	}
 
 	changeStatDates(startDate, endDate) {
@@ -61,8 +61,8 @@ class Stats {
 
 		const stats = {
 			tomatoes: 0,
-			fiveMinuteBreaks: 0,
-			fifteenMinuteBreaks: 0
+			shortBreaks: 0,
+			longBreaks: 0
 		};
 
 		// Go through timeline
@@ -73,10 +73,10 @@ class Stats {
 					this.addTomatoDateToChartData(completedTomatoesChartData, timelineAlarm.date);
 					break;
 				case getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK):
-					stats.fiveMinuteBreaks++;
+					stats.shortBreaks++;
 					break;
 				case getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK):
-					stats.fifteenMinuteBreaks++;
+					stats.longBreaks++;
 					break;
 				default:
 					break;
