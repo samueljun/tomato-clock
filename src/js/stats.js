@@ -2,13 +2,12 @@ class Stats {
 	constructor() {
 		// Get DOM Elements
 		this.tomatoesCount = document.getElementById('tomatoes-count');
-		this.fiveMinuteBreaksCount = document.getElementById('five-minute-breaks-count');
-		this.tenMinuteBreaksCount = document.getElementById('ten-minute-breaks-count');
-		this.fifteenMinuteBreaksCount = document.getElementById('fifteen-minute-breaks-count');
+		this.shortBreaksCount = document.getElementById('short-breaks-count');
+		this.longBreaksCount = document.getElementById('long-breaks-count');
 		this.resetStatsButton = document.getElementById('reset-stats-button');
 
 		this.ctx = document.getElementById('completed-tomato-dates-chart').getContext('2d');
-		this.completedTomatoesChart;
+		this.completedTomatoesChart = null;
 
 		this.resetStatsButton.addEventListener('click', () => {
 			if (confirm('Are you sure you want to reset your stats?')) {
@@ -39,9 +38,8 @@ class Stats {
 
 	setStatsText(stats) {
 		this.tomatoesCount.textContent = stats.tomatoes;
-		this.fiveMinuteBreaksCount.textContent = stats.fiveMinuteBreaks;
-		this.tenMinuteBreaksCount.textContent = stats.tenMinuteBreaks;
-		this.fifteenMinuteBreaksCount.textContent = stats.fifteenMinuteBreaks;
+		this.shortBreaksCount.textContent = stats.fiveMinuteBreaks;
+		this.longBreaksCount.textContent = stats.fifteenMinuteBreaks;
 	}
 
 	changeStatDates(startDate, endDate) {
@@ -64,24 +62,20 @@ class Stats {
 		const stats = {
 			tomatoes: 0,
 			fiveMinuteBreaks: 0,
-			tenMinuteBreaks: 0,
 			fifteenMinuteBreaks: 0
 		};
 
 		// Go through timeline
 		for (let timelineAlarm of filteredTimeline) {
 			switch (timelineAlarm.timeout) {
-				case 1500000:
+				case getMinutesInMilliseconds(MINUTES_IN_TOMATO):
 					stats.tomatoes++;
 					this.addTomatoDateToChartData(completedTomatoesChartData, timelineAlarm.date);
 					break;
-				case 300000:
+				case getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK):
 					stats.fiveMinuteBreaks++;
 					break;
-				case 600000:
-					stats.tenMinuteBreaks++;
-					break;
-				case 900000:
+				case getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK):
 					stats.fifteenMinuteBreaks++;
 					break;
 				default:

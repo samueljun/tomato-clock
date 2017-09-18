@@ -41,7 +41,7 @@ class Timer {
 					const {minutes} = getMillisecondsToMinutesAndSeconds(timer.totalTime);
 
 					this.notifications.createBrowserNotification(minutes);
-					this.timeline.addAlarmToTimeline(minutes);
+					this.timeline.addAlarmToTimeline(timer.totalTime);
 					this.resetTimer();
 				} else {
 					const minutesLeft = getMillisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
