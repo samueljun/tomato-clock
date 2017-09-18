@@ -1,9 +1,11 @@
 class Timer {
 	constructor() {
-		this.timer = {};
+		this.settings = new Settings();
 		this.badge = new Badge();
-		this.notifications = new Notifications();
+		this.notifications = new Notifications(this.settings);
 		this.timeline = new Timeline();
+
+		this.timer = {};
 
 		this.resetTimer();
 		this.setListeners();

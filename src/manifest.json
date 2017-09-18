@@ -38,6 +38,7 @@
       "/lib/browser-polyfill.min.js",
       "/js/constants.js",
       "/js/utils.js",
+      "/js/settings.js",
       "/js/badge.js",
       "/js/notifications.js",
       "/js/timeline.js",
@@ -77,5 +78,10 @@
       },
       "description": "Reset the current timer."
     }
+  },
+
+  "options_ui": {
+    "page": "/html/options.html",
+    "browser_style": false
   }
 }

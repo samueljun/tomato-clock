@@ -1,5 +1,7 @@
 class Notifications {
-	constructor() {
+	constructor(settings) {
+		this.settings = settings;
+
 		this.notificationSound = new Audio('/assets/sounds/Portal2_sfx_button_positive.m4a');
 
 		this.setListeners();
@@ -19,7 +21,11 @@ class Notifications {
 		});
 		// };
 
-		this.notificationSound.play();
+		this.settings.getSettings().then(settings => {
+			if (settings.isNotificationSoundEnabled) {
+				this.notificationSound.play();
+			}
+		});
 	}
 
 	setListeners() {
