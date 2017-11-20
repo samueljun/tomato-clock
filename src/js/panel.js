@@ -11,23 +11,31 @@ class Panel {
 			}
 		});
 
+		this.settings = new Settings();
+		this.settings.getSettings().then(settings => {
+			const {minutesInTomato, minutesInShortBreak, minutesInLongBreak} = settings;
+			this.minutesInTomato = minutesInTomato;
+			this.minutesInShortBreak = minutesInShortBreak;
+			this.minutesInLongBreak = minutesInLongBreak;
+		});
+
 		this.setEventListeners();
 	}
 
 	setEventListeners() {
 		document.getElementById('tomato-button').addEventListener('click', () => {
-			this.setTimer(getMinutesInMilliseconds(MINUTES_IN_TOMATO));
-			this.setBackgroundTimer(getMinutesInMilliseconds(MINUTES_IN_TOMATO));
+			this.setTimer(getMinutesInMilliseconds(this.minutesInTomato));
+			this.setBackgroundTimer(getMinutesInMilliseconds(this.minutesInTomato));
 		});
 
 		document.getElementById('short-break-button').addEventListener('click', () => {
-			this.setTimer(getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK));
-			this.setBackgroundTimer(getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK));
+			this.setTimer(getMinutesInMilliseconds(this.minutesInShortBreak));
+			this.setBackgroundTimer(getMinutesInMilliseconds(this.minutesInShortBreak));
 		});
 
 		document.getElementById('long-break-button').addEventListener('click', () => {
-			this.setTimer(getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK));
-			this.setBackgroundTimer(getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK));
+			this.setTimer(getMinutesInMilliseconds(this.minutesInLongBreak));
+			this.setBackgroundTimer(getMinutesInMilliseconds(this.minutesInLongBreak));
 		});
 
 		document.getElementById('reset-button').addEventListener('click', () => {
