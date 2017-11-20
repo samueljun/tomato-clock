@@ -1,3 +1,12 @@
 body {
 	background-color: transparent;
 }
+
+input.minutes {
+	width: 5em;
+	margin: 5px 1em;
+}
+
+table.minutes {
+	margin-bottom: 1em;
+}
