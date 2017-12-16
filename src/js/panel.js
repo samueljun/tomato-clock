@@ -93,8 +93,6 @@ class Panel {
 	}
 
 	setBackgroundTimer(milliseconds) {
-		const minutes = milliseconds / 60000;
-
 		browser.runtime.sendMessage({
 			action: RUNTIME_ACTION.SET_TIMER,
 			data: {
