@@ -67,15 +67,15 @@ class Stats {
 
 		// Go through timeline
 		for (let timelineAlarm of filteredTimeline) {
-			switch (timelineAlarm.timeout) {
-				case getMinutesInMilliseconds(MINUTES_IN_TOMATO):
+			switch (timelineAlarm.type) {
+				case TIMER_TYPE.TOMATO:
 					stats.tomatoes++;
 					this.addTomatoDateToChartData(completedTomatoesChartData, timelineAlarm.date);
 					break;
-				case getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK):
+				case TIMER_TYPE.SHORT_BREAK:
 					stats.shortBreaks++;
 					break;
-				case getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK):
+				case TIMER_TYPE.LONG_BREAK:
 					stats.longBreaks++;
 					break;
 				default:

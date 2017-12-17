@@ -7,19 +7,30 @@ class Notifications {
 		this.setListeners();
 	}
 
-	createBrowserNotification(totalMinutes) {
-		const isAlarmTomato = totalMinutes === MINUTES_IN_TOMATO;
+	createBrowserNotification(timerType) {
+		let message = '';
 
-		// this.notificationSound.onended = () => {
+		switch (timerType) {
+			case TIMER_TYPE.TOMATO:
+				message = 'Your Tomato timer is done!';
+				break;
+			case TIMER_TYPE.SHORT_BREAK:
+				message = 'Your short break is done!';
+				break;
+			case TIMER_TYPE.LONG_BREAK:
+				message = 'Your long break is done!';
+				break;
+			default:
+				message = 'Your timer is done!'
+				break;
+		}
+
 		browser.notifications.create(NOTIFICATION_ID, {
 			type: 'basic',
 			iconUrl: '/assets/img/tomato-icon-64.png',
 			title: 'Tomato Clock',
-			message: isAlarmTomato ?
-				'Your Tomato timer is done!' :
-				`Your ${totalMinutes} minute timer is done!`
+			message
 		});
-		// };
 
 		this.settings.getSettings().then(settings => {
 			if (settings.isNotificationSoundEnabled) {

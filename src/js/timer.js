@@ -22,42 +22,46 @@ class Timer {
 			interval: null,
 			scheduledTime: null,
 			totalTime: 0,
-			timeLeft: 0
+			timeLeft: 0,
+			type: null
 		};
 
 		this.badge.setBadgeText('');
 	}
 
-	setTimer(milliseconds) {
+	setTimer(type) {
 		this.resetTimer();
 
-		this.timer = {
-			interval: setInterval(() => {
-				const timer = this.getTimer();
+		this.settings.getSettings().then(settings => {
+			const milliseconds = getTimerTypeMilliseconds(type, settings);
 
-				timer.timeLeft -= getSecondsInMilliseconds(1);
+			this.timer = {
+				interval: setInterval(() => {
+					const timer = this.getTimer();
 
-				if (timer.timeLeft <= 0) {
-					const {minutes} = getMillisecondsToMinutesAndSeconds(timer.totalTime);
+					timer.timeLeft -= getSecondsInMilliseconds(1);
 
-					this.notifications.createBrowserNotification(minutes);
-					this.timeline.addAlarmToTimeline(timer.totalTime);
-					this.resetTimer();
-				} else {
-					const minutesLeft = getMillisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
+					if (timer.timeLeft <= 0) {
+						this.notifications.createBrowserNotification(timer.type);
+						this.timeline.addAlarmToTimeline(timer.type, timer.totalTime);
+						this.resetTimer();
+					} else {
+						const minutesLeft = getMillisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
 
-					if (this.badge.getBadgeText() !== minutesLeft) {
-						this.badge.setBadgeText(minutesLeft);
+						if (this.badge.getBadgeText() !== minutesLeft) {
+							this.badge.setBadgeText(minutesLeft);
+						}
 					}
-				}
-			}, getSecondsInMilliseconds(1)),
-			scheduledTime: Date.now() + milliseconds,
-			totalTime: milliseconds,
-			timeLeft: milliseconds
-		};
+				}, getSecondsInMilliseconds(1)),
+				scheduledTime: Date.now() + milliseconds,
+				totalTime: milliseconds,
+				timeLeft: milliseconds,
+				type
+			};
 
-		const {minutes} = getMillisecondsToMinutesAndSeconds(milliseconds);
-		this.badge.setBadgeText(minutes.toString());
+			const {minutes} = getMillisecondsToMinutesAndSeconds(milliseconds);
+			this.badge.setBadgeText(minutes.toString());
+		});
 	}
 
 	getTimerScheduledTime() {
@@ -71,7 +75,7 @@ class Timer {
 					this.resetTimer();
 					break;
 				case RUNTIME_ACTION.SET_TIMER:
-					this.setTimer(request.data.milliseconds);
+					this.setTimer(request.data.type);
 					break;
 				case RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME:
 					// Hack because of difference in chrome and firefox
@@ -89,13 +93,13 @@ class Timer {
 		browser.commands.onCommand.addListener(command => {
 			switch (command) {
 				case 'start-tomato':
-					this.setTimer(getMinutesInMilliseconds(MINUTES_IN_TOMATO));
+					this.setTimer(TIMER_TYPE.TOMATO);
 					break;
 				case 'start-short-break':
-					this.setTimer(getMinutesInMilliseconds(MINUTES_IN_SHORT_BREAK));
+					this.setTimer(TIMER_TYPE.SHORT_BREAK);
 					break;
 				case 'start-long-break':
-					this.setTimer(getMinutesInMilliseconds(MINUTES_IN_LONG_BREAK));
+					this.setTimer(TIMER_TYPE.LONG_BREAK);
 					break;
 				case 'reset-timer':
 					this.resetTimer();

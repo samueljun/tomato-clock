@@ -13,10 +13,9 @@ class Panel {
 
 		this.settings = new Settings();
 		this.settings.getSettings().then(settings => {
-			const {minutesInTomato, minutesInShortBreak, minutesInLongBreak} = settings;
-			this.minutesInTomato = minutesInTomato;
-			this.minutesInShortBreak = minutesInShortBreak;
-			this.minutesInLongBreak = minutesInLongBreak;
+			this.minutesInTomato = settings.minutesInTomato;
+			this.minutesInShortBreak = settings.minutesInShortBreak;
+			this.minutesInLongBreak = settings.minutesInLongBreak;
 		});
 
 		this.setEventListeners();
@@ -25,17 +24,17 @@ class Panel {
 	setEventListeners() {
 		document.getElementById('tomato-button').addEventListener('click', () => {
 			this.setTimer(getMinutesInMilliseconds(this.minutesInTomato));
-			this.setBackgroundTimer(getMinutesInMilliseconds(this.minutesInTomato));
+			this.setBackgroundTimer(TIMER_TYPE.TOMATO);
 		});
 
 		document.getElementById('short-break-button').addEventListener('click', () => {
 			this.setTimer(getMinutesInMilliseconds(this.minutesInShortBreak));
-			this.setBackgroundTimer(getMinutesInMilliseconds(this.minutesInShortBreak));
+			this.setBackgroundTimer(TIMER_TYPE.SHORT_BREAK);
 		});
 
 		document.getElementById('long-break-button').addEventListener('click', () => {
 			this.setTimer(getMinutesInMilliseconds(this.minutesInLongBreak));
-			this.setBackgroundTimer(getMinutesInMilliseconds(this.minutesInLongBreak));
+			this.setBackgroundTimer(TIMER_TYPE.LONG_BREAK);
 		});
 
 		document.getElementById('reset-button').addEventListener('click', () => {
@@ -92,11 +91,11 @@ class Panel {
 		});
 	}
 
-	setBackgroundTimer(milliseconds) {
+	setBackgroundTimer(type) {
 		browser.runtime.sendMessage({
 			action: RUNTIME_ACTION.SET_TIMER,
 			data: {
-				milliseconds
+				type
 			}
 		});
 	}

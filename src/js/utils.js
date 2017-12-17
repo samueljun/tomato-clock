@@ -43,3 +43,16 @@ function getDateRangeStringArray(startDate, endDate) {
 
 	return dateStringArray;
 }
+
+function getTimerTypeMilliseconds(type, settings) {
+	switch (type) {
+		case TIMER_TYPE.TOMATO:
+			return getMinutesInMilliseconds(settings.minutesInTomato);
+		case TIMER_TYPE.SHORT_BREAK:
+			return getMinutesInMilliseconds(settings.minutesInShortBreak);
+		case TIMER_TYPE.LONG_BREAK:
+			return getMinutesInMilliseconds(settings.minutesInLongBreak);
+		default:
+			return;
+	}
+}

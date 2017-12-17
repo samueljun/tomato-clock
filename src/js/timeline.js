@@ -35,11 +35,12 @@ class Timeline {
 		});
 	}
 
-	addAlarmToTimeline(alarmTime) {
+	addAlarmToTimeline(type, totalTime) {
 		const timeline = this.getTimeline();
 
 		timeline.push({
-			timeout: alarmTime,
+			timeout: totalTime,
+			type,
 			date: new Date().toString() // should be initialized to Date whenever interacted with
 		});
 
