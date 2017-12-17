@@ -24,7 +24,6 @@ class Timer {
 			interval: null,
 			scheduledTime: null,
 			totalTime: 0,
-			timeLeft: 0,
 			type: null
 		};
 
@@ -40,15 +39,14 @@ class Timer {
 			this.timer = {
 				interval: setInterval(() => {
 					const timer = this.getTimer();
+					const timeLeft = timer.scheduledTime - Date.now();
 
-					timer.timeLeft -= getSecondsInMilliseconds(1);
-
-					if (timer.timeLeft <= 0) {
+					if (timeLeft <= 0) {
 						this.notifications.createBrowserNotification(timer.type);
 						this.timeline.addAlarmToTimeline(timer.type, timer.totalTime);
 						this.resetTimer();
 					} else {
-						const minutesLeft = getMillisecondsToMinutesAndSeconds(timer.timeLeft).minutes.toString();
+						const minutesLeft = getMillisecondsToMinutesAndSeconds(timeLeft).minutes.toString();
 
 						if (this.badge.getBadgeText() !== minutesLeft) {
 							this.badge.setBadgeText(minutesLeft);
@@ -57,7 +55,6 @@ class Timer {
 				}, getSecondsInMilliseconds(1)),
 				scheduledTime: Date.now() + milliseconds,
 				totalTime: milliseconds,
-				timeLeft: milliseconds,
 				type
 			};
 
