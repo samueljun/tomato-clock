@@ -48,7 +48,9 @@ class Panel {
 	}
 
 	resetTimer() {
-		clearInterval(this.timer.interval);
+		if (this.timer.interval) {
+			clearInterval(this.timer.interval);
+		}
 
 		this.timer = {
 			interval: null,
