@@ -47,11 +47,17 @@ function getDateRangeStringArray(startDate, endDate) {
 function getTimerTypeMilliseconds(type, settings) {
 	switch (type) {
 		case TIMER_TYPE.TOMATO:
-			return getMinutesInMilliseconds(settings.minutesInTomato);
+			return getMinutesInMilliseconds(
+				settings.minutesInTomato || DEFAULT_SETTINGS.minutesInTomato
+			);
 		case TIMER_TYPE.SHORT_BREAK:
-			return getMinutesInMilliseconds(settings.minutesInShortBreak);
+			return getMinutesInMilliseconds(
+				settings.minutesInShortBreak || DEFAULT_SETTINGS.minutesInShortBreak
+			);
 		case TIMER_TYPE.LONG_BREAK:
-			return getMinutesInMilliseconds(settings.minutesInLongBreak);
+			return getMinutesInMilliseconds(
+				settings.minutesInLongBreak || DEFAULT_SETTINGS.minutesInLongBreak
+			);
 		default:
 			return;
 	}

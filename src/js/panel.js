@@ -1,5 +1,6 @@
 class Panel {
 	constructor() {
+		this.settings = new Settings();
 		this.currentTimeText = document.getElementById('current-time-text');
 		this.timer = {};
 
@@ -7,33 +8,27 @@ class Panel {
 			action: RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME
 		}).then(scheduledTime => {
 			if (scheduledTime) {
-				this.setTimer(scheduledTime - Date.now());
+				this.setDisplayTimer(scheduledTime - Date.now());
 			}
 		});
 
-		this.settings = new Settings();
-		this.settings.getSettings().then(settings => {
-			this.minutesInTomato = settings.minutesInTomato;
-			this.minutesInShortBreak = settings.minutesInShortBreak;
-			this.minutesInLongBreak = settings.minutesInLongBreak;
-		});
 
 		this.setEventListeners();
 	}
 
 	setEventListeners() {
 		document.getElementById('tomato-button').addEventListener('click', () => {
-			this.setTimer(getMinutesInMilliseconds(this.minutesInTomato));
+			this.setTimer(TIMER_TYPE.TOMATO);
 			this.setBackgroundTimer(TIMER_TYPE.TOMATO);
 		});
 
 		document.getElementById('short-break-button').addEventListener('click', () => {
-			this.setTimer(getMinutesInMilliseconds(this.minutesInShortBreak));
+			this.setTimer(TIMER_TYPE.SHORT_BREAK);
 			this.setBackgroundTimer(TIMER_TYPE.SHORT_BREAK);
 		});
 
 		document.getElementById('long-break-button').addEventListener('click', () => {
-			this.setTimer(getMinutesInMilliseconds(this.minutesInLongBreak));
+			this.setTimer(TIMER_TYPE.LONG_BREAK);
 			this.setBackgroundTimer(TIMER_TYPE.LONG_BREAK);
 		});
 
@@ -64,7 +59,14 @@ class Panel {
 		return this.timer;
 	}
 
-	setTimer(milliseconds) {
+	setTimer(type) {
+		this.settings.getSettings().then(settings => {
+			const milliseconds = getTimerTypeMilliseconds(type, settings);
+			this.setDisplayTimer(milliseconds)
+		});
+	}
+
+	setDisplayTimer(milliseconds) {
 		this.resetTimer();
 		this.setCurrentTimeText(milliseconds);
 
