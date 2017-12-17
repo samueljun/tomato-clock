@@ -1,10 +1,22 @@
 # Tomato Clock - Browser Extension
 
-Tomato Clock is a simple browser extension for managing your productivity. Use the extension to break down your work into 25 minute 'Tomato' intervals separated by short breaks.
+Tomato Clock is a simple browser extension for managing your productivity. Use the extension to break down your work into 25 minute 'Tomato' intervals separated by short breaks. Use the long break after completing four Tomato intervals.
 
-The add-on uses the default browser notification system, accompanied by a sound, to let you know when the timer is over. The add-on also features stats for tracking how many 'Tomatoes' you complete. Your stats are synced across devices using the browser's cloud storage support.
+Features:
 
-> Due to a trademark complaint, the extension was renamed from Pomodoro Clock to Tomato Clock.
+* Customizable timer lengths
+* Browser notifications
+* Stat tracking
+
+You can customize the length of the Tomatoes and breaks in the extension page. The extension uses the default browser notification system, accompanied by a sound, to let you know when the timer is over. The extension also features stats for tracking how many Tomatoes you complete. Your stats are synced across devices using the browser's cloud storage support.
+
+---
+
+Please file any issues or feature requests at https://github.com/samueljun/tomato-clock/issues.
+
+---
+
+Due to a trademark complaint, the extension was renamed from Pomodoro Clock to Tomato Clock.
 
 ## Installation
 
