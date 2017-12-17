@@ -13,10 +13,12 @@ class Options {
 
 	setOptionsOnPage() {
 		this.settings.getSettings().then(settings => {
-			const {isNotificationSoundEnabled, 
+			const {
+				isNotificationSoundEnabled,
 				minutesInTomato,
 				minutesInShortBreak,
-				minutesInLongBreak} = settings;
+				minutesInLongBreak
+			} = settings;
 
 			this.domNotificationSoundCheckbox.checked = isNotificationSoundEnabled;
 			this.domMinutesInTomato.value = minutesInTomato;
