@@ -62,7 +62,7 @@ class Panel {
 	setTimer(type) {
 		this.settings.getSettings().then(settings => {
 			const milliseconds = getTimerTypeMilliseconds(type, settings);
-			this.setDisplayTimer(milliseconds)
+			this.setDisplayTimer(milliseconds);
 		});
 	}
 
