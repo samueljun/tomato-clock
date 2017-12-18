@@ -1,12 +1,8 @@
 body {
 	background-color: transparent;
+	margin: 1em;
 }
 
-input.minutes {
-	width: 5em;
-	margin: 5px 1em;
-}
-
-table.minutes {
-	margin-bottom: 1em;
+#options-form {
+	max-width: 500px;
 }

@@ -11,25 +11,24 @@
 </head>
 <body>
 	<form id="options-form">
+		<div class="form-group">
+			<label for="minutes-in-tomato" class="control-label">Minutes in Tomato</label>
+			<input type="number" class="form-control" id="minutes-in-tomato">
+		</div>
+		<div class="form-group">
+			<label for="minutes-in-short-break" class="control-label">Minutes in Short Break</label>
+			<input type="number" class="form-control" id="minutes-in-short-break">
+		</div>
+		<div class="form-group">
+			<label for="minutes-in-long-break" class="control-label">Minutes in Long Break</label>
+			<input type="number" class="form-control" id="minutes-in-long-break">
+		</div>
+
 		<div class="checkbox">
 			<label>
 				<input type="checkbox" id="notification-sound-checkbox"> Notification sound
 			</label>
 		</div>
-		<table class="minutes">
-			<tr>
-				<td>Minutes in a tomato:</td>
-				<td><input class="minutes" type="number" id="minutes-in-tomato"></td>
-			</tr>
-			<tr>
-				<td>Minutes in a short break:</td>
-				<td><input class="minutes" type="number" id="minutes-in-short-break"></input></td>
-			</tr>
-			<tr>
-				<td>Minutes in a long break:</td>
-				<td><input class="minutes" type="number" id="minutes-in-long-break"></input></td>
-			</tr>
-		</table>
 
 		<button type="submit" class="btn btn-primary">Save</button>
 	</form>
