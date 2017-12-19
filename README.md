@@ -46,3 +46,32 @@ Due to a trademark complaint, the extension was renamed from Pomodoro Clock to T
 2. Enable developer mode
 3. Click `Load unpacked extension...`
 4. Load the `src` folder
+
+### Updating the version number
+
+1. In a single commit, update the `"version"` in the `manifest.json` file based on [semver](http://semver.org/). The commit message should simply be the version. For example:
+
+```
+commit 349c96167ee43ffd9135b4908281f176313d6ac9
+Author: Samuel Jun <mrsamueljun@gmail.com>
+Date:   Sat May 20 19:17:19 2017 -0700
+
+    4.0.0
+
+```
+
+2. Tag the commit with the version number.
+
+```sh
+git tag 4.0.0
+```
+
+3. Finally push the commit and tag to origin.
+
+```sh
+git push && git push --tags
+```
+
+### Building submission file
+
+Use the provided `build.sh` script to create a zip file of the extension.
