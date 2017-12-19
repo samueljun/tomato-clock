@@ -6,10 +6,11 @@ class Settings {
 	getSettings() {
 		return new Promise((resolve, reject) => {
 			const onSuccess = (storageResults) => {
-				const settings = {
-					...DEFAULT_SETTINGS,
-					...storageResults[STORAGE_KEY.SETTINGS]
-				};
+				const settings = Object.assign(
+					{},
+					DEFAULT_SETTINGS,
+					storageResults[STORAGE_KEY.SETTINGS]
+				);
 
 				resolve(settings);
 			};
