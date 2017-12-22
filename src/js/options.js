@@ -42,8 +42,7 @@ class Options {
 	}
 
 	setEventListeners() {
-		document.getElementById('options-form').addEventListener('submit', e => {
-			e.preventDefault();
+		document.getElementById('options-form').addEventListener('submit', () => {
 			this.saveOptions();
 		});
 
