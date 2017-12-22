@@ -11,7 +11,7 @@
     global.browser = mod.exports;
   }
 })(this, function (module) {
-  /* webextension-polyfill - v0.1.1 - Sat May 20 2017 16:51:57 */
+  /* webextension-polyfill - v0.2.1 - Fri Dec 22 2017 13:37:45 */
   /* -*- Mode: indent-tabs-mode: nil; js-indent-level: 2 -*- */
   /* vim: set sts=2 sw=2 et tw=80: */
   /* This Source Code Form is subject to the terms of the Mozilla Public
@@ -164,6 +164,21 @@
           "set": {
             "minArgs": 1,
             "maxArgs": 1
+          }
+        },
+        "devtools": {
+          "inspectedWindow": {
+            "eval": {
+              "minArgs": 1,
+              "maxArgs": 2
+            }
+          },
+          "panels": {
+            "create": {
+              "minArgs": 3,
+              "maxArgs": 3,
+              "singleCallbackArg": true
+            }
           }
         },
         "downloads": {
@@ -600,15 +615,20 @@
        *        The promise's resolution function.
        * @param {function} promise.rejection
        *        The promise's rejection function.
+       * @param {object} metadata
+       *        Metadata about the wrapped method which has created the callback.
+       * @param {integer} metadata.maxResolvedArgs
+       *        The maximum number of arguments which may be passed to the
+       *        callback created by the wrapped async function.
        *
        * @returns {function}
        *        The generated callback function.
        */
-      const makeCallback = promise => {
+      const makeCallback = (promise, metadata) => {
         return (...callbackArgs) => {
           if (chrome.runtime.lastError) {
             promise.reject(chrome.runtime.lastError);
-          } else if (callbackArgs.length === 1) {
+          } else if (metadata.singleCallbackArg || callbackArgs.length === 1) {
             promise.resolve(callbackArgs[0]);
           } else {
             promise.resolve(callbackArgs);
@@ -631,6 +651,9 @@
        *        The maximum number of arguments which may be passed to the
        *        function. If called with more than this number of arguments, the
        *        wrapper will raise an exception.
+       * @param {integer} metadata.maxResolvedArgs
+       *        The maximum number of arguments which may be passed to the
+       *        callback created by the wrapped async function.
        *
        * @returns {function(object, ...*)}
        *       The generated wrapper function.
@@ -648,7 +671,7 @@
           }
 
           return new Promise((resolve, reject) => {
-            target[name](...args, makeCallback({ resolve, reject }));
+            target[name](...args, makeCallback({ resolve, reject }, metadata));
           });
         };
       };
@@ -862,7 +885,12 @@
         }
       };
 
-      return wrapObject(chrome, staticWrappers, apiMetadata);
+      // Create a new empty object and copy the properties of the original chrome object
+      // to prevent a Proxy violation exception for the devtools API getter
+      // (which is a read-only non-configurable property on the original target).
+      const targetObject = Object.assign({}, chrome);
+
+      return wrapObject(targetObject, staticWrappers, apiMetadata);
     };
 
     // The build process adds a UMD wrapper around this file, which makes the

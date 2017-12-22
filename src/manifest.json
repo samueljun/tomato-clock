@@ -35,7 +35,7 @@
 
   "background": {
     "scripts": [
-      "/lib/browser-polyfill.min.js",
+      "/lib/browser-polyfill/browser-polyfill.min.js",
       "/js/constants.js",
       "/js/utils.js",
       "/js/settings.js",
