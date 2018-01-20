@@ -31,7 +31,6 @@ class Timer {
 	}
 
 	setTimer(type) {
-		console.log("ich bin fertig");
 		this.resetTimer();
 
 		this.settings.getSettings().then(settings => {

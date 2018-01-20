@@ -25,13 +25,13 @@ class Notifications {
 				break;
 		}
 
-		console.log("test");
 		this.settings.getSettings().then(settings => {
 			browser.notifications.create(NOTIFICATION_ID, {
 				type: 'basic',
 				iconUrl: '/assets/img/tomato-icon-64.png',
 				title: 'Tomato Clock',
-				requireInteraction: settings.annoyingMode,
+				//implemented in Chrome but not in Firefox yet
+				//requireInteraction: settings.annoyingMode,
 				message
 			});
 			if (settings.annoyingMode) {
@@ -48,7 +48,7 @@ class Notifications {
 		browser.notifications.onClicked.addListener(notificationId => {
 			if (notificationId === NOTIFICATION_ID) {
 				browser.notifications.clear(notificationId);
-				this.notificationSound.stop();
+				this.notificationSound.pause();
 			}
 		});
 	}
