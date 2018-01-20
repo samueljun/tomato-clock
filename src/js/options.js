@@ -2,6 +2,7 @@ class Options {
 	constructor() {
 		this.settings = new Settings();
 
+		this.domAnnoyingMode = document.getElementById('annoying-mode-checkbox');
 		this.domNotificationSoundCheckbox = document.getElementById('notification-sound-checkbox');
 		this.domMinutesInTomato = document.getElementById('minutes-in-tomato');
 		this.domMinutesInShortBreak = document.getElementById('minutes-in-short-break');
@@ -14,12 +15,14 @@ class Options {
 	setOptionsOnPage() {
 		this.settings.getSettings().then(settings => {
 			const {
+				annoyingMode,
 				isNotificationSoundEnabled,
 				minutesInTomato,
 				minutesInShortBreak,
 				minutesInLongBreak
 			} = settings;
 
+			this.domAnnoyingMode.checked = annoyingMode;
 			this.domNotificationSoundCheckbox.checked = isNotificationSoundEnabled;
 			this.domMinutesInTomato.value = minutesInTomato;
 			this.domMinutesInShortBreak.value = minutesInShortBreak;
@@ -28,12 +31,14 @@ class Options {
 	}
 
 	saveOptions(e) {
+		const annoyingMode = this.domAnnoyingMode.checked;
 		const isNotificationSoundEnabled = this.domNotificationSoundCheckbox.checked;
 		const minutesInTomato = parseInt(this.domMinutesInTomato.value);
 		const minutesInShortBreak = parseInt(this.domMinutesInShortBreak.value);
 		const minutesInLongBreak = parseInt(this.domMinutesInLongBreak.value);
 
 		this.settings.saveSettings({
+			[SETTINGS_KEY.ANNOYING_MODE]: annoyingMode,
 			[SETTINGS_KEY.IS_NOTIFICATION_SOUND_ENABLED]: isNotificationSoundEnabled,
 			[SETTINGS_KEY.MINUTES_IN_TOMATO]: minutesInTomato,
 			[SETTINGS_KEY.MINUTES_IN_SHORT_BREAK]: minutesInShortBreak,
