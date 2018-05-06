@@ -27,7 +27,7 @@ Due to a trademark complaint, the extension was renamed from Pomodoro Clock to T
 
 ### Firefox
 
-- For live reloading in a clean Firefox instance:
+- For live reloading in a clean Firefox instance, install and use the [`web-ext`](https://www.npmjs.com/package/web-ext) command line tool:
 
   ```sh
   cd src
