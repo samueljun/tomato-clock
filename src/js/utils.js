@@ -31,14 +31,36 @@ function getZeroArray(length) {
 	return zeroArray;
 }
 
-function getDateRangeStringArray(startDate, endDate) {
+function getDateMonthName(date) {
+	return MONTH_NAMES[date.getMonth()];
+}
+
+function getDateLabel(date, dateUnit) {
+	switch (dateUnit) {
+	case DATE_UNIT.DAY:
+		return date.toDateString();
+	case DATE_UNIT.MONTH:
+		return getDateMonthName(date);
+	default:
+		return null;
+	}
+}
+
+function getDateRangeStringArray(startDate, endDate, dateUnit) {
 	const dateStringArray = [];
 
 	const currentStartDate = new Date(startDate);
 	while (currentStartDate <= endDate) {
-		dateStringArray.push(currentStartDate.toDateString());
+		dateStringArray.push(getDateLabel(currentStartDate, dateUnit));
 
-		currentStartDate.setDate(currentStartDate.getDate() + 1);
+		switch (dateUnit) {
+		case DATE_UNIT.DAY:
+			currentStartDate.setDate(currentStartDate.getDate() + 1);
+			break;
+		case DATE_UNIT.MONTH:
+			currentStartDate.setMonth(currentStartDate.getMonth() + 1);
+			break;
+		}
 	}
 
 	return dateStringArray;

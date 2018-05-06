@@ -30,3 +30,23 @@ const RUNTIME_ACTION = {
 	RESET_TIMER: 'resetTimer',
 	GET_TIMER_SCHEDULED_TIME: 'getTimerScheduledTime'
 };
+
+const DATE_UNIT = {
+	DATE: 'day',
+	MONTH: 'month'
+};
+
+const MONTH_NAMES = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December'
+];

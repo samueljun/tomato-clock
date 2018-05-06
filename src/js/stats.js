@@ -27,9 +27,9 @@ class Stats {
 		this.changeStatDates(momentLastWeek.toDate(), momentToday.toDate());
 	}
 
-	addTomatoDateToChartData(data, date) {
-		for (var i = 0; i < data.labels.length; i++) {
-			if (data.labels[i] == date.toDateString()) {
+	addTomatoDateToChartData(data, date, dateUnit) {
+		for (let i = 0; i < data.labels.length; i++) {
+			if (data.labels[i] === getDateLabel(date, dateUnit)) {
 				data.datasets[0].data[i]++;
 				break;
 			}
@@ -42,9 +42,9 @@ class Stats {
 		this.longBreaksCount.textContent = stats.longBreaks;
 	}
 
-	changeStatDates(startDate, endDate) {
+	changeStatDates(startDate, endDate, dateUnit) {
 		const filteredTimeline = this.timeline.getFilteredTimeline(startDate, endDate);
-		const dateRangeStrings = getDateRangeStringArray(startDate, endDate);
+		const dateRangeStrings = getDateRangeStringArray(startDate, endDate, dateUnit);
 
 		const completedTomatoesChartData = {
 			labels: dateRangeStrings,
@@ -70,7 +70,11 @@ class Stats {
 			switch (timelineAlarm.type) {
 				case TIMER_TYPE.TOMATO:
 					stats.tomatoes++;
-					this.addTomatoDateToChartData(completedTomatoesChartData, timelineAlarm.date);
+					this.addTomatoDateToChartData(
+						completedTomatoesChartData,
+						timelineAlarm.date,
+						dateUnit
+					);
 					break;
 				case TIMER_TYPE.SHORT_BREAK:
 					stats.shortBreaks++;
@@ -150,6 +154,9 @@ $(document).ready(() => {
 		const startDate = momentStartDate.toDate();
 		const endDate = momentEndDate.toDate();
 
-		stats.changeStatDates(startDate, endDate);
+		const isRangeYear = label === 'This Year' || label === 'Last Year';
+		const dateUnit = isRangeYear ? DATE_UNIT.MONTH : DATE_UNIT.DAY;
+
+		stats.changeStatDates(startDate, endDate, dateUnit);
 	});
 });
