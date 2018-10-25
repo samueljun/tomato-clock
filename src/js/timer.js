@@ -47,9 +47,13 @@ class Timer {
 						this.resetTimer();
 					} else {
 						const minutesLeft = getMillisecondsToMinutesAndSeconds(timeLeft).minutes.toString();
+						const secondsLeft = getMillisecondsToMinutesAndSeconds(timeLeft).seconds;
 
 						if (this.badge.getBadgeText() !== minutesLeft) {
-							this.badge.setBadgeText(minutesLeft);
+							if (minutesLeft === '0' && secondsLeft < 60)
+								this.badge.setBadgeText('<1');
+							else
+								this.badge.setBadgeText(minutesLeft);
 						}
 					}
 				}, getSecondsInMilliseconds(1)),
