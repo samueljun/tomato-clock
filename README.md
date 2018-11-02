@@ -4,9 +4,9 @@ Tomato Clock is a simple browser extension for managing your productivity. Use t
 
 Features:
 
-* Customizable timer lengths
-* Browser notifications
-* Stat tracking
+- Customizable timer lengths
+- Browser notifications
+- Stat tracking
 
 You can customize the length of the Tomatoes and breaks in the extension page. The extension uses the default browser notification system, accompanied by a sound, to let you know when the timer is over. The extension also features stats for tracking how many Tomatoes you complete. Your stats are synced across devices using the browser's cloud storage support.
 
@@ -57,7 +57,6 @@ Author: Samuel Jun <mrsamueljun@gmail.com>
 Date:   Sat May 20 19:17:19 2017 -0700
 
     4.0.0
-
 ```
 
 2. Tag the commit with the version number.

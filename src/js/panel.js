@@ -1,112 +1,115 @@
 class Panel {
-	constructor() {
-		this.settings = new Settings();
-		this.currentTimeText = document.getElementById('current-time-text');
-		this.timer = {};
+  constructor() {
+    this.settings = new Settings();
+    this.currentTimeText = document.getElementById("current-time-text");
+    this.timer = {};
 
-		browser.runtime.sendMessage({
-			action: RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME
-		}).then(scheduledTime => {
-			if (scheduledTime) {
-				this.setDisplayTimer(scheduledTime - Date.now());
-			}
-		});
+    browser.runtime
+      .sendMessage({
+        action: RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME
+      })
+      .then(scheduledTime => {
+        if (scheduledTime) {
+          this.setDisplayTimer(scheduledTime - Date.now());
+        }
+      });
 
+    this.setEventListeners();
+  }
 
-		this.setEventListeners();
-	}
+  setEventListeners() {
+    document.getElementById("tomato-button").addEventListener("click", () => {
+      this.setTimer(TIMER_TYPE.TOMATO);
+      this.setBackgroundTimer(TIMER_TYPE.TOMATO);
+    });
 
-	setEventListeners() {
-		document.getElementById('tomato-button').addEventListener('click', () => {
-			this.setTimer(TIMER_TYPE.TOMATO);
-			this.setBackgroundTimer(TIMER_TYPE.TOMATO);
-		});
+    document
+      .getElementById("short-break-button")
+      .addEventListener("click", () => {
+        this.setTimer(TIMER_TYPE.SHORT_BREAK);
+        this.setBackgroundTimer(TIMER_TYPE.SHORT_BREAK);
+      });
 
-		document.getElementById('short-break-button').addEventListener('click', () => {
-			this.setTimer(TIMER_TYPE.SHORT_BREAK);
-			this.setBackgroundTimer(TIMER_TYPE.SHORT_BREAK);
-		});
+    document
+      .getElementById("long-break-button")
+      .addEventListener("click", () => {
+        this.setTimer(TIMER_TYPE.LONG_BREAK);
+        this.setBackgroundTimer(TIMER_TYPE.LONG_BREAK);
+      });
 
-		document.getElementById('long-break-button').addEventListener('click', () => {
-			this.setTimer(TIMER_TYPE.LONG_BREAK);
-			this.setBackgroundTimer(TIMER_TYPE.LONG_BREAK);
-		});
+    document.getElementById("reset-button").addEventListener("click", () => {
+      this.resetTimer();
+      this.resetBackgroundTimer();
+    });
 
-		document.getElementById('reset-button').addEventListener('click', () => {
-			this.resetTimer();
-			this.resetBackgroundTimer();
-		});
+    document.getElementById("stats-link").addEventListener("click", () => {
+      browser.tabs.create({ url: "/html/stats.html" });
+    });
+  }
 
-		document.getElementById('stats-link').addEventListener('click', () => {
-			browser.tabs.create({url: '/html/stats.html'});
-		});
-	}
+  resetTimer() {
+    if (this.timer.interval) {
+      clearInterval(this.timer.interval);
+    }
 
-	resetTimer() {
-		if (this.timer.interval) {
-			clearInterval(this.timer.interval);
-		}
+    this.timer = {
+      interval: null,
+      timeLeft: 0
+    };
 
-		this.timer = {
-			interval: null,
-			timeLeft: 0
-		}
+    this.setCurrentTimeText(0);
+  }
 
-		this.setCurrentTimeText(0);
-	}
+  getTimer() {
+    return this.timer;
+  }
 
-	getTimer() {
-		return this.timer;
-	}
+  setTimer(type) {
+    this.settings.getSettings().then(settings => {
+      const milliseconds = getTimerTypeMilliseconds(type, settings);
+      this.setDisplayTimer(milliseconds);
+    });
+  }
 
-	setTimer(type) {
-		this.settings.getSettings().then(settings => {
-			const milliseconds = getTimerTypeMilliseconds(type, settings);
-			this.setDisplayTimer(milliseconds);
-		});
-	}
+  setDisplayTimer(milliseconds) {
+    this.resetTimer();
+    this.setCurrentTimeText(milliseconds);
 
-	setDisplayTimer(milliseconds) {
-		this.resetTimer();
-		this.setCurrentTimeText(milliseconds);
+    this.timer = {
+      interval: setInterval(() => {
+        const timer = this.getTimer();
 
-		this.timer = {
-			interval: setInterval(() => {
-				const timer = this.getTimer();
+        timer.timeLeft -= getSecondsInMilliseconds(1);
+        this.setCurrentTimeText(timer.timeLeft);
 
-				timer.timeLeft -= getSecondsInMilliseconds(1);
-				this.setCurrentTimeText(timer.timeLeft);
+        if (timer.timeLeft <= 0) {
+          this.resetTimer();
+        }
+      }, getSecondsInMilliseconds(1)),
+      timeLeft: milliseconds
+    };
+  }
 
-				if (timer.timeLeft <= 0) {
-					this.resetTimer();
-				}
-			}, getSecondsInMilliseconds(1)),
-			timeLeft: milliseconds
-		};
-	}
+  setCurrentTimeText(milliseconds) {
+    this.currentTimeText.textContent = getMillisecondsToTimeText(milliseconds);
+  }
 
-	setCurrentTimeText(milliseconds) {
-		this.currentTimeText.textContent = getMillisecondsToTimeText(milliseconds);
-	}
+  resetBackgroundTimer() {
+    browser.runtime.sendMessage({
+      action: RUNTIME_ACTION.RESET_TIMER
+    });
+  }
 
-	resetBackgroundTimer() {
-		browser.runtime.sendMessage({
-			action: RUNTIME_ACTION.RESET_TIMER
-		});
-	}
-
-	setBackgroundTimer(type) {
-		browser.runtime.sendMessage({
-			action: RUNTIME_ACTION.SET_TIMER,
-			data: {
-				type
-			}
-		});
-	}
+  setBackgroundTimer(type) {
+    browser.runtime.sendMessage({
+      action: RUNTIME_ACTION.SET_TIMER,
+      data: {
+        type
+      }
+    });
+  }
 }
 
-
-
-document.addEventListener('DOMContentLoaded', () => {
-	const panel = new Panel();
+document.addEventListener("DOMContentLoaded", () => {
+  const panel = new Panel();
 });
