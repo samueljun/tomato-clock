@@ -33,11 +33,10 @@ npm run watch
 
 ### Firefox
 
-Install and use the [`web-ext`](https://www.npmjs.com/package/web-ext) command line tool for live reloading in a clean Firefox instance. In a separate terminal run the follow commands:
+To run the extension with live reloading in a clean Firefox instance, run the following command in a separate terminal:
 
 ```sh
-cd dist
-web-ext run
+npm run watch-firefox
 ```
 
 To temporarily load the extension in a normal Firefox instance:
@@ -55,7 +54,7 @@ To temporarily load the extension in a normal Firefox instance:
 
 ### Updating the version number
 
-1. In a single commit, update the `"version"` in the `manifest.json` file based on [semver](http://semver.org/). The commit message should simply be the version. For example:
+1. In a single commit, update the `"version"` in the `manifest.json` file based on [semver](http://semver.org/) as well as the `package.json`. The commit message should simply be the version. For example:
 
 ```
 commit 349c96167ee43ffd9135b4908281f176313d6ac9
