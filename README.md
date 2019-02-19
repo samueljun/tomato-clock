@@ -10,13 +10,10 @@ Features:
 
 You can customize the length of the Tomatoes and breaks in the extension page. The extension uses the default browser notification system, accompanied by a sound, to let you know when the timer is over. The extension also features stats for tracking how many Tomatoes you complete. Your stats are synced across devices using the browser's cloud storage support.
 
----
+Due to a trademark complaint, the extension was renamed from Pomodoro Clock to Tomato Clock.
 
 Please file any issues or feature requests at https://github.com/samueljun/tomato-clock/issues.
 
----
-
-Due to a trademark complaint, the extension was renamed from Pomodoro Clock to Tomato Clock.
 
 ## Installation
 
