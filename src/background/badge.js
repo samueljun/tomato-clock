@@ -18,20 +18,20 @@ export default class Badge {
     // Try-catch because Firefox Android lacks badge support
     try {
       browser.browserAction.setBadgeText({ text });
-      browser.browserAction.setBadgeTextColor({ color: "white" });
       browser.browserAction.setBadgeBackgroundColor({ color: backgroundColor });
+      browser.browserAction.setBadgeTextColor({ color: "white" });
     } catch (ignoredError) {
       return;
     }
   }
 
-  setBadgeText(text, backgroundColor) {
+  setBadgeText(text, backgroundColor = "#666") {
     this.settings.getSettings().then(settings => {
       if (settings[SETTINGS_KEY.IS_TOOLBAR_BADGE_ENABLED]) {
         this._setBadgeText(text, backgroundColor);
         this.badgeText = text;
       } else {
-        this._setBadgeText(null, backgroundColor);
+        this._setBadgeText("", backgroundColor);
         this.badgeText = text;
       }
     });
