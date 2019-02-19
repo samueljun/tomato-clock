@@ -33,7 +33,7 @@ export default class Notifications {
 
     browser.notifications.create(NOTIFICATION_ID, {
       type: "basic",
-      iconUrl: "/assets/img/tomato-icon-64.png",
+      iconUrl: "/assets/images/tomato-icon-64.png",
       title: "Tomato Clock",
       message
     });
