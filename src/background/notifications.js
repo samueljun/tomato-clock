@@ -1,4 +1,8 @@
-class Notifications {
+import browser from "webextension-polyfill";
+
+import { NOTIFICATION_ID, TIMER_TYPE } from "../utils/constants";
+
+export default class Notifications {
   constructor(settings) {
     this.settings = settings;
 

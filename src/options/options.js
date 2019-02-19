@@ -1,4 +1,10 @@
-class Options {
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./options.css";
+
+import Settings from "../utils/settings";
+import { SETTINGS_KEY } from "../utils/constants";
+
+export default class Options {
   constructor() {
     this.settings = new Settings();
 
@@ -33,7 +39,7 @@ class Options {
     });
   }
 
-  saveOptions(e) {
+  saveOptions() {
     const isNotificationSoundEnabled = this.domNotificationSoundCheckbox
       .checked;
     const minutesInTomato = parseInt(this.domMinutesInTomato.value);
@@ -49,7 +55,8 @@ class Options {
   }
 
   setEventListeners() {
-    document.getElementById("options-form").addEventListener("submit", () => {
+    document.getElementById("options-form").addEventListener("submit", e => {
+      e.preventDefault();
       this.saveOptions();
     });
 
@@ -62,5 +69,5 @@ class Options {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const options = new Options();
+  new Options();
 });

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Options - Tomato Clock</title>
+  </head>
+
+  <body>
+    <form id="options-form">
+      <div class="form-group">
+        <label for="minutes-in-tomato" class="control-label">
+          Minutes in Tomato
+        </label>
+        <input type="number" class="form-control" id="minutes-in-tomato" />
+      </div>
+      <div class="form-group">
+        <label for="minutes-in-short-break" class="control-label">
+          Minutes in Short Break
+        </label>
+        <input type="number" class="form-control" id="minutes-in-short-break" />
+      </div>
+      <div class="form-group">
+        <label for="minutes-in-long-break" class="control-label">
+          Minutes in Long Break
+        </label>
+        <input type="number" class="form-control" id="minutes-in-long-break" />
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="notification-sound-checkbox" />
+          Notification sound
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+
+    <hr />
+
+    <div>
+      <button class="btn btn-xs btn-warning" id="reset-options">
+        Reset to default
+      </button>
+    </div>
+  </body>
+</html>

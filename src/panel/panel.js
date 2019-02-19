@@ -1,4 +1,17 @@
-class Panel {
+import browser from "webextension-polyfill";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./panel.css";
+
+import { RUNTIME_ACTION, TIMER_TYPE } from "../utils/constants";
+import {
+  getMillisecondsToTimeText,
+  getSecondsInMilliseconds,
+  getTimerTypeMilliseconds
+} from "../utils/utils";
+import Settings from "../utils/settings";
+
+export default class Panel {
   constructor() {
     this.settings = new Settings();
     this.currentTimeText = document.getElementById("current-time-text");
@@ -43,7 +56,7 @@ class Panel {
     });
 
     document.getElementById("stats-link").addEventListener("click", () => {
-      browser.tabs.create({ url: "/html/stats.html" });
+      browser.tabs.create({ url: "/stats/stats.html" });
     });
   }
 
@@ -111,5 +124,5 @@ class Panel {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const panel = new Panel();
+  new Panel();
 });

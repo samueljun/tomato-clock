@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stats - Tomato Clock</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1 class="mt-3">Stats - Tomato Clock</h1>
+
+      <hr />
+
+      <div class="form-group">
+        <label for="date-range-picker">Date Range</label>
+        <input
+          class="form-control"
+          id="date-range-picker"
+          type="text"
+          name="daterange"
+        />
+      </div>
+
+      <br />
+
+      <div class="row">
+        <div class="col-md-9">
+          <div>
+            <canvas id="completed-tomato-dates-chart"></canvas>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Timer</th>
+                <th>#</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tomatoes</td>
+                <td id="tomatoes-count"></td>
+              </tr>
+              <tr>
+                <td>Short Breaks</td>
+                <td id="short-breaks-count"></td>
+              </tr>
+              <tr>
+                <td>Long Breaks</td>
+                <td id="long-breaks-count"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <hr />
+
+      <button class="btn btn-warning" id="reset-stats-button">
+        Reset Stats
+      </button>
+    </div>
+  </body>
+</html>

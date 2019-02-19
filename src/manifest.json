@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Tomato Clock",
-  "version": "4.3.1",
+  "version": "4.3.0",
   "author": "Samuel Jun",
   "description": "A simple browser extension for managing your productivity.",
 
@@ -12,46 +12,32 @@
   },
 
   "icons": {
-    "16": "/assets/img/tomato-icon-16.png",
-    "32": "/assets/img/tomato-icon-32.png",
-    "48": "/assets/img/tomato-icon-48.png",
-    "64": "/assets/img/tomato-icon-64.png",
-    "128": "/assets/img/tomato-icon-128.png",
-    "256": "/assets/img/tomato-icon-256.png"
+    "16": "/assets/images/tomato-icon-16.png",
+    "32": "/assets/images/tomato-icon-32.png",
+    "48": "/assets/images/tomato-icon-48.png",
+    "64": "/assets/images/tomato-icon-64.png",
+    "128": "/assets/images/tomato-icon-128.png",
+    "256": "/assets/images/tomato-icon-256.png"
   },
 
   "browser_action": {
     "default_icon": {
-      "16": "/assets/img/tomato-icon-16.png",
-      "32": "/assets/img/tomato-icon-32.png",
-      "48": "/assets/img/tomato-icon-48.png",
-      "64": "/assets/img/tomato-icon-64.png",
-      "128": "/assets/img/tomato-icon-128.png",
-      "256": "/assets/img/tomato-icon-256.png"
+      "16": "/assets/images/tomato-icon-16.png",
+      "32": "/assets/images/tomato-icon-32.png",
+      "48": "/assets/images/tomato-icon-48.png",
+      "64": "/assets/images/tomato-icon-64.png",
+      "128": "/assets/images/tomato-icon-128.png",
+      "256": "/assets/images/tomato-icon-256.png"
     },
     "default_title": "Tomato Clock",
-    "default_popup": "/html/panel.html"
+    "default_popup": "/panel/panel.html"
   },
 
   "background": {
-    "scripts": [
-      "/lib/browser-polyfill/browser-polyfill.min.js",
-      "/js/constants.js",
-      "/js/utils.js",
-      "/js/settings.js",
-      "/js/badge.js",
-      "/js/notifications.js",
-      "/js/timeline.js",
-      "/js/timer.js",
-      "/js/background.js"
-    ]
+    "scripts": ["/background/background.js"]
   },
 
-  "permissions": [
-    "alarms",
-    "notifications",
-    "storage"
-  ],
+  "permissions": ["alarms", "notifications", "storage"],
 
   "commands": {
     "start-tomato": {
@@ -81,7 +67,7 @@
   },
 
   "options_ui": {
-    "page": "/html/options.html",
+    "page": "/options/options.html",
     "browser_style": false
   }
 }

@@ -1,1 +1,0 @@
-const timer = new Timer();

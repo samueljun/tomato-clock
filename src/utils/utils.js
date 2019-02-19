@@ -1,18 +1,20 @@
-function getSecondsInMilliseconds(seconds) {
+import { DATE_UNIT, MONTH_NAMES, TIMER_TYPE } from "./constants";
+
+export function getSecondsInMilliseconds(seconds) {
   return seconds * 1000;
 }
-function getMinutesInMilliseconds(minutes) {
+export function getMinutesInMilliseconds(minutes) {
   return minutes * 60000;
 }
 
-function getMillisecondsToMinutesAndSeconds(milliseconds) {
+export function getMillisecondsToMinutesAndSeconds(milliseconds) {
   return {
     minutes: parseInt((milliseconds / (1000 * 60)) % 60),
     seconds: parseInt((milliseconds / 1000) % 60)
   };
 }
 
-function getMillisecondsToTimeText(milliseconds) {
+export function getMillisecondsToTimeText(milliseconds) {
   const minutes = parseInt((milliseconds / (1000 * 60)) % 60);
   const seconds = parseInt((milliseconds / 1000) % 60);
   const minutesString = minutes < 10 ? `0${minutes}` : minutes.toString();
@@ -21,7 +23,7 @@ function getMillisecondsToTimeText(milliseconds) {
   return `${minutesString}:${secondsString}`;
 }
 
-function getZeroArray(length) {
+export function getZeroArray(length) {
   const zeroArray = [];
 
   for (let i = 0; i < length; i++) {
@@ -31,11 +33,11 @@ function getZeroArray(length) {
   return zeroArray;
 }
 
-function getDateMonthName(date) {
+export function getDateMonthName(date) {
   return MONTH_NAMES[date.getMonth()];
 }
 
-function getDateLabel(date, dateUnit) {
+export function getDateLabel(date, dateUnit) {
   switch (dateUnit) {
     case DATE_UNIT.DAY:
       return date.toDateString();
@@ -46,7 +48,7 @@ function getDateLabel(date, dateUnit) {
   }
 }
 
-function getDateRangeStringArray(startDate, endDate, dateUnit) {
+export function getDateRangeStringArray(startDate, endDate, dateUnit) {
   const dateStringArray = [];
 
   const currentStartDate = new Date(startDate);
@@ -66,7 +68,7 @@ function getDateRangeStringArray(startDate, endDate, dateUnit) {
   return dateStringArray;
 }
 
-function getTimerTypeMilliseconds(type, settings) {
+export function getTimerTypeMilliseconds(type, settings) {
   switch (type) {
     case TIMER_TYPE.TOMATO:
       return getMinutesInMilliseconds(settings.minutesInTomato);

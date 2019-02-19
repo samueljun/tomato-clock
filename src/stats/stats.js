@@ -1,4 +1,21 @@
-class Stats {
+import $ from "jquery";
+import Chart from "chart.js";
+import moment from "moment";
+import "daterangepicker";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import "daterangepicker/daterangepicker.css";
+import "./stats.css";
+
+import Timeline from "../utils/timeline";
+import {
+  getDateLabel,
+  getDateRangeStringArray,
+  getZeroArray
+} from "../utils/utils";
+import { DATE_UNIT, TIMER_TYPE } from "../utils/constants";
+
+export default class Stats {
   constructor() {
     // Get DOM Elements
     this.tomatoesCount = document.getElementById("tomatoes-count");

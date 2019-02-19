@@ -1,4 +1,17 @@
-class Timer {
+import browser from "webextension-polyfill";
+
+import Settings from "../utils/settings";
+import Badge from "./badge";
+import Notifications from "./notifications";
+import Timeline from "../utils/timeline";
+import {
+  getMillisecondsToMinutesAndSeconds,
+  getSecondsInMilliseconds,
+  getTimerTypeMilliseconds
+} from "../utils/utils";
+import { RUNTIME_ACTION, TIMER_TYPE } from "../utils/constants";
+
+export default class Timer {
   constructor() {
     this.settings = new Settings();
     this.badge = new Badge();
@@ -89,7 +102,6 @@ class Timer {
             sendResponse(this.getTimerScheduledTime());
           }
           return this.getTimerScheduledTime();
-          break;
         default:
           break;
       }

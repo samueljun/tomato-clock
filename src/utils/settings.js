@@ -1,10 +1,14 @@
-class Settings {
+import browser from "webextension-polyfill";
+
+import { DEFAULT_SETTINGS, STORAGE_KEY } from "./constants";
+
+export default class Settings {
   constructor() {
     this.storage = browser.storage.sync || browser.storage.local;
   }
 
   getSettings() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       const onSuccess = storageResults => {
         const settings = Object.assign(
           {},

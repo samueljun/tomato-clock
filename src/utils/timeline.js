@@ -1,4 +1,8 @@
-class Timeline {
+import browser from "webextension-polyfill";
+
+import { STORAGE_KEY } from "./constants";
+
+export default class Timeline {
   constructor() {
     this.storage = browser.storage.sync || browser.storage.local;
     this.timeline = [];
@@ -6,7 +10,7 @@ class Timeline {
   }
 
   _getTimelinePromise() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.storage.get(STORAGE_KEY.TIMELINE).then(storageResults => {
         const timeline = storageResults[STORAGE_KEY.TIMELINE] || [];
 

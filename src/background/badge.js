@@ -1,4 +1,6 @@
-class Badge {
+import browser from "webextension-polyfill";
+
+export default class Badge {
   constructor() {
     this.badgeText = "";
   }
@@ -12,7 +14,9 @@ class Badge {
     try {
       browser.browserAction.setBadgeBackgroundColor({ color: "#666" });
       browser.browserAction.setBadgeText({ text });
-    } catch (ignoredError) {}
+    } catch (ignoredError) {
+      return;
+    }
 
     this.badgeText = text;
   }
