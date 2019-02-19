@@ -27,6 +27,12 @@ export const TIMER_TYPE = {
   LONG_BREAK: "longBreak"
 };
 
+export const BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE = {
+  [TIMER_TYPE.TOMATO]: "#dc3545",
+  [TIMER_TYPE.SHORT_BREAK]: "#666",
+  [TIMER_TYPE.LONG_BREAK]: "#666"
+};
+
 export const RUNTIME_ACTION = {
   SET_TIMER: "setTimer",
   RESET_TIMER: "resetTimer",

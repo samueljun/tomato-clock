@@ -9,7 +9,11 @@ import {
   getSecondsInMilliseconds,
   getTimerTypeMilliseconds
 } from "../utils/utils";
-import { RUNTIME_ACTION, TIMER_TYPE } from "../utils/constants";
+import {
+  RUNTIME_ACTION,
+  TIMER_TYPE,
+  BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE
+} from "../utils/constants";
 
 export default class Timer {
   constructor() {
@@ -45,6 +49,7 @@ export default class Timer {
 
   setTimer(type) {
     this.resetTimer();
+    const badgeBackgroundColor = BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE[type];
 
     this.settings.getSettings().then(settings => {
       const milliseconds = getTimerTypeMilliseconds(type, settings);
@@ -67,8 +72,8 @@ export default class Timer {
 
             if (this.badge.getBadgeText() !== minutesLeft) {
               if (minutesLeft === "0" && secondsLeft < 60)
-                this.badge.setBadgeText("<1");
-              else this.badge.setBadgeText(minutesLeft);
+                this.badge.setBadgeText("<1", badgeBackgroundColor);
+              else this.badge.setBadgeText(minutesLeft, badgeBackgroundColor);
             }
           }
         }, getSecondsInMilliseconds(1)),
@@ -78,7 +83,7 @@ export default class Timer {
       };
 
       const { minutes } = getMillisecondsToMinutesAndSeconds(milliseconds);
-      this.badge.setBadgeText(minutes.toString());
+      this.badge.setBadgeText(minutes.toString(), badgeBackgroundColor);
     });
   }
 
