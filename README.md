@@ -14,7 +14,6 @@ Due to a trademark complaint, the extension was renamed from Pomodoro Clock to T
 
 Please file any issues or feature requests at https://github.com/samueljun/tomato-clock/issues.
 
-
 ## Installation
 
 - [Firefox AMO](https://addons.mozilla.org/en-US/firefox/addon/tomato-clock/)
