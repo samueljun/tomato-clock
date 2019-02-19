@@ -25,7 +25,15 @@ Due to a trademark complaint, the extension was renamed from Pomodoro Clock to T
 
 ## Development
 
-Run the following command so that webpack can watch and recompile the `/src` files live to the `/dist` folder:
+1. [Install node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+
+2. Install the required node modules:
+
+```sh
+npm run watch
+```
+
+3. Run the following command so that webpack can watch and recompile the `/src` files live to the `/dist` folder:
 
 ```sh
 npm run watch
