@@ -25,27 +25,33 @@ Due to a trademark complaint, the extension was renamed from Pomodoro Clock to T
 
 ## Development
 
+Run the following command so that webpack can watch and recompile the `/src` files live to the `/dist` folder:
+
+```sh
+npm run watch
+```
+
 ### Firefox
 
-- For live reloading in a clean Firefox instance, install and use the [`web-ext`](https://www.npmjs.com/package/web-ext) command line tool:
+Install and use the [`web-ext`](https://www.npmjs.com/package/web-ext) command line tool for live reloading in a clean Firefox instance. In a separate terminal run the follow commands:
 
-  ```sh
-  cd src
-  web-ext run
-  ```
+```sh
+cd dist
+web-ext run
+```
 
-- For running in a normal instance:
+To temporarily load the extension in a normal Firefox instance:
 
-  1. Go to `about:debugging`
-  2. Click `Load Temporary Add-on`
-  3. Load the `src` folder
+1. Go to `about:debugging`
+2. Click `Load Temporary Add-on`
+3. Load the `src` folder
 
 ### Chromium
 
 1. Go to `chrome://extensions/`
 2. Enable developer mode
 3. Click `Load unpacked extension...`
-4. Load the `src` folder
+4. Load the `/dist` folder
 
 ### Updating the version number
 
@@ -73,4 +79,8 @@ git push && git push --tags
 
 ### Building submission file
 
-Use the provided `build.sh` script to create a zip file of the extension.
+Run the following command so that webpack can recompile the `/src` files in production mode to the `/dist` folder:
+
+```sh
+npm run build
+```
