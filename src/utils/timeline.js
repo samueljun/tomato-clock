@@ -5,42 +5,32 @@ import { STORAGE_KEY } from "./constants";
 export default class Timeline {
   constructor() {
     this.storage = browser.storage.sync || browser.storage.local;
-    this.timeline = [];
-    this.timelinePromise = this._getTimelinePromise();
   }
 
-  _getTimelinePromise() {
-    return new Promise(resolve => {
-      this.storage.get(STORAGE_KEY.TIMELINE).then(storageResults => {
-        const timeline = storageResults[STORAGE_KEY.TIMELINE] || [];
+  async getRawTimeline() {
+    const storageResults = await this.storage.get(STORAGE_KEY.TIMELINE);
+    return storageResults[STORAGE_KEY.TIMELINE] || [];
+  }
 
-        this.timeline = timeline.map(timelineAlarm => {
-          timelineAlarm.date = new Date(timelineAlarm.date);
-          return timelineAlarm;
-        });
+  async getTimeline() {
+    const timeline = await this.getRawTimeline();
 
-        resolve();
-      });
+    return timeline.map(timelineAlarm => {
+      timelineAlarm.date = new Date(timelineAlarm.date);
+      return timelineAlarm;
     });
   }
 
-  getTimelinePromise() {
-    return this.timelinePromise;
-  }
-
-  getTimeline() {
-    return this.timeline;
-  }
-
   // Inclusive date range
-  getFilteredTimeline(startDate, endDate) {
-    return this.timeline.filter(timelineAlarm => {
+  async getFilteredTimeline(startDate, endDate) {
+    const timeline = await this.getTimeline();
+    return timeline.filter(timelineAlarm => {
       return timelineAlarm.date >= startDate && timelineAlarm.date <= endDate;
     });
   }
 
-  addAlarmToTimeline(type, totalTime) {
-    const timeline = this.getTimeline();
+  async addAlarmToTimeline(type, totalTime) {
+    const timeline = await this.getRawTimeline();
 
     timeline.push({
       timeout: totalTime,
@@ -48,11 +38,10 @@ export default class Timeline {
       date: new Date().toString() // should be initialized to Date whenever interacted with
     });
 
-    this.storage.set({ [STORAGE_KEY.TIMELINE]: timeline });
+    await this.storage.set({ [STORAGE_KEY.TIMELINE]: timeline });
   }
 
-  resetTimeline() {
-    this.timeline = [];
-    this.storage.remove(STORAGE_KEY.TIMELINE);
+  async resetTimeline() {
+    await this.storage.remove(STORAGE_KEY.TIMELINE);
   }
 }

@@ -30,13 +30,14 @@ export default class Stats {
 
     this.resetStatsButton.addEventListener("click", () => {
       if (confirm("Are you sure you want to reset your stats?")) {
-        this.timeline.resetTimeline();
-        this.resetDateRange();
+        this.timeline.resetTimeline().then(() => {
+          this.resetDateRange();
+        });
       }
     });
 
     this.timeline = new Timeline();
-    this.timeline.getTimelinePromise().then(() => this.resetDateRange());
+    this.resetDateRange();
   }
 
   resetDateRange() {
@@ -61,8 +62,8 @@ export default class Stats {
     this.longBreaksCount.textContent = stats.longBreaks;
   }
 
-  changeStatDates(startDate, endDate, dateUnit) {
-    const filteredTimeline = this.timeline.getFilteredTimeline(
+  async changeStatDates(startDate, endDate, dateUnit) {
+    const filteredTimeline = await this.timeline.getFilteredTimeline(
       startDate,
       endDate
     );
