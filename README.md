@@ -26,7 +26,7 @@ Please file any issues or feature requests at https://github.com/samueljun/tomat
 2. Install the required node modules:
 
 ```sh
-npm run watch
+npm install
 ```
 
 3. Run the following command so that webpack can watch and recompile the `/src` files live to the `/dist` folder:
