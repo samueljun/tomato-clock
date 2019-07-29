@@ -22,22 +22,50 @@ export default class Stats {
     this.shortBreaksCount = document.getElementById("short-breaks-count");
     this.longBreaksCount = document.getElementById("long-breaks-count");
     this.resetStatsButton = document.getElementById("reset-stats-button");
+    this.exportStatsButton = document.getElementById("export-stats-button");
 
     this.ctx = document
       .getElementById("completed-tomato-dates-chart")
       .getContext("2d");
     this.completedTomatoesChart = null;
 
-    this.resetStatsButton.addEventListener("click", () => {
-      if (confirm("Are you sure you want to reset your stats?")) {
-        this.timeline.resetTimeline().then(() => {
-          this.resetDateRange();
-        });
-      }
-    });
+    this.handleResetStatsButtonClick = this.handleResetStatsButtonClick.bind(
+      this
+    );
+    this.handleExportStatsButtonClick = this.handleExportStatsButtonClick.bind(
+      this
+    );
+    this.resetStatsButton.addEventListener(
+      "click",
+      this.handleResetStatsButtonClick
+    );
+    this.exportStatsButton.addEventListener(
+      "click",
+      this.handleExportStatsButtonClick
+    );
 
     this.timeline = new Timeline();
     this.resetDateRange();
+  }
+
+  handleResetStatsButtonClick() {
+    if (confirm("Are you sure you want to reset your stats?")) {
+      this.timeline.resetTimeline().then(() => {
+        this.resetDateRange();
+      });
+    }
+  }
+
+  handleExportStatsButtonClick() {
+    this.timeline.getTimeline().then(timeline => {
+      const dataStr =
+        "data:text/json;charset=utf-8," +
+        encodeURIComponent(JSON.stringify(timeline));
+      const dlAnchorElem = document.getElementById("downloadAnchorElem");
+      dlAnchorElem.setAttribute("href", dataStr);
+      dlAnchorElem.setAttribute("download", "tomato-clock-stats.json");
+      dlAnchorElem.click();
+    });
   }
 
   resetDateRange() {
