@@ -7,7 +7,7 @@ export default class Notifications {
     this.settings = settings;
 
     this.notificationSound = new Audio(
-      "/assets/sounds/Portal2_sfx_button_positive.m4a"
+      "/assets/sounds/Portal2_sfx_button_positive.mp3"
     );
 
     this.setListeners();
