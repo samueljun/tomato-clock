@@ -1,6 +1,6 @@
 {
   "name": "tomato-clock",
-  "version": "5.1.1",
+  "version": "5.1.2",
   "description": "Tomato Clock is a simple browser extension for managing your productivity.",
   "main": "src/background.js",
   "scripts": {
