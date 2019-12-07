@@ -1,5 +1,7 @@
 # Tomato Clock - Browser Extension
 
+[![Node CI](https://github.com/samueljun/tomato-clock/workflows/Node%20CI/badge.svg?branch=master)](https://github.com/samueljun/tomato-clock/actions?query=workflow%3A%22Node+CI%22+branch%3Amaster)
+
 Tomato Clock is a simple browser extension for managing your productivity. Use the extension to break down your work into 25 minute 'Tomato' intervals separated by short breaks. Use the long break after completing four Tomato intervals.
 
 Features:
