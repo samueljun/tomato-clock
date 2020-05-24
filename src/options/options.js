@@ -27,13 +27,13 @@ export default class Options {
   }
 
   setOptionsOnPage() {
-    this.settings.getSettings().then(settings => {
+    this.settings.getSettings().then((settings) => {
       const {
         minutesInTomato,
         minutesInShortBreak,
         minutesInLongBreak,
         isNotificationSoundEnabled,
-        isToolbarBadgeEnabled
+        isToolbarBadgeEnabled,
       } = settings;
 
       this.domMinutesInTomato.value = minutesInTomato;
@@ -57,12 +57,12 @@ export default class Options {
       [SETTINGS_KEY.MINUTES_IN_SHORT_BREAK]: minutesInShortBreak,
       [SETTINGS_KEY.MINUTES_IN_LONG_BREAK]: minutesInLongBreak,
       [SETTINGS_KEY.IS_NOTIFICATION_SOUND_ENABLED]: isNotificationSoundEnabled,
-      [SETTINGS_KEY.IS_TOOLBAR_BADGE_ENABLED]: isToolbarBadgeEnabled
+      [SETTINGS_KEY.IS_TOOLBAR_BADGE_ENABLED]: isToolbarBadgeEnabled,
     });
   }
 
   setEventListeners() {
-    document.getElementById("options-form").addEventListener("submit", e => {
+    document.getElementById("options-form").addEventListener("submit", (e) => {
       e.preventDefault();
       this.saveOptions();
     });

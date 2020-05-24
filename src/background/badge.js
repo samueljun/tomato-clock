@@ -26,7 +26,7 @@ export default class Badge {
   }
 
   setBadgeText(text, backgroundColor = "#666") {
-    this.settings.getSettings().then(settings => {
+    this.settings.getSettings().then((settings) => {
       if (settings[SETTINGS_KEY.IS_TOOLBAR_BADGE_ENABLED]) {
         this._setBadgeText(text, backgroundColor);
         this.badgeText = text;

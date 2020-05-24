@@ -11,7 +11,7 @@ import Timeline from "../utils/timeline";
 import {
   getDateLabel,
   getDateRangeStringArray,
-  getZeroArray
+  getZeroArray,
 } from "../utils/utils";
 import { DATE_UNIT, TIMER_TYPE } from "../utils/constants";
 
@@ -57,7 +57,7 @@ export default class Stats {
   }
 
   handleExportStatsButtonClick() {
-    this.timeline.getTimeline().then(timeline => {
+    this.timeline.getTimeline().then((timeline) => {
       const dataStr =
         "data:text/json;charset=utf-8," +
         encodeURIComponent(JSON.stringify(timeline));
@@ -111,15 +111,15 @@ export default class Stats {
           backgroundColor: "rgba(255,0,0,0.2)",
           pointBorderColor: "#fff",
           pointBackgroundColor: "rgba(255,0,0,1)",
-          data: getZeroArray(dateRangeStrings.length)
-        }
-      ]
+          data: getZeroArray(dateRangeStrings.length),
+        },
+      ],
     };
 
     const stats = {
       tomatoes: 0,
       shortBreaks: 0,
-      longBreaks: 0
+      longBreaks: 0,
     };
 
     // Go through timeline
@@ -157,7 +157,7 @@ export default class Stats {
         options: {
           tooltips: {
             intersect: false,
-            mode: "nearest"
+            mode: "nearest",
           },
           scales: {
             yAxes: [
@@ -165,15 +165,15 @@ export default class Stats {
                 ticks: {
                   maxTicksLimit: 5,
                   suggestedMax: 5,
-                  beginAtZero: true
-                }
-              }
-            ]
+                  beginAtZero: true,
+                },
+              },
+            ],
           },
           legend: {
-            position: "bottom"
-          }
-        }
+            position: "bottom",
+          },
+        },
       });
     }
   }
@@ -190,10 +190,10 @@ $(document).ready(() => {
   $('input[name="daterange"]').daterangepicker(
     {
       locale: {
-        format: "dddd, MMMM Do YYYY"
+        format: "dddd, MMMM Do YYYY",
       },
       dateLimit: {
-        months: 1
+        months: 1,
       },
       startDate: momentLastWeek,
       endDate: momentToday,
@@ -201,33 +201,21 @@ $(document).ready(() => {
         "Last 7 Days": [moment().subtract(6, "days"), moment()],
         "This week": [moment().startOf("week"), moment().endOf("week")],
         "Last week": [
-          moment()
-            .subtract(1, "week")
-            .startOf("week"),
-          moment()
-            .subtract(1, "week")
-            .endOf("week")
+          moment().subtract(1, "week").startOf("week"),
+          moment().subtract(1, "week").endOf("week"),
         ],
         "Last 30 Days": [moment().subtract(29, "days"), moment()],
         "This Month": [moment().startOf("month"), moment().endOf("month")],
         "Last Month": [
-          moment()
-            .subtract(1, "month")
-            .startOf("month"),
-          moment()
-            .subtract(1, "month")
-            .endOf("month")
+          moment().subtract(1, "month").startOf("month"),
+          moment().subtract(1, "month").endOf("month"),
         ],
         "This Year": [moment().startOf("year"), moment().endOf("year")],
         "Last Year": [
-          moment()
-            .subtract(1, "year")
-            .startOf("year"),
-          moment()
-            .subtract(1, "year")
-            .endOf("year")
-        ]
-      }
+          moment().subtract(1, "year").startOf("year"),
+          moment().subtract(1, "year").endOf("year"),
+        ],
+      },
     },
     (momentStartDate, momentEndDate, label) => {
       // Convert Moment dates to native JS dates

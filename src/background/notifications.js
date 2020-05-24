@@ -35,10 +35,10 @@ export default class Notifications {
       type: "basic",
       iconUrl: "/assets/images/tomato-icon-64.png",
       title: "Tomato Clock",
-      message
+      message,
     });
 
-    this.settings.getSettings().then(settings => {
+    this.settings.getSettings().then((settings) => {
       if (settings.isNotificationSoundEnabled) {
         this.notificationSound.play();
       }
@@ -46,7 +46,7 @@ export default class Notifications {
   }
 
   setListeners() {
-    browser.notifications.onClicked.addListener(notificationId => {
+    browser.notifications.onClicked.addListener((notificationId) => {
       if (notificationId === NOTIFICATION_ID) {
         browser.notifications.clear(notificationId);
       }

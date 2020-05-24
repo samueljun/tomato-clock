@@ -7,7 +7,7 @@ import { RUNTIME_ACTION, TIMER_TYPE } from "../utils/constants";
 import {
   getMillisecondsToTimeText,
   getSecondsInMilliseconds,
-  getTimerTypeMilliseconds
+  getTimerTypeMilliseconds,
 } from "../utils/utils";
 import Settings from "../utils/settings";
 
@@ -19,9 +19,9 @@ export default class Panel {
 
     browser.runtime
       .sendMessage({
-        action: RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME
+        action: RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME,
       })
-      .then(scheduledTime => {
+      .then((scheduledTime) => {
         if (scheduledTime) {
           this.setDisplayTimer(scheduledTime - Date.now());
         }
@@ -67,7 +67,7 @@ export default class Panel {
 
     this.timer = {
       interval: null,
-      timeLeft: 0
+      timeLeft: 0,
     };
 
     this.setCurrentTimeText(0);
@@ -78,7 +78,7 @@ export default class Panel {
   }
 
   setTimer(type) {
-    this.settings.getSettings().then(settings => {
+    this.settings.getSettings().then((settings) => {
       const milliseconds = getTimerTypeMilliseconds(type, settings);
       this.setDisplayTimer(milliseconds);
     });
@@ -99,7 +99,7 @@ export default class Panel {
           this.resetTimer();
         }
       }, getSecondsInMilliseconds(1)),
-      timeLeft: milliseconds
+      timeLeft: milliseconds,
     };
   }
 
@@ -109,7 +109,7 @@ export default class Panel {
 
   resetBackgroundTimer() {
     browser.runtime.sendMessage({
-      action: RUNTIME_ACTION.RESET_TIMER
+      action: RUNTIME_ACTION.RESET_TIMER,
     });
   }
 
@@ -117,8 +117,8 @@ export default class Panel {
     browser.runtime.sendMessage({
       action: RUNTIME_ACTION.SET_TIMER,
       data: {
-        type
-      }
+        type,
+      },
     });
   }
 }

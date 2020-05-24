@@ -7,12 +7,12 @@ import Timeline from "../utils/timeline";
 import {
   getMillisecondsToMinutesAndSeconds,
   getSecondsInMilliseconds,
-  getTimerTypeMilliseconds
+  getTimerTypeMilliseconds,
 } from "../utils/utils";
 import {
   RUNTIME_ACTION,
   TIMER_TYPE,
-  BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE
+  BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE,
 } from "../utils/constants";
 
 export default class Timer {
@@ -41,7 +41,7 @@ export default class Timer {
       interval: null,
       scheduledTime: null,
       totalTime: 0,
-      type: null
+      type: null,
     };
 
     this.badge.setBadgeText("");
@@ -51,7 +51,7 @@ export default class Timer {
     this.resetTimer();
     const badgeBackgroundColor = BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE[type];
 
-    this.settings.getSettings().then(settings => {
+    this.settings.getSettings().then((settings) => {
       const milliseconds = getTimerTypeMilliseconds(type, settings);
 
       this.timer = {
@@ -79,7 +79,7 @@ export default class Timer {
         }, getSecondsInMilliseconds(1)),
         scheduledTime: Date.now() + milliseconds,
         totalTime: milliseconds,
-        type
+        type,
       };
 
       const { minutes } = getMillisecondsToMinutesAndSeconds(milliseconds);
@@ -112,7 +112,7 @@ export default class Timer {
       }
     });
 
-    browser.commands.onCommand.addListener(command => {
+    browser.commands.onCommand.addListener((command) => {
       switch (command) {
         case "start-tomato":
           this.setTimer(TIMER_TYPE.TOMATO);

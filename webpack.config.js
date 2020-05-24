@@ -9,11 +9,11 @@ module.exports = {
     background: "./src/background/background.js",
     panel: "./src/panel/panel.js",
     stats: "./src/stats/stats.js",
-    options: "./src/options/options.js"
+    options: "./src/options/options.js",
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "[name]/[name].js"
+    filename: "[name]/[name].js",
   },
   devtool: "source-map",
   module: {
@@ -29,18 +29,18 @@ module.exports = {
                 "@babel/preset-env",
                 {
                   useBuiltIns: "usage",
-                  corejs: 3
-                }
-              ]
-            ]
-          }
-        }
+                  corejs: 3,
+                },
+              ],
+            ],
+          },
+        },
       },
       {
         test: /\.css$/,
-        use: [{ loader: "style-loader" }, { loader: "css-loader" }]
-      }
-    ]
+        use: [{ loader: "style-loader" }, { loader: "css-loader" }],
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(["dist"]),
@@ -48,24 +48,24 @@ module.exports = {
       title: "Panel - Tomato Clock",
       template: "src/panel/panel.html",
       filename: "panel/panel.html",
-      chunks: ["panel"]
+      chunks: ["panel"],
     }),
     new HtmlWebpackPlugin({
       title: "Stats - Tomato Clock",
       template: "src/stats/stats.html",
       filename: "stats/stats.html",
-      chunks: ["stats"]
+      chunks: ["stats"],
     }),
     new HtmlWebpackPlugin({
       title: "Options - Tomato Clock",
       template: "src/options/options.html",
       filename: "options/options.html",
-      chunks: ["options"]
+      chunks: ["options"],
     }),
 
     new CopyWebpackPlugin([
       { from: "./src/manifest.json", to: "./manifest.json" },
-      { from: "./src/assets", to: "./assets" }
-    ])
-  ]
+      { from: "./src/assets", to: "./assets" },
+    ]),
+  ],
 };

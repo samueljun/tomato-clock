@@ -15,7 +15,7 @@ export default class Timeline {
   async getTimeline() {
     const timeline = await this.getRawTimeline();
 
-    return timeline.map(timelineAlarm => {
+    return timeline.map((timelineAlarm) => {
       timelineAlarm.date = new Date(timelineAlarm.date);
       return timelineAlarm;
     });
@@ -24,7 +24,7 @@ export default class Timeline {
   // Inclusive date range
   async getFilteredTimeline(startDate, endDate) {
     const timeline = await this.getTimeline();
-    return timeline.filter(timelineAlarm => {
+    return timeline.filter((timelineAlarm) => {
       return timelineAlarm.date >= startDate && timelineAlarm.date <= endDate;
     });
   }
@@ -35,7 +35,7 @@ export default class Timeline {
     timeline.push({
       timeout: totalTime,
       type,
-      date: new Date().toString() // should be initialized to Date whenever interacted with
+      date: new Date().toString(), // should be initialized to Date whenever interacted with
     });
 
     await this.storage.set({ [STORAGE_KEY.TIMELINE]: timeline });

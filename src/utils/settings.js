@@ -8,8 +8,8 @@ export default class Settings {
   }
 
   getSettings() {
-    return new Promise(resolve => {
-      const onSuccess = storageResults => {
+    return new Promise((resolve) => {
+      const onSuccess = (storageResults) => {
         const settings = Object.assign(
           {},
           DEFAULT_SETTINGS,
@@ -29,13 +29,13 @@ export default class Settings {
 
   saveSettings(settings) {
     return this.storage.set({
-      [STORAGE_KEY.SETTINGS]: settings
+      [STORAGE_KEY.SETTINGS]: settings,
     });
   }
 
   resetSettings() {
     return this.storage.set({
-      [STORAGE_KEY.SETTINGS]: DEFAULT_SETTINGS
+      [STORAGE_KEY.SETTINGS]: DEFAULT_SETTINGS,
     });
   }
 }
