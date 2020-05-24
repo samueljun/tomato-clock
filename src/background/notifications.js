@@ -2,6 +2,18 @@ import browser from "webextension-polyfill";
 
 import { NOTIFICATION_ID, TIMER_TYPE } from "../utils/constants";
 
+const timerTypeToMessage = {
+  [TIMER_TYPE.TOMATO]: "Your Tomato timer is done!",
+  [TIMER_TYPE.SHORT_BREAK]: "Your short break is done!",
+  [TIMER_TYPE.LONG_BREAK]: "Your long break is done!",
+};
+
+const timerTypeToButtons = {
+  [TIMER_TYPE.TOMATO]: [{ title: "Short" }, { title: "Long" }],
+  [TIMER_TYPE.SHORT_BREAK]: [{ title: "Tomato" }],
+  [TIMER_TYPE.LONG_BREAK]: [{ title: "Tomato" }],
+};
+
 export default class Notifications {
   constructor(settings) {
     this.settings = settings;
@@ -14,28 +26,15 @@ export default class Notifications {
   }
 
   createBrowserNotification(timerType) {
-    let message = "";
-
-    switch (timerType) {
-      case TIMER_TYPE.TOMATO:
-        message = "Your Tomato timer is done!";
-        break;
-      case TIMER_TYPE.SHORT_BREAK:
-        message = "Your short break is done!";
-        break;
-      case TIMER_TYPE.LONG_BREAK:
-        message = "Your long break is done!";
-        break;
-      default:
-        message = "Your timer is done!";
-        break;
-    }
+    const message = timerTypeToMessage[timerType] || "Your timer is done!";
+    const buttons = timerTypeToButtons[timerType];
 
     browser.notifications.create(NOTIFICATION_ID, {
       type: "basic",
       iconUrl: "/assets/images/tomato-icon-64.png",
       title: "Tomato Clock",
       message,
+      buttons,
     });
 
     this.settings.getSettings().then((settings) => {
@@ -51,5 +50,11 @@ export default class Notifications {
         browser.notifications.clear(notificationId);
       }
     });
+
+    browser.notifications.onButtonClicked.addListener(
+      (notificationId, buttonIndex) => {
+        console.log(notificationId, buttonIndex);
+      }
+    );
   }
 }
