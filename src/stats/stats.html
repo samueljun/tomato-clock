@@ -68,13 +68,21 @@
       <button class="btn btn-primary" id="export-stats-button">
         Export Stats as JSON
       </button>
-      <input class="btn btn-secondary" type="file" accept="application/json" id="import-stats-button">
+      <a id="downloadAnchorElem" style="display: none;"></a>
+
+      <button class="btn btn-secondary" id="import-stats-button">
         Import Stats from JSON
-      </input>
+      </button>
+      <input
+        hidden
+        type="file"
+        accept="application/json"
+        id="import-stats-hidden-input"
+      />
+
       <button class="btn btn-warning" id="reset-stats-button">
         Reset Stats
       </button>
-      <a id="downloadAnchorElem" style="display: none;"></a>
     </div>
   </body>
 </html>

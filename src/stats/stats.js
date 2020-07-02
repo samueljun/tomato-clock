@@ -24,6 +24,9 @@ export default class Stats {
     this.resetStatsButton = document.getElementById("reset-stats-button");
     this.exportStatsButton = document.getElementById("export-stats-button");
     this.importStatsButton = document.getElementById("import-stats-button");
+    this.importStatsHiddenInput = document.getElementById(
+      "import-stats-hidden-input"
+    );
 
     this.ctx = document
       .getElementById("completed-tomato-dates-chart")
@@ -39,6 +42,9 @@ export default class Stats {
     this.handleImportStatsButtonClick = this.handleImportStatsButtonClick.bind(
       this
     );
+    this.handleImportStatsHiddenInputChange = this.handleImportStatsHiddenInputChange.bind(
+      this
+    );
     this.resetStatsButton.addEventListener(
       "click",
       this.handleResetStatsButtonClick
@@ -48,8 +54,12 @@ export default class Stats {
       this.handleExportStatsButtonClick
     );
     this.importStatsButton.addEventListener(
-      "change",
+      "click",
       this.handleImportStatsButtonClick
+    );
+    this.importStatsHiddenInput.addEventListener(
+      "change",
+      this.handleImportStatsHiddenInputChange
     );
 
     this.timeline = new Timeline();
@@ -76,18 +86,25 @@ export default class Stats {
     });
   }
 
-  async handleImportStatsButtonClick(e) {
-    const [ file ] = e.target.files;
+  handleImportStatsButtonClick() {
+    this.importStatsHiddenInput.click();
+  }
+
+  async handleImportStatsHiddenInputChange(e) {
+    const [file] = e.target.files;
     const timelineJson = await file.text();
 
-    try {
-      const newTimeline = JSON.parse(timelineJson);
-      await this.timeline.setTimeline(newTimeline);
+    let newTimeline;
 
-      window.location.reload();
-    } catch(e) {
+    try {
+      newTimeline = JSON.parse(timelineJson);
+    } catch (e) {
       alert("Invalid JSON");
+      return;
     }
+
+    await this.timeline.setTimeline(newTimeline);
+    window.location.reload();
   }
 
   resetDateRange() {
