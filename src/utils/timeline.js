@@ -21,6 +21,15 @@ export default class Timeline {
     });
   }
 
+  async setTimeline(newTimeline) {
+    const timeline = await this.getRawTimeline();
+    newTimeline.map((item) => {
+      timeline.push(item)
+    })
+
+    await this.storage.set({ [STORAGE_KEY.TIMELINE]: timeline })
+  }
+
   // Inclusive date range
   async getFilteredTimeline(startDate, endDate) {
     const timeline = await this.getTimeline();
