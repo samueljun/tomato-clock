@@ -23,6 +23,7 @@ export default class Stats {
     this.longBreaksCount = document.getElementById("long-breaks-count");
     this.resetStatsButton = document.getElementById("reset-stats-button");
     this.exportStatsButton = document.getElementById("export-stats-button");
+    this.importStatsButton = document.getElementById("import-stats-button");
 
     this.ctx = document
       .getElementById("completed-tomato-dates-chart")
@@ -35,6 +36,9 @@ export default class Stats {
     this.handleExportStatsButtonClick = this.handleExportStatsButtonClick.bind(
       this
     );
+    this.handleImportStatsButtonClick = this.handleImportStatsButtonClick.bind(
+      this
+    );
     this.resetStatsButton.addEventListener(
       "click",
       this.handleResetStatsButtonClick
@@ -42,6 +46,10 @@ export default class Stats {
     this.exportStatsButton.addEventListener(
       "click",
       this.handleExportStatsButtonClick
+    );
+    this.importStatsButton.addEventListener(
+      "change",
+      this.handleImportStatsButtonClick
     );
 
     this.timeline = new Timeline();
@@ -66,6 +74,20 @@ export default class Stats {
       dlAnchorElem.setAttribute("download", "tomato-clock-stats.json");
       dlAnchorElem.click();
     });
+  }
+
+  async handleImportStatsButtonClick(e) {
+    const [ file ] = e.target.files;
+    const timelineJson = await file.text();
+
+    try {
+      const newTimeline = JSON.parse(timelineJson);
+      await this.timeline.setTimeline(newTimeline);
+
+      window.location.reload();
+    } catch(e) {
+      alert("Invalid JSON");
+    }
   }
 
   resetDateRange() {
