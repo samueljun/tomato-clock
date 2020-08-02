@@ -63,9 +63,11 @@ module.exports = {
       chunks: ["options"],
     }),
 
-    new CopyWebpackPlugin([
-      { from: "./src/manifest.json", to: "./manifest.json" },
-      { from: "./src/assets", to: "./assets" },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "./src/manifest.json", to: "./manifest.json" },
+        { from: "./src/assets", to: "./assets" },
+      ],
+    }),
   ],
 };
