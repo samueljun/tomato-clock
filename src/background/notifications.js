@@ -41,6 +41,16 @@ export default class Notifications {
     });
   }
 
+  async createStorageLimitNotification() {
+    await browser.notifications.create(null, {
+      type: "basic",
+      iconUrl: "/assets/images/tomato-icon-inactive-64.png",
+      title: "Error! - Tomato Clock",
+      message:
+        "The storage limit was hit. Consider exporting and resetting stats.",
+    });
+  }
+
   setListeners() {
     browser.notifications.onClicked.addListener((notificationId) => {
       if (notificationId === NOTIFICATION_ID) {

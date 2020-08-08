@@ -22,6 +22,8 @@ export default class Timer {
     this.notifications = new Notifications(this.settings);
     this.timeline = new Timeline();
 
+    this.timeline.switchStorageFromSyncToLocal();
+
     this.timer = {};
 
     this.resetTimer();
