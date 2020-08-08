@@ -1,4 +1,6 @@
 import { DATE_UNIT, MONTH_NAMES, TIMER_TYPE } from "./constants";
+import uniqWith from "lodash/uniqWith";
+import isEqual from "lodash/isEqual";
 
 export function getSecondsInMilliseconds(seconds) {
   return seconds * 1000;
@@ -79,4 +81,34 @@ export function getTimerTypeMilliseconds(type, settings) {
     default:
       return;
   }
+}
+
+export function pad(number) {
+  if (number < 10) {
+    return "0" + number;
+  }
+  return number;
+}
+
+export function getFilenameDate() {
+  const date = new Date();
+  return (
+    date.getFullYear() +
+    "-" +
+    pad(date.getMonth() + 1) +
+    "-" +
+    pad(date.getDate()) +
+    "_" +
+    pad(date.getHours()) +
+    "-" +
+    pad(date.getMinutes()) +
+    "-" +
+    pad(date.getSeconds())
+  );
+}
+
+export function getMergedAndDedupedArray(a, b) {
+  const mergedArrays = a.concat(b);
+
+  return uniqWith(mergedArrays, isEqual);
 }

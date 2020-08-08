@@ -12,6 +12,7 @@ import {
   getDateLabel,
   getDateRangeStringArray,
   getZeroArray,
+  getFilenameDate,
 } from "../utils/utils";
 import { DATE_UNIT, TIMER_TYPE } from "../utils/constants";
 
@@ -76,12 +77,14 @@ export default class Stats {
 
   handleExportStatsButtonClick() {
     this.timeline.getTimeline().then((timeline) => {
+      const filename = `${getFilenameDate()}_tomato-clock-stats.json`;
+
       const dataStr =
         "data:text/json;charset=utf-8," +
         encodeURIComponent(JSON.stringify(timeline));
       const dlAnchorElem = document.getElementById("downloadAnchorElem");
       dlAnchorElem.setAttribute("href", dataStr);
-      dlAnchorElem.setAttribute("download", "tomato-clock-stats.json");
+      dlAnchorElem.setAttribute("download", filename);
       dlAnchorElem.click();
     });
   }
