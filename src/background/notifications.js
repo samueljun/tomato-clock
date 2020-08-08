@@ -6,10 +6,6 @@ export default class Notifications {
   constructor(settings) {
     this.settings = settings;
 
-    this.notificationSound = new Audio(
-      "/assets/sounds/Portal2_sfx_button_positive.mp3"
-    );
-
     this.setListeners();
   }
 
@@ -40,7 +36,7 @@ export default class Notifications {
 
     this.settings.getSettings().then((settings) => {
       if (settings.isNotificationSoundEnabled) {
-        this.notificationSound.play();
+        new Audio("/assets/sounds/Portal2_sfx_button_positive.mp3").play();
       }
     });
   }
