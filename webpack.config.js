@@ -3,6 +3,8 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
+const { version } = require("./package.json");
+
 module.exports = {
   mode: "development",
   entry: {
@@ -65,7 +67,15 @@ module.exports = {
 
     new CopyWebpackPlugin({
       patterns: [
-        { from: "./src/manifest.json", to: "./manifest.json" },
+        {
+          from: "./src/manifest.json",
+          to: "./manifest.json",
+          transform: (content) => {
+            const jsonContent = JSON.parse(content);
+            jsonContent.version = version;
+            return JSON.stringify(jsonContent, null, 2);
+          },
+        },
         { from: "./src/assets", to: "./assets" },
       ],
     }),

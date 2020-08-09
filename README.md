@@ -60,18 +60,10 @@ To temporarily load the extension in a normal Firefox instance:
 
 ### Updating the version number
 
-1. In a single commit, update the `"version"` in the `manifest.json` file based on [semver](http://semver.org/). The commit message should be something along the following: `Bump manifest to 5.0.4`.
-
-2. Then `npm version {patch/minor/major}` to bump the package.json version and tag the commit:
+Run the following command with the appropriate `npm version {patch/minor/major}` to bump the package.json version based on [semver](http://semver.org/):
 
 ```sh
-npm version patch
-```
-
-3. Finally push the commits and tag to origin.
-
-```sh
-git push && git push --tags
+npm version patch && git push && git push --tags
 ```
 
 ### Building submission file
