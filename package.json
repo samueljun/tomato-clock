@@ -4,7 +4,7 @@
   "description": "Tomato Clock is a simple browser extension for managing your productivity.",
   "main": "src/background.js",
   "scripts": {
-    "build": "webpack --mode=production && ./build.sh",
+    "build": "webpack --mode=production && node ./scripts/build-zip.js",
     "lint": "eslint src",
     "lint-fix": "eslint --fix src",
     "test": "echo \"Error: no test specified\" && exit 1",
