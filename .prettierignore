@@ -1,0 +1,10 @@
+dist/
+dist-zip/
+dist.crx
+tomato-clock.zip
+
+.DS_Store
+.notes.md
+*.swp
+
+node_modules/
