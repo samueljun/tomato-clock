@@ -1,3 +1,5 @@
+import { i18n } from "webextension-polyfill";
+
 export const NOTIFICATION_ID = "tomatoClockNotification";
 
 export const STORAGE_KEY = {
@@ -45,16 +47,16 @@ export const DATE_UNIT = {
 };
 
 export const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  i18n.getMessage("monthNameJanuary"),
+  i18n.getMessage("monthNameFebruary"),
+  i18n.getMessage("monthNameMarch"),
+  i18n.getMessage("monthNameApril"),
+  i18n.getMessage("monthNameMay"),
+  i18n.getMessage("monthNameJune"),
+  i18n.getMessage("monthNameJuly"),
+  i18n.getMessage("monthNameAugust"),
+  i18n.getMessage("monthNameSeptember"),
+  i18n.getMessage("monthNameOctober"),
+  i18n.getMessage("monthNameNovember"),
+  i18n.getMessage("monthNameDecember"),
 ];

@@ -1,7 +1,10 @@
 import $ from "jquery";
-import Chart from "chart.js";
 import moment from "moment";
+import "moment/locale/zh-cn";
 import "daterangepicker";
+import Chart from "chart.js";
+import { i18n } from "webextension-polyfill";
+moment.locale(i18n.getUILanguage());
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "daterangepicker/daterangepicker.css";
@@ -68,7 +71,7 @@ export default class Stats {
   }
 
   handleResetStatsButtonClick() {
-    if (confirm("Are you sure you want to reset your stats?")) {
+    if (confirm(i18n.getMessage("resetStatsButtonClickAlert"))) {
       this.timeline.resetTimeline().then(() => {
         this.resetDateRange();
       });
@@ -102,7 +105,7 @@ export default class Stats {
     try {
       newTimeline = JSON.parse(timelineJson);
     } catch (e) {
-      alert("Invalid JSON");
+      alert(i18n.getMessage("importStatsInvalidJsonAlert"));
       return;
     }
 
@@ -147,7 +150,7 @@ export default class Stats {
       labels: dateRangeStrings,
       datasets: [
         {
-          label: "Tomatoes",
+          label: i18n.getMessage("tomoto"),
           fill: true,
           borderColor: "rgba(255,0,0,1)",
           backgroundColor: "rgba(255,0,0,0.2)",
@@ -232,7 +235,10 @@ $(document).ready(() => {
   $('input[name="daterange"]').daterangepicker(
     {
       locale: {
-        format: "dddd, MMMM Do YYYY",
+        applyLabel: i18n.getMessage("datePickerApplyLabel"),
+        cancelLabel: i18n.getMessage("datePickerCancelLabel"),
+        resetLabel: i18n.getMessage("datePickerResetLabel"),
+        customRangeLabel: i18n.getMessage("datePickerCustomRangeLabel"),
       },
       dateLimit: {
         months: 1,
@@ -240,20 +246,35 @@ $(document).ready(() => {
       startDate: momentLastWeek,
       endDate: momentToday,
       ranges: {
-        "Last 7 Days": [moment().subtract(6, "days"), moment()],
-        "This week": [moment().startOf("week"), moment().endOf("week")],
-        "Last week": [
+        [i18n.getMessage("datePickerLast7Days")]: [
+          moment().subtract(6, "days"),
+          moment(),
+        ],
+        [i18n.getMessage("datePickerThisWeek")]: [
+          moment().startOf("week"),
+          moment().endOf("week"),
+        ],
+        [i18n.getMessage("datePickerLastWeek")]: [
           moment().subtract(1, "week").startOf("week"),
           moment().subtract(1, "week").endOf("week"),
         ],
-        "Last 30 Days": [moment().subtract(29, "days"), moment()],
-        "This Month": [moment().startOf("month"), moment().endOf("month")],
-        "Last Month": [
+        [i18n.getMessage("datePickerLast30Days")]: [
+          moment().subtract(29, "days"),
+          moment(),
+        ],
+        [i18n.getMessage("datePickerThisMonth")]: [
+          moment().startOf("month"),
+          moment().endOf("month"),
+        ],
+        [i18n.getMessage("datePickerLastMonth")]: [
           moment().subtract(1, "month").startOf("month"),
           moment().subtract(1, "month").endOf("month"),
         ],
-        "This Year": [moment().startOf("year"), moment().endOf("year")],
-        "Last Year": [
+        [i18n.getMessage("datePickerThisYear")]: [
+          moment().startOf("year"),
+          moment().endOf("year"),
+        ],
+        [i18n.getMessage("datePickerLastYear")]: [
           moment().subtract(1, "year").startOf("year"),
           moment().subtract(1, "year").endOf("year"),
         ],
@@ -264,7 +285,9 @@ $(document).ready(() => {
       const startDate = momentStartDate.toDate();
       const endDate = momentEndDate.toDate();
 
-      const isRangeYear = label === "This Year" || label === "Last Year";
+      const isRangeYear =
+        label === i18n.getMessage("datePickerThisYear") ||
+        label === i18n.getMessage("datePickerLastYear");
       const dateUnit = isRangeYear ? DATE_UNIT.MONTH : DATE_UNIT.DAY;
 
       stats.changeStatDates(startDate, endDate, dateUnit);

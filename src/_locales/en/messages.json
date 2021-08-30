@@ -22,5 +22,94 @@
   "commandsResetTimer": {
     "message": "Reset the current timer.",
     "description": "Manifest.json command to reset the current timer."
+  },
+  "stats.resetStatsButtonClickAlert": {
+    "message": "Are you sure you want to reset your stats?",
+    "description": "JS alert confirmation message when users click on reset stats"
+  },
+  "stats.importStatsInvalidJsonAlert": {
+    "message": "Invalid JSON",
+    "description": "JS alert message when user attempts to import an invalid json stats file"
+  },
+  "tomoto": {
+    "message": "Tomato"
+  },
+  "shortBreak": {
+    "message": "Short Break"
+  },
+  "longBreak": {
+    "message": "Long Break"
+  },
+  "datePickerApplyLabel": {
+    "message": "Apply"
+  },
+  "datePickerCancelLabel": {
+    "message": "Cancel"
+  },
+  "datePickerResetLabel": {
+    "message": "Reset"
+  },
+  "datePickerCustomRangeLabel": {
+    "message": "Custom Range"
+  },
+  "datePickerLast7Days": {
+    "message": "Last 7 days"
+  },
+  "datePickerThisWeek": {
+    "message": "This week"
+  },
+  "datePickerLastWeek": {
+    "message": "Last week"
+  },
+  "datePickerLast30Days": {
+    "message": "Last 30 days"
+  },
+  "datePickerThisMonth": {
+    "message": "This month"
+  },
+  "datePickerLastMonth": {
+    "message": "Last month"
+  },
+  "datePickerThisYear": {
+    "message": "This year"
+  },
+  "datePickerLastYear": {
+    "message": "Last year"
+  },
+  "monthNameJanuary": {
+    "message": "January"
+  },
+  "monthNameFebruary": {
+    "message": "February"
+  },
+  "monthNameMarch": {
+    "message": "March"
+  },
+  "monthNameApril": {
+    "message": "April"
+  },
+  "monthNameMay": {
+    "message": "May"
+  },
+  "monthNameJune": {
+    "message": "June"
+  },
+  "monthNameJuly": {
+    "message": "July"
+  },
+  "monthNameAugust": {
+    "message": "August"
+  },
+  "monthNameSeptember": {
+    "message": "September"
+  },
+  "monthNameOctober": {
+    "message": "October"
+  },
+  "monthNameNovember": {
+    "message": "November"
+  },
+  "monthNameDecember": {
+    "message": "December"
   }
 }

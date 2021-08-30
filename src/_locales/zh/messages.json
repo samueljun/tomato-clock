@@ -22,5 +22,94 @@
   "commandsResetTimer": {
     "message": "Reset the current timer.",
     "description": "Manifest.json command to reset the timer."
+  },
+  "resetStatsButtonClickAlert": {
+    "message": "你确定想要重置你的统计数据吗？",
+    "description": "JS alert confirmation message when users click on reset stats"
+  },
+  "importStatsInvalidJsonAlert": {
+    "message": "无效的JSON",
+    "description": "JS alert message when user attempts to import an invalid json stats file"
+  },
+  "tomoto": {
+    "message": "番茄"
+  },
+  "shortBreak": {
+    "message": "短休息"
+  },
+  "longBreak": {
+    "message": "长休息"
+  },
+  "datePickerApplyLabel": {
+    "message": "应用"
+  },
+  "datePickerCancelLabel": {
+    "message": "取消"
+  },
+  "datePickerResetLabel": {
+    "message": "重置"
+  },
+  "datePickerCustomRangeLabel": {
+    "message": "自定义"
+  },
+  "datePickerLast7Days": {
+    "message": "最近7天"
+  },
+  "datePickerThisWeek": {
+    "message": "本周"
+  },
+  "datePickerLastWeek": {
+    "message": "上周"
+  },
+  "datePickerLast30Days": {
+    "message": "最近30天"
+  },
+  "datePickerThisMonth": {
+    "message": "本月"
+  },
+  "datePickerLastMonth": {
+    "message": "上月"
+  },
+  "datePickerThisYear": {
+    "message": "本年"
+  },
+  "datePickerLastYear": {
+    "message": "前年"
+  },
+  "monthNameJanuary": {
+    "message": "一月"
+  },
+  "monthNameFebruary": {
+    "message": "二月"
+  },
+  "monthNameMarch": {
+    "message": "三月"
+  },
+  "monthNameApril": {
+    "message": "四月"
+  },
+  "monthNameMay": {
+    "message": "五月"
+  },
+  "monthNameJune": {
+    "message": "六月"
+  },
+  "monthNameJuly": {
+    "message": "七月"
+  },
+  "monthNameAugust": {
+    "message": "八月"
+  },
+  "monthNameSeptember": {
+    "message": "九月"
+  },
+  "monthNameOctober": {
+    "message": "十月"
+  },
+  "monthNameNovember": {
+    "message": "十一月"
+  },
+  "monthNameDecember": {
+    "message": "十二月"
   }
 }

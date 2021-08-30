@@ -42,7 +42,7 @@ export function getDateMonthName(date) {
 export function getDateLabel(date, dateUnit) {
   switch (dateUnit) {
     case DATE_UNIT.DAY:
-      return date.toDateString();
+      return date.toLocaleDateString();
     case DATE_UNIT.MONTH:
       return getDateMonthName(date);
     default:
