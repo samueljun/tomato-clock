@@ -37,7 +37,7 @@
     "scripts": ["/background/background.js"]
   },
 
-  "permissions": ["alarms", "notifications", "storage"],
+  "permissions": ["notifications", "storage"],
 
   "commands": {
     "start-tomato": {
