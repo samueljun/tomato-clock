@@ -1,16 +1,15 @@
 {
   "manifest_version": 2,
-  "name": "Tomato Clock",
+  "default_locale": "en",
+  "name": "__MSG_extensionName__",
   "version": "__REPLACED_ON_BUILD__",
   "author": "Samuel Jun",
-  "description": "A simple browser extension for managing your productivity.",
-
+  "description": "__MSG_extensionDescription__",
   "applications": {
     "gecko": {
       "id": "jid1-Kt2kYYgi32zPuw@jetpack"
     }
   },
-
   "icons": {
     "16": "/assets/images/tomato-icon-16.png",
     "32": "/assets/images/tomato-icon-32.png",
@@ -19,7 +18,6 @@
     "128": "/assets/images/tomato-icon-128.png",
     "256": "/assets/images/tomato-icon-256.png"
   },
-
   "browser_action": {
     "default_icon": {
       "16": "/assets/images/tomato-icon-16.png",
@@ -29,10 +27,9 @@
       "128": "/assets/images/tomato-icon-128.png",
       "256": "/assets/images/tomato-icon-256.png"
     },
-    "default_title": "Tomato Clock",
+    "default_title": "__MSG_extensionName__",
     "default_popup": "/panel/panel.html"
   },
-
   "background": {
     "scripts": ["/background/background.js"]
   },
@@ -44,28 +41,27 @@
       "suggested_key": {
         "default": "Alt+Shift+1"
       },
-      "description": "Start a new tomato timer."
+      "description": "__MSG_commandsStartTomato__"
     },
     "start-short-break": {
       "suggested_key": {
         "default": "Alt+Shift+2"
       },
-      "description": "Start a new short break."
+      "description": "__MSG_commandsStartShortBreak__"
     },
     "start-long-break": {
       "suggested_key": {
         "default": "Alt+Shift+3"
       },
-      "description": "Start a new long break."
+      "description": "__MSG_commandsStartLongBreak__"
     },
     "reset-timer": {
       "suggested_key": {
         "default": "Alt+Shift+4"
       },
-      "description": "Reset the current timer."
+      "description": "__MSG_commandsResetTimer__"
     }
   },
-
   "options_ui": {
     "page": "/options/options.html",
     "browser_style": false

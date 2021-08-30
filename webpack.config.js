@@ -77,6 +77,7 @@ module.exports = {
           },
         },
         { from: "./src/assets", to: "./assets" },
+        { from: "./src/_locales", to: "./_locales" },
       ],
     }),
   ],

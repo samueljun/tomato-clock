@@ -1,0 +1,26 @@
+{
+  "extensionName": {
+    "message": "Tomato Clock",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "A simple browser extension for managing your productivity.",
+    "description": "Description of the extension."
+  },
+  "commandsStartTomato": {
+    "message": "Start a new tomato timer.",
+    "description": "Manifest.json command to start a new tomato timer."
+  },
+  "commandsStartShortBreak": {
+    "message": "Start a new short break.",
+    "description": "Manifest.json command to start a new short break."
+  },
+  "commandsStartLongBreak": {
+    "message": "Start a new long break.",
+    "description": "Manifest.json command to start a new long break."
+  },
+  "commandsResetTimer": {
+    "message": "Reset the current timer.",
+    "description": "Manifest.json command to reset the current timer."
+  }
+}

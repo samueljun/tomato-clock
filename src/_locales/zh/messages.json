@@ -1,0 +1,26 @@
+{
+  "extensionName": {
+    "message": "番茄时钟",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "A simple browser extension for managing your productivity.",
+    "description": "Description of the extension."
+  },
+  "commandsStartTomato": {
+    "message": "Start a new tomato timer.",
+    "description": "Manifest.json command to start a timer."
+  },
+  "commandsStartShortBreak": {
+    "message": "Start a new short break.",
+    "description": "Manifest.json command to start a short break timer."
+  },
+  "commandsStartLongBreak": {
+    "message": "Start a new long break.",
+    "description": "Manifest.json command to start a long break timer."
+  },
+  "commandsResetTimer": {
+    "message": "Reset the current timer.",
+    "description": "Manifest.json command to reset the timer."
+  }
+}
