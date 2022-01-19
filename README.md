@@ -18,7 +18,7 @@ Please file any issues or feature requests at https://github.com/samueljun/tomat
 
 ## Installation
 
-- [Firefox AMO](https://addons.mozilla.org/en-US/firefox/addon/tomato-clock/)
+- [Firefox AMO](https://addons.mozilla.org/firefox/addon/tomato-clock/)
 - [Chrome Web Store](https://chrome.google.com/webstore/detail/tomato-clock/enemipdanmallpjakiehedcgjmibjihj)
 
 ## Development
