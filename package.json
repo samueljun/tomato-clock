@@ -31,7 +31,7 @@
     "daterangepicker": "^2.1.27",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "webextension-polyfill": "^0.8.0"
   },
   "devDependencies": {
