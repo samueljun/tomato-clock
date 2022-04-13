@@ -87,9 +87,9 @@ The expected formatting of Tomato Clock's .json files is as follows
 ]
 ```
 
-At the base, there is an array [] of objects {}
-Each object {} is an instance of the clock timer.
-Within each object:
-  "timeout": is the time in milliseconds of the timer
-  "type": is one of "tomato", "shortBreak", or "longBreak"
-  "date": is the exact date and time string in the [ISOString format](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString)
+- At the base, there is an array [] of objects {}
+- Each object {} is an instance of the clock timer.
+- Within each object:
+  - "timeout": is the time in milliseconds of the timer
+  - "type": is one of "tomato", "shortBreak", or "longBreak"
+  - "date": is the exact date and time string in the [ISOString format](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString)
