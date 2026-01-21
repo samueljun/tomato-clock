@@ -37,7 +37,7 @@
     "core-js": "^3.47.0",
     "daterangepicker": "^3.1.0",
     "jquery": "^3.6.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "moment": "^2.29.4",
     "webextension-polyfill": "^0.12.0"
   },
