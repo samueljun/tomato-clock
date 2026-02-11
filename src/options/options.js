@@ -49,6 +49,7 @@ export default class Options {
     this.domClearCustomSoundButton = document.getElementById(
       "clear-custom-sound-button",
     );
+    this.domWeekStartDay = document.getElementById("week-start-day");
 
     this.setOptionsOnPage();
     this.setEventListeners();
@@ -73,6 +74,7 @@ export default class Options {
         isNotificationSoundEnabled,
         selectedNotificationSound,
         isToolbarBadgeEnabled,
+        weekStartDay,
       } = settings;
 
       this.domMinutesInTomato.value = minutesInTomato;
@@ -104,6 +106,7 @@ export default class Options {
       }
 
       this.domToolbarBadgeCheckbox.checked = isToolbarBadgeEnabled;
+      this.domWeekStartDay.value = weekStartDay;
     });
   }
 
@@ -115,6 +118,7 @@ export default class Options {
       this.domNotificationSoundCheckbox.checked;
     const selectedNotificationSound = this.domNotificationSoundSelect.value;
     const isToolbarBadgeEnabled = this.domToolbarBadgeCheckbox.checked;
+    const weekStartDay = parseInt(this.domWeekStartDay.value);
 
     this.settings.saveSettings({
       [SETTINGS_KEY.MINUTES_IN_TOMATO]: minutesInTomato,
@@ -123,6 +127,7 @@ export default class Options {
       [SETTINGS_KEY.IS_NOTIFICATION_SOUND_ENABLED]: isNotificationSoundEnabled,
       [SETTINGS_KEY.SELECTED_NOTIFICATION_SOUND]: selectedNotificationSound,
       [SETTINGS_KEY.IS_TOOLBAR_BADGE_ENABLED]: isToolbarBadgeEnabled,
+      [SETTINGS_KEY.WEEK_START_DAY]: weekStartDay,
     });
   }
 
@@ -135,6 +140,7 @@ export default class Options {
       this.domNotificationSoundCheckbox,
       this.domNotificationSoundSelect,
       this.domToolbarBadgeCheckbox,
+      this.domWeekStartDay,
     ];
 
     inputs.forEach((input) => {

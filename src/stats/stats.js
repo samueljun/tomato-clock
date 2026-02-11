@@ -8,13 +8,14 @@ import "daterangepicker/daterangepicker.css";
 import "./stats.css";
 
 import Timeline from "../utils/timeline";
+import Settings from "../utils/settings";
 import {
   getDateLabel,
   getDateRangeStringArray,
   getZeroArray,
   getFilenameDate,
 } from "../utils/utils";
-import { DATE_UNIT, TIMER_TYPE } from "../utils/constants";
+import { DATE_UNIT, TIMER_TYPE, SETTINGS_KEY } from "../utils/constants";
 
 export default class Stats {
   constructor() {
@@ -217,7 +218,15 @@ export default class Stats {
   }
 }
 
-$(document).ready(() => {
+$(document).ready(async () => {
+  const settings = new Settings();
+  const { [SETTINGS_KEY.WEEK_START_DAY]: weekStartDay = 0 } =
+    await settings.getSettings();
+
+  moment.updateLocale("en", {
+    week: { dow: weekStartDay },
+  });
+
   const stats = new Stats();
 
   // Date Picker
@@ -228,6 +237,7 @@ $(document).ready(() => {
     {
       locale: {
         format: "dddd, MMMM Do YYYY",
+        firstDay: weekStartDay,
       },
       dateLimit: {
         months: 1,
