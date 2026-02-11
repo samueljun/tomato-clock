@@ -1,6 +1,6 @@
 {
   "name": "tomato-clock",
-  "version": "7.2.0",
+  "version": "7.2.1",
   "description": "Tomato Clock is a simple browser extension for managing your productivity.",
   "main": "src/background.js",
   "scripts": {
@@ -9,13 +9,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=production && web-ext build --source-dir ./dist --artifacts-dir ./dist-zip --overwrite-dest",
     "watch": "webpack --watch",
-    "start": "web-ext run --source-dir ./dist -f /Applications/Firefox.app/Contents/MacOS/firefox",
+    "start": "node scripts/run-webext.js",
     "build:firefox": "npm run build",
     "watch:firefox": "npm run watch",
     "start:firefox": "npm run start",
     "build:chrome": "TARGET_BROWSER=chrome npm run build",
     "watch:chrome": "TARGET_BROWSER=chrome webpack --watch",
-    "start:chrome": "web-ext run -t chromium --source-dir ./dist",
+    "start:chrome": "node scripts/run-webext.js chromium",
     "prepare": "husky"
   },
   "repository": {

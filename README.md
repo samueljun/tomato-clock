@@ -44,14 +44,35 @@ npm run watch:firefox
 npm run watch:chrome
 ```
 
-4. In a separate terminal, run the following command to start a clean clean browser instance with live reloading (https://github.com/mozilla/web-ext):
+4. In a separate terminal, run the following command to start a clean browser instance with live reloading (https://github.com/mozilla/web-ext).
+
+- On Windows (PowerShell):
+
+```powershell
+$env:FIREFOX_PATH = 'C:\\Program Files\\Mozilla Firefox\\firefox.exe'
+npm run start
+```
+
+- On Windows (Command Prompt):
+
+```cmd
+set FIREFOX_PATH=C:\\Program Files\\Mozilla Firefox\\firefox.exe
+npm run start
+```
+
+- On macOS / Linux (if Firefox is in the default location or on PATH):
 
 ```sh
 npm run start
-npm run start:firefox
+```
 
+- To run against Chromium/Chrome (when installed):
+
+```sh
 npm run start:chrome
 ```
+
+The `start` script uses `scripts/run-webext.js` and will attempt to auto-detect a local Firefox installation; set the `FIREFOX_PATH` environment variable if your Firefox is in a non-standard location.
 
 ### Updating the version number
 

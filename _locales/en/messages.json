@@ -1,0 +1,185 @@
+{
+  "extName": {
+    "message": "Tomato Clock - A Simple Pomodoro Timer"
+  },
+  "extDescription": {
+    "message": "A simple browser extension for managing your productivity."
+  },
+  "actionDefaultTitle": {
+    "message": "Tomato Clock"
+  },
+  "cmd_start_tomato_description": {
+    "message": "Start a new tomato timer."
+  },
+  "cmd_start_short_break_description": {
+    "message": "Start a new short break."
+  },
+  "cmd_start_long_break_description": {
+    "message": "Start a new long break."
+  },
+  "cmd_reset_timer_description": {
+    "message": "Reset the current timer."
+  },
+  "confirmResetStats": {
+    "message": "Are you sure you want to reset your stats?"
+  },
+  "invalidJSON": {
+    "message": "Invalid JSON"
+  },
+  "tomatoesLabel": {
+    "message": "Tomatoes"
+  },
+  "dateFormat": {
+    "message": "dddd, MMMM Do YYYY"
+  },
+  "range_last_7_days": {
+    "message": "Last 7 Days"
+  },
+  "range_this_week": {
+    "message": "This week"
+  },
+  "range_last_week": {
+    "message": "Last week"
+  },
+  "range_last_30_days": {
+    "message": "Last 30 Days"
+  },
+  "range_this_month": {
+    "message": "This Month"
+  },
+  "range_last_month": {
+    "message": "Last Month"
+  },
+  "range_this_year": {
+    "message": "This Year"
+  },
+  "range_last_year": {
+    "message": "Last Year"
+  },
+  "sound_alarm_beep_loud_mp3": {
+    "message": "Alarm Beep Loud"
+  },
+  "sound_alarm_beep_mp3": {
+    "message": "Alarm Beep"
+  },
+  "sound_beep_beep_mp3": {
+    "message": "Beep Beep"
+  },
+  "sound_button_mp3": {
+    "message": "Button"
+  },
+  "sound_kitchen_timer_mp3": {
+    "message": "Kitchen Timer"
+  },
+  "sound_timer_chime_mp3": {
+    "message": "Timer Chime"
+  },
+  "sound_custom": {
+    "message": "Custom"
+  },
+  "panelTitle": {
+    "message": "Panel - Tomato Clock"
+  },
+  "btn_tomato": {
+    "message": "Tomato"
+  },
+  "btn_short_break": {
+    "message": "Short Break"
+  },
+  "btn_long_break": {
+    "message": "Long Break"
+  },
+  "btn_reset": {
+    "message": "Reset"
+  },
+  "label_stats": {
+    "message": "Stats"
+  },
+  "optionsTitle": {
+    "message": "Options - Tomato Clock"
+  },
+  "label_minutes_in_tomato": {
+    "message": "Minutes in Tomato"
+  },
+  "label_minutes_in_short_break": {
+    "message": "Minutes in Short Break"
+  },
+  "label_minutes_in_long_break": {
+    "message": "Minutes in Long Break"
+  },
+  "label_notification_sound": {
+    "message": "Notification sound"
+  },
+  "placeholder_custom_sound": {
+    "message": "Custom Sound"
+  },
+  "btn_clear": {
+    "message": "Clear"
+  },
+  "label_toolbar_minute_display": {
+    "message": "Toolbar minute display"
+  },
+  "btn_reset_to_default": {
+    "message": "Reset to default"
+  },
+  "modal_confirm_reset_title": {
+    "message": "Confirm Reset"
+  },
+  "modal_confirm_reset_body": {
+    "message": "Are you sure you want to reset all settings to default?"
+  },
+  "btn_cancel": {
+    "message": "Cancel"
+  },
+  "btn_reset_confirm": {
+    "message": "Reset"
+  },
+  "statsTitle": {
+    "message": "Stats - Tomato Clock"
+  },
+  "statsHeader": {
+    "message": "Stats - Tomato Clock"
+  },
+  "label_date_range": {
+    "message": "Date Range"
+  },
+  "label_language": {
+    "message": "Language"
+  },
+  "table_header_timer": {
+    "message": "Timer"
+  },
+  "table_header_count": {
+    "message": "#"
+  },
+  "label_tomatoes": {
+    "message": "Tomatoes"
+  },
+  "label_short_breaks": {
+    "message": "Short Breaks"
+  },
+  "label_long_breaks": {
+    "message": "Long Breaks"
+  },
+  "btn_export_stats": {
+    "message": "Export Stats as JSON"
+  },
+  "btn_import_stats": {
+    "message": "Import Stats from JSON"
+  },
+  "btn_reset_stats": {
+    "message": "Reset Stats"
+  },
+  "offscreenTitle": {
+    "message": "Offscreen"
+  },
+  "lang_en": {
+    "message": "English"
+  },
+  "lang_pt": {
+    "message": "Portuguese"
+  },
+  "label_options": {
+    "message": "Options"
+  }
+}

@@ -1,4 +1,9 @@
 import browser from "webextension-polyfill";
+import {
+  localizeHtmlPage,
+  addLanguageChangeListener,
+  applyTranslations,
+} from "../utils/i18n";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./panel.css";
@@ -13,21 +18,32 @@ import Settings from "../utils/settings";
 
 export default class Panel {
   constructor() {
-    this.settings = new Settings();
-    this.currentTimeText = document.getElementById("current-time-text");
-    this.timer = {};
+    // Localize static HTML tokens like __MSG_key__ then initialize
+    localizeHtmlPage().then(() => {
+      this.settings = new Settings();
+      this.currentTimeText = document.getElementById("current-time-text");
+      this.timer = {};
 
-    browser.runtime
-      .sendMessage({
-        action: RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME,
-      })
-      .then((scheduledTime) => {
-        if (scheduledTime) {
-          this.setDisplayTimer(scheduledTime - Date.now());
-        }
+      browser.runtime
+        .sendMessage({
+          action: RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME,
+        })
+        .then((scheduledTime) => {
+          if (scheduledTime) {
+            this.setDisplayTimer(scheduledTime - Date.now());
+          }
+        });
+
+      this.setEventListeners();
+    });
+
+    // Update panel UI when language changes at runtime
+    addLanguageChangeListener(() => {
+      // re-run localization and re-apply dynamic translations
+      localizeHtmlPage().then(() => {
+        applyTranslations();
       });
-
-    this.setEventListeners();
+    });
   }
 
   setEventListeners() {
@@ -58,6 +74,18 @@ export default class Panel {
     document.getElementById("stats-link").addEventListener("click", () => {
       browser.tabs.create({ url: "/stats/stats.html" });
     });
+
+    const optionsLink = document.getElementById("options-link");
+    if (optionsLink) {
+      optionsLink.addEventListener("click", () => {
+        if (browser.runtime.openOptionsPage) {
+          browser.runtime.openOptionsPage();
+        } else {
+          // Fallback for older browsers
+          browser.tabs.create({ url: "/options/options.html" });
+        }
+      });
+    }
   }
 
   resetTimer() {

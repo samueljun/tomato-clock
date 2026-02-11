@@ -8,6 +8,7 @@ import "daterangepicker/daterangepicker.css";
 import "./stats.css";
 
 import Timeline from "../utils/timeline";
+import { localizeHtmlPage, t, addLanguageChangeListener } from "../utils/i18n";
 import {
   getDateLabel,
   getDateRangeStringArray,
@@ -18,42 +19,124 @@ import { DATE_UNIT, TIMER_TYPE } from "../utils/constants";
 
 export default class Stats {
   constructor() {
-    // Get DOM Elements
-    this.tomatoesCount = document.getElementById("tomatoes-count");
-    this.shortBreaksCount = document.getElementById("short-breaks-count");
-    this.longBreaksCount = document.getElementById("long-breaks-count");
-    this.resetStatsButton = document.getElementById("reset-stats-button");
-    this.exportStatsButton = document.getElementById("export-stats-button");
-    this.importStatsButton = document.getElementById("import-stats-button");
-    this.importStatsHiddenInput = document.getElementById(
-      "import-stats-hidden-input",
-    );
+    // Localize static HTML tokens then initialize DOM bindings
+    localizeHtmlPage().then(() => {
+      // Get DOM Elements
+      this.tomatoesCount = document.getElementById("tomatoes-count");
+      this.shortBreaksCount = document.getElementById("short-breaks-count");
+      this.longBreaksCount = document.getElementById("long-breaks-count");
+      this.resetStatsButton = document.getElementById("reset-stats-button");
+      this.exportStatsButton = document.getElementById("export-stats-button");
+      this.importStatsButton = document.getElementById("import-stats-button");
+      this.importStatsHiddenInput = document.getElementById(
+        "import-stats-hidden-input",
+      );
 
-    this.ctx = document
-      .getElementById("completed-tomato-dates-chart")
-      .getContext("2d");
-    this.completedTomatoesChart = null;
+      this.ctx = document
+        .getElementById("completed-tomato-dates-chart")
+        .getContext("2d");
+      this.completedTomatoesChart = null;
 
-    this.handleResetStatsButtonClick =
-      this.handleResetStatsButtonClick.bind(this);
-    this.handleExportStatsButtonClick =
-      this.handleExportStatsButtonClick.bind(this);
-    this.handleImportStatsButtonClick =
-      this.handleImportStatsButtonClick.bind(this);
-    this.handleImportStatsHiddenInputChange =
-      this.handleImportStatsHiddenInputChange.bind(this);
-    this.resetStatsButton.addEventListener(
-      "click",
-      this.handleResetStatsButtonClick,
-    );
-    this.exportStatsButton.addEventListener(
-      "click",
-      this.handleExportStatsButtonClick,
-    );
-    this.importStatsButton.addEventListener(
-      "click",
-      this.handleImportStatsButtonClick,
-    );
+      this.handleResetStatsButtonClick =
+        this.handleResetStatsButtonClick.bind(this);
+      this.handleExportStatsButtonClick =
+        this.handleExportStatsButtonClick.bind(this);
+      this.handleImportStatsButtonClick =
+        this.handleImportStatsButtonClick.bind(this);
+      this.handleImportStatsHiddenInputChange =
+        this.handleImportStatsHiddenInputChange.bind(this);
+      this.resetStatsButton.addEventListener(
+        "click",
+        this.handleResetStatsButtonClick,
+      );
+      this.exportStatsButton.addEventListener(
+        "click",
+        this.handleExportStatsButtonClick,
+      );
+      this.importStatsButton.addEventListener(
+        "click",
+        this.handleImportStatsButtonClick,
+      );
+
+      this.resetDateRange();
+
+      // Listen for language changes to update chart label and daterangepicker
+      addLanguageChangeListener(() => {
+        if (this.completedTomatoesChart) {
+          this.completedTomatoesChart.data.datasets[0].label =
+            t("tomatoesLabel");
+          this.completedTomatoesChart.update();
+        }
+        // Reinitialize daterangepicker locale/labels
+        const picker = $('input[name="daterange"]');
+        if (picker && picker.data("daterangepicker")) {
+          picker.data("daterangepicker").remove();
+          // rebuild ranges with new labels
+          const rangeLabels = {
+            last7Days: t("range_last_7_days"),
+            thisWeek: t("range_this_week"),
+            lastWeek: t("range_last_week"),
+            last30Days: t("range_last_30_days"),
+            thisMonth: t("range_this_month"),
+            lastMonth: t("range_last_month"),
+            thisYear: t("range_this_year"),
+            lastYear: t("range_last_year"),
+          };
+          const ranges = {};
+          ranges[rangeLabels.last7Days] = [
+            moment().subtract(6, "days"),
+            moment(),
+          ];
+          ranges[rangeLabels.thisWeek] = [
+            moment().startOf("week"),
+            moment().endOf("week"),
+          ];
+          ranges[rangeLabels.lastWeek] = [
+            moment().subtract(1, "week").startOf("week"),
+            moment().subtract(1, "week").endOf("week"),
+          ];
+          ranges[rangeLabels.last30Days] = [
+            moment().subtract(29, "days"),
+            moment(),
+          ];
+          ranges[rangeLabels.thisMonth] = [
+            moment().startOf("month"),
+            moment().endOf("month"),
+          ];
+          ranges[rangeLabels.lastMonth] = [
+            moment().subtract(1, "month").startOf("month"),
+            moment().subtract(1, "month").endOf("month"),
+          ];
+          ranges[rangeLabels.thisYear] = [
+            moment().startOf("year"),
+            moment().endOf("year"),
+          ];
+          ranges[rangeLabels.lastYear] = [
+            moment().subtract(1, "year").startOf("year"),
+            moment().subtract(1, "year").endOf("year"),
+          ];
+
+          picker.daterangepicker(
+            {
+              locale: { format: t("dateFormat") || "dddd, MMMM Do YYYY" },
+              dateLimit: { months: 1 },
+              startDate: moment().subtract(6, "days"),
+              endDate: moment(),
+              ranges,
+            },
+            (start, end, label) => {
+              const startDate = start.toDate();
+              const endDate = end.toDate();
+              const isRangeYear =
+                label === rangeLabels.thisYear ||
+                label === rangeLabels.lastYear;
+              const dateUnit = isRangeYear ? DATE_UNIT.MONTH : DATE_UNIT.DAY;
+              this.changeStatDates(startDate, endDate, dateUnit);
+            },
+          );
+        }
+      });
+    });
     this.importStatsHiddenInput.addEventListener(
       "change",
       this.handleImportStatsHiddenInputChange,
@@ -64,7 +147,7 @@ export default class Stats {
   }
 
   handleResetStatsButtonClick() {
-    if (confirm("Are you sure you want to reset your stats?")) {
+    if (confirm(t("confirmResetStats"))) {
       this.timeline.resetTimeline().then(() => {
         this.resetDateRange();
       });
@@ -98,7 +181,7 @@ export default class Stats {
     try {
       newTimeline = JSON.parse(timelineJson);
     } catch {
-      alert("Invalid JSON");
+      alert(t("invalidJSON"));
       return;
     }
 
@@ -143,7 +226,7 @@ export default class Stats {
       labels: dateRangeStrings,
       datasets: [
         {
-          label: "Tomatoes",
+          label: t("tomatoesLabel"),
           fill: true,
           borderColor: "rgba(255,0,0,1)",
           backgroundColor: "rgba(255,0,0,0.2)",
@@ -224,42 +307,64 @@ $(document).ready(() => {
   const momentLastWeek = moment().subtract(6, "days");
   const momentToday = moment();
 
+  // Build localized ranges for daterangepicker
+  const rangeLabels = {
+    last7Days: t("range_last_7_days"),
+    thisWeek: t("range_this_week"),
+    lastWeek: t("range_last_week"),
+    last30Days: t("range_last_30_days"),
+    thisMonth: t("range_this_month"),
+    lastMonth: t("range_last_month"),
+    thisYear: t("range_this_year"),
+    lastYear: t("range_last_year"),
+  };
+
+  const ranges = {};
+  ranges[rangeLabels.last7Days] = [moment().subtract(6, "days"), moment()];
+  ranges[rangeLabels.thisWeek] = [
+    moment().startOf("week"),
+    moment().endOf("week"),
+  ];
+  ranges[rangeLabels.lastWeek] = [
+    moment().subtract(1, "week").startOf("week"),
+    moment().subtract(1, "week").endOf("week"),
+  ];
+  ranges[rangeLabels.last30Days] = [moment().subtract(29, "days"), moment()];
+  ranges[rangeLabels.thisMonth] = [
+    moment().startOf("month"),
+    moment().endOf("month"),
+  ];
+  ranges[rangeLabels.lastMonth] = [
+    moment().subtract(1, "month").startOf("month"),
+    moment().subtract(1, "month").endOf("month"),
+  ];
+  ranges[rangeLabels.thisYear] = [
+    moment().startOf("year"),
+    moment().endOf("year"),
+  ];
+  ranges[rangeLabels.lastYear] = [
+    moment().subtract(1, "year").startOf("year"),
+    moment().subtract(1, "year").endOf("year"),
+  ];
+
   $('input[name="daterange"]').daterangepicker(
     {
       locale: {
-        format: "dddd, MMMM Do YYYY",
+        format: t("dateFormat") || "dddd, MMMM Do YYYY",
       },
       dateLimit: {
         months: 1,
       },
       startDate: momentLastWeek,
       endDate: momentToday,
-      ranges: {
-        "Last 7 Days": [moment().subtract(6, "days"), moment()],
-        "This week": [moment().startOf("week"), moment().endOf("week")],
-        "Last week": [
-          moment().subtract(1, "week").startOf("week"),
-          moment().subtract(1, "week").endOf("week"),
-        ],
-        "Last 30 Days": [moment().subtract(29, "days"), moment()],
-        "This Month": [moment().startOf("month"), moment().endOf("month")],
-        "Last Month": [
-          moment().subtract(1, "month").startOf("month"),
-          moment().subtract(1, "month").endOf("month"),
-        ],
-        "This Year": [moment().startOf("year"), moment().endOf("year")],
-        "Last Year": [
-          moment().subtract(1, "year").startOf("year"),
-          moment().subtract(1, "year").endOf("year"),
-        ],
-      },
+      ranges,
     },
     (momentStartDate, momentEndDate, label) => {
-      // Convert Moment dates to native JS dates
       const startDate = momentStartDate.toDate();
       const endDate = momentEndDate.toDate();
 
-      const isRangeYear = label === "This Year" || label === "Last Year";
+      const isRangeYear =
+        label === rangeLabels.thisYear || label === rangeLabels.lastYear;
       const dateUnit = isRangeYear ? DATE_UNIT.MONTH : DATE_UNIT.DAY;
 
       stats.changeStatDates(startDate, endDate, dateUnit);

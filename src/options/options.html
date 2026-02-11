@@ -4,14 +4,14 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Options - Tomato Clock</title>
+    <title>__MSG_optionsTitle__</title>
   </head>
 
   <body>
     <form id="options-form">
       <div class="mb-3">
         <label for="minutes-in-tomato" class="form-label">
-          Minutes in Tomato
+          __MSG_label_minutes_in_tomato__
         </label>
         <input
           type="number"
@@ -22,7 +22,7 @@
       </div>
       <div class="mb-3">
         <label for="minutes-in-short-break" class="form-label">
-          Minutes in Short Break
+          __MSG_label_minutes_in_short_break__
         </label>
         <input
           type="number"
@@ -33,7 +33,7 @@
       </div>
       <div class="mb-3">
         <label for="minutes-in-long-break" class="form-label">
-          Minutes in Long Break
+          __MSG_label_minutes_in_long_break__
         </label>
         <input
           type="number"
@@ -50,7 +50,7 @@
           id="notification-sound-checkbox"
         />
         <label class="form-check-label" for="notification-sound-checkbox">
-          Notification sound
+          __MSG_label_notification_sound__
         </label>
         <select
           class="form-select mt-2"
@@ -81,20 +81,19 @@
                 class="form-control"
                 id="custom-sound-filename"
                 disabled
-                placeholder="Custom Sound"
+                placeholder="__MSG_placeholder_custom_sound__"
               />
               <button
                 class="btn btn-outline-secondary"
                 type="button"
                 id="clear-custom-sound-button"
               >
-                Clear
+                __MSG_btn_clear__
               </button>
             </div>
           </div>
         </div>
       </div>
-
       <div class="form-check mb-3">
         <input
           class="form-check-input"
@@ -102,8 +101,15 @@
           id="toolbar-badge-checkbox"
         />
         <label class="form-check-label" for="toolbar-badge-checkbox">
-          Toolbar minute display
+          __MSG_label_toolbar_minute_display__
         </label>
+      </div>
+
+      <div class="mb-3">
+        <label for="language-select" class="form-label"
+          >__MSG_label_language__</label
+        >
+        <select id="language-select" class="form-select"></select>
       </div>
     </form>
 
@@ -111,7 +117,7 @@
 
     <div>
       <button class="btn btn-sm btn-warning" id="reset-options">
-        Reset to default
+        __MSG_btn_reset_to_default__
       </button>
     </div>
 
@@ -126,7 +132,9 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="resetModalLabel">Confirm Reset</h5>
+            <h5 class="modal-title" id="resetModalLabel">
+              __MSG_modal_confirm_reset_title__
+            </h5>
             <button
               type="button"
               class="btn-close"
@@ -134,19 +142,17 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
-            Are you sure you want to reset all settings to default?
-          </div>
+          <div class="modal-body">__MSG_modal_confirm_reset_body__</div>
           <div class="modal-footer">
             <button
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
             >
-              Cancel
+              __MSG_btn_cancel__
             </button>
             <button type="button" class="btn btn-danger" id="confirm-reset">
-              Reset
+              __MSG_btn_reset_confirm__
             </button>
           </div>
         </div>

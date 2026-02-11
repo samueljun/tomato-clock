@@ -1,4 +1,10 @@
 import browser from "webextension-polyfill";
+import {
+  t,
+  setLanguage,
+  localizeHtmlPage,
+  applyTranslations,
+} from "../utils/i18n";
 import Modal from "bootstrap/js/dist/modal";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./options.css";
@@ -9,57 +15,79 @@ import {
   DEFAULT_SETTINGS,
   SETTINGS_KEY,
   STORAGE_KEY,
+  AVAILABLE_LANGUAGES,
 } from "../utils/constants";
 
 export default class Options {
   constructor() {
-    this.settings = new Settings();
+    // Localize static HTML tokens then initialize DOM bindings
+    localizeHtmlPage().then(() => {
+      this.settings = new Settings();
 
-    this.domMinutesInTomato = document.getElementById("minutes-in-tomato");
-    this.domMinutesInShortBreak = document.getElementById(
-      "minutes-in-short-break",
-    );
-    this.domMinutesInLongBreak = document.getElementById(
-      "minutes-in-long-break",
-    );
-    this.domNotificationSoundCheckbox = document.getElementById(
-      "notification-sound-checkbox",
-    );
-    this.domNotificationSoundSelect = document.getElementById(
-      "notification-sound-select",
-    );
-    this.domToolbarBadgeCheckbox = document.getElementById(
-      "toolbar-badge-checkbox",
-    );
-    this.domCustomSoundUploadContainer = document.getElementById(
-      "custom-sound-upload-container",
-    );
-    this.domCustomSoundEmptyState = document.getElementById(
-      "custom-sound-empty-state",
-    );
-    this.domCustomSoundUploadInput = document.getElementById(
-      "custom-sound-upload-input",
-    );
-    this.domCustomSoundFilledState = document.getElementById(
-      "custom-sound-filled-state",
-    );
-    this.domCustomSoundFilename = document.getElementById(
-      "custom-sound-filename",
-    );
-    this.domClearCustomSoundButton = document.getElementById(
-      "clear-custom-sound-button",
-    );
+      this.domMinutesInTomato = document.getElementById("minutes-in-tomato");
+      this.domMinutesInShortBreak = document.getElementById(
+        "minutes-in-short-break",
+      );
+      this.domMinutesInLongBreak = document.getElementById(
+        "minutes-in-long-break",
+      );
+      this.domNotificationSoundCheckbox = document.getElementById(
+        "notification-sound-checkbox",
+      );
+      this.domNotificationSoundSelect = document.getElementById(
+        "notification-sound-select",
+      );
+      this.domToolbarBadgeCheckbox = document.getElementById(
+        "toolbar-badge-checkbox",
+      );
+      this.domCustomSoundUploadContainer = document.getElementById(
+        "custom-sound-upload-container",
+      );
+      this.domCustomSoundEmptyState = document.getElementById(
+        "custom-sound-empty-state",
+      );
+      this.domCustomSoundUploadInput = document.getElementById(
+        "custom-sound-upload-input",
+      );
+      this.domCustomSoundFilledState = document.getElementById(
+        "custom-sound-filled-state",
+      );
+      this.domCustomSoundFilename = document.getElementById(
+        "custom-sound-filename",
+      );
+      this.domClearCustomSoundButton = document.getElementById(
+        "clear-custom-sound-button",
+      );
+      this.domLanguageSelect = document.getElementById("language-select");
 
-    this.setOptionsOnPage();
-    this.setEventListeners();
-    this.populateSoundSelect();
+      this.setOptionsOnPage();
+      this.setEventListeners();
+      this.populateSoundSelect();
+      this.populateLanguageSelect();
+    });
+  }
+
+  populateLanguageSelect() {
+    if (!this.domLanguageSelect) return;
+    // populate language options
+    AVAILABLE_LANGUAGES.forEach((lang) => {
+      const option = document.createElement("option");
+      option.value = lang.id;
+      option.dataset.i18nKey = lang.nameKey;
+      option.dataset.i18nAttr = "text";
+      option.textContent = t(lang.nameKey) || lang.id;
+      this.domLanguageSelect.appendChild(option);
+    });
   }
 
   populateSoundSelect() {
     AVAILABLE_NOTIFICATION_SOUNDS.forEach((sound) => {
       const option = document.createElement("option");
       option.value = sound.id;
-      option.textContent = sound.name;
+      const key = `sound_${sound.id.replace(/[^a-z0-9]/gi, "_")}`;
+      option.dataset.i18nKey = key;
+      option.dataset.i18nAttr = "text";
+      option.textContent = t(key) || sound.id;
       this.domNotificationSoundSelect.appendChild(option);
     });
   }
@@ -73,6 +101,7 @@ export default class Options {
         isNotificationSoundEnabled,
         selectedNotificationSound,
         isToolbarBadgeEnabled,
+        language,
       } = settings;
 
       this.domMinutesInTomato.value = minutesInTomato;
@@ -104,6 +133,9 @@ export default class Options {
       }
 
       this.domToolbarBadgeCheckbox.checked = isToolbarBadgeEnabled;
+      if (this.domLanguageSelect && language) {
+        this.domLanguageSelect.value = language;
+      }
     });
   }
 
@@ -183,6 +215,20 @@ export default class Options {
         this.saveOptions();
       });
     });
+
+    if (this.domLanguageSelect) {
+      this.domLanguageSelect.addEventListener("change", async (e) => {
+        const newLang = e.target.value;
+        const settings = await this.settings.getSettings();
+        settings[SETTINGS_KEY.LANGUAGE] = newLang;
+        await this.settings.saveSettings(settings);
+        // Load new language and notify listeners
+        await setLanguage(newLang, false);
+        // Re-localize static tokens in HTML and dynamic elements
+        await localizeHtmlPage();
+        applyTranslations();
+      });
+    }
 
     this.domCustomSoundUploadInput.addEventListener("change", (event) => {
       const file = event.target.files[0];
