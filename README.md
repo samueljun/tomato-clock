@@ -61,6 +61,31 @@ Run the following command with the appropriate `npm version {patch/minor/major}`
 npm version patch && git push && git push --tags
 ```
 
+### Running integration tests
+
+The integration tests require additional packages and your Firefox installation on your PATH.
+
+1. Build the extension first:
+
+```sh
+npm run build
+```
+
+2. Enter test directory, install dependencies, and run the integration tests:
+
+```sh
+cd test
+npm install
+npm test
+```
+
+Or you can run the tests headlessly with
+
+```sh
+cd test
+HEADLESS=1 npm test
+```
+
 ### Building submission file
 
 Run one of the following commands so that webpack can build the submission zip file into `/dist-zip`:

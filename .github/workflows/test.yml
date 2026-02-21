@@ -1,0 +1,30 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: browser-actions/setup-firefox@v1
+
+      - name: Install dependencies and build extension
+        run: |
+          npm install
+          npm run build
+
+      - name: Install test dependencies
+        working-directory: test
+        run: npm install
+
+      - name: Run integration tests
+        working-directory: test
+        run: HEADLESS=1 npm test

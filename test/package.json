@@ -1,0 +1,12 @@
+{
+  "name": "tomato-clock-tests",
+  "private": true,
+  "scripts": {
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "geckodriver": "*",
+    "selenium-webdriver": "^4.0.0",
+    "selenium-webext-bridge": "^0.3.0"
+  }
+}
