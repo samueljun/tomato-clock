@@ -1,7 +1,7 @@
 # Tomato Clock - Browser Extension
 
 [![Mozilla Add-on Users](https://img.shields.io/amo/users/tomato-clock?logo=firefox&label=Firefox%20Users&color=red)](https://addons.mozilla.org/firefox/addon/tomato-clock/)
-[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/enemipdanmallpjakiehedcgjmibjihj?logo=googlechrome&label=Chrome%20Users&color=blue)](https://chrome.google.com/webstore/detail/tomato-clock/enemipdanmallpjakiehedcgjmibjihj)
+[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/enemipdanmallpjakiehedcgjmibjihj?logo=googlechrome&label=Chrome%20Users&color=blue)](https://chromewebstore.google.com/detail/tomato-clock/enemipdanmallpjakiehedcgjmibjihj)
 
 Tomato Clock is a simple browser extension for managing your productivity. Use the extension to break down your work into 25 minute 'Tomato' intervals separated by short breaks. Use the long break after completing four Tomato intervals.
 
@@ -21,7 +21,7 @@ Please file any issues or feature requests at https://github.com/samueljun/tomat
 ## Installation
 
 - [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/tomato-clock/)
-- [Chrome Web Store](https://chrome.google.com/webstore/detail/tomato-clock/enemipdanmallpjakiehedcgjmibjihj)
+- [Chrome Web Store](https://chromewebstore.google.com/detail/tomato-clock/enemipdanmallpjakiehedcgjmibjihj)
 
 ## Development
 
