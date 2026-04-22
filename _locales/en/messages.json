@@ -152,9 +152,6 @@
   "label_date_range": {
     "message": "Date Range"
   },
-  "label_language": {
-    "message": "Language"
-  },
   "table_header_timer": {
     "message": "Timer"
   },
@@ -181,12 +178,6 @@
   },
   "offscreenTitle": {
     "message": "Offscreen"
-  },
-  "lang_en": {
-    "message": "English"
-  },
-  "lang_pt": {
-    "message": "Portuguese"
   },
   "label_options": {
     "message": "Options"

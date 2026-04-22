@@ -152,9 +152,6 @@
   "label_date_range": {
     "message": "Intervalo de Datas"
   },
-  "label_language": {
-    "message": "Idioma"
-  },
   "table_header_timer": {
     "message": "Temporizador"
   },
@@ -181,12 +178,6 @@
   },
   "offscreenTitle": {
     "message": "Offscreen"
-  },
-  "lang_en": {
-    "message": "Inglês"
-  },
-  "lang_pt": {
-    "message": "Português"
   },
   "label_options": {
     "message": "Opções"
