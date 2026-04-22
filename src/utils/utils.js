@@ -60,6 +60,7 @@ export function getDateRangeStringArray(startDate, endDate, dateUnit) {
 
     switch (dateUnit) {
       case DATE_UNIT.MONTH:
+        currentStartDate.setDate(1);
         currentStartDate.setMonth(currentStartDate.getMonth() + 1);
         break;
       case DATE_UNIT.DAY:
@@ -86,10 +87,7 @@ export function getTimerTypeMilliseconds(type, settings) {
 }
 
 export function pad(number) {
-  if (number < 10) {
-    return "0" + number;
-  }
-  return number;
+  return String(number).padStart(2, "0");
 }
 
 export function getFilenameDate() {
