@@ -1,7 +1,6 @@
 import $ from "jquery";
 import Chart from "chart.js/auto";
 import moment from "moment";
-import "moment/locale/pt";
 import "daterangepicker";
 import browser from "webextension-polyfill";
 
@@ -113,10 +112,11 @@ export default class Stats {
   }
 
   resetDateRange() {
-    const momentLastWeek = moment().subtract(6, "days");
-    const momentToday = moment();
+    const today = new Date();
+    const lastWeek = new Date(today);
+    lastWeek.setDate(lastWeek.getDate() - 6);
 
-    this.changeStatDates(momentLastWeek.toDate(), momentToday.toDate());
+    this.changeStatDates(lastWeek, today);
   }
 
   addTomatoDateToChartData(data, date, dateUnit) {
@@ -240,44 +240,28 @@ $(document).ready(async () => {
   const momentToday = moment();
 
   // Build localized ranges for daterangepicker
-  const rangeLabels = {
-    last7Days: t("range_last_7_days"),
-    thisWeek: t("range_this_week"),
-    lastWeek: t("range_last_week"),
-    last30Days: t("range_last_30_days"),
-    thisMonth: t("range_this_month"),
-    lastMonth: t("range_last_month"),
-    thisYear: t("range_this_year"),
-    lastYear: t("range_last_year"),
+  const ranges = {
+    [t("range_last_7_days")]: [moment().subtract(6, "days"), momentToday],
+    [t("range_this_week")]: [moment().startOf("week"), moment().endOf("week")],
+    [t("range_last_week")]: [
+      moment().subtract(1, "week").startOf("week"),
+      moment().subtract(1, "week").endOf("week"),
+    ],
+    [t("range_last_30_days")]: [moment().subtract(29, "days"), momentToday],
+    [t("range_this_month")]: [
+      moment().startOf("month"),
+      moment().endOf("month"),
+    ],
+    [t("range_last_month")]: [
+      moment().subtract(1, "month").startOf("month"),
+      moment().subtract(1, "month").endOf("month"),
+    ],
+    [t("range_this_year")]: [moment().startOf("year"), moment().endOf("year")],
+    [t("range_last_year")]: [
+      moment().subtract(1, "year").startOf("year"),
+      moment().subtract(1, "year").endOf("year"),
+    ],
   };
-
-  const ranges = {};
-  ranges[rangeLabels.last7Days] = [moment().subtract(6, "days"), moment()];
-  ranges[rangeLabels.thisWeek] = [
-    moment().startOf("week"),
-    moment().endOf("week"),
-  ];
-  ranges[rangeLabels.lastWeek] = [
-    moment().subtract(1, "week").startOf("week"),
-    moment().subtract(1, "week").endOf("week"),
-  ];
-  ranges[rangeLabels.last30Days] = [moment().subtract(29, "days"), moment()];
-  ranges[rangeLabels.thisMonth] = [
-    moment().startOf("month"),
-    moment().endOf("month"),
-  ];
-  ranges[rangeLabels.lastMonth] = [
-    moment().subtract(1, "month").startOf("month"),
-    moment().subtract(1, "month").endOf("month"),
-  ];
-  ranges[rangeLabels.thisYear] = [
-    moment().startOf("year"),
-    moment().endOf("year"),
-  ];
-  ranges[rangeLabels.lastYear] = [
-    moment().subtract(1, "year").startOf("year"),
-    moment().subtract(1, "year").endOf("year"),
-  ];
 
   $('input[name="daterange"]').daterangepicker(
     {
@@ -298,7 +282,7 @@ $(document).ready(async () => {
       const endDate = momentEndDate.toDate();
 
       const isRangeYear =
-        label === rangeLabels.thisYear || label === rangeLabels.lastYear;
+        label === t("range_this_year") || label === t("range_last_year");
       const dateUnit = isRangeYear ? DATE_UNIT.MONTH : DATE_UNIT.DAY;
 
       stats.changeStatDates(startDate, endDate, dateUnit);
