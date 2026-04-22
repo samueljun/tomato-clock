@@ -6,7 +6,9 @@
   "scripts": {
     "lint": "eslint src",
     "lint-fix": "eslint --fix src",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "build": "webpack --mode=production && web-ext build --source-dir ./dist --artifacts-dir ./dist-zip --overwrite-dest",
     "watch": "webpack --watch",
     "start": "web-ext run --source-dir ./dist -f /Applications/Firefox.app/Contents/MacOS/firefox",
@@ -46,6 +48,7 @@
     "@babel/eslint-parser": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
     "@eslint/js": "^9.39.1",
+    "@vitest/coverage-v8": "^4.1.5",
     "babel-loader": "^10.0.0",
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.2",
@@ -56,6 +59,7 @@
     "lint-staged": "^16.2.7",
     "prettier": "3.7.4",
     "style-loader": "^4.0.0",
+    "vitest": "^4.1.5",
     "web-ext": "^10.0.0",
     "webpack": "^5.105.0",
     "webpack-cli": "^6.0.1"

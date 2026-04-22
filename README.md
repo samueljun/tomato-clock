@@ -53,6 +53,14 @@ npm run start:firefox
 npm run start:chrome
 ```
 
+### Running Tests
+
+```sh
+npm run test          # Run tests once
+npm run test:watch    # Run tests while watching for file changes
+npm run test:coverage # Run tests and show coverage report
+```
+
 ### Updating the version number
 
 Run the following command with the appropriate `npm version {patch/minor/major}` to bump the package.json version based on [semver](http://semver.org/):

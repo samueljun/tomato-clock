@@ -8,3 +8,4 @@ tomato-clock.zip
 *.swp
 
 node_modules/
+coverage/
