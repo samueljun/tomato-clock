@@ -1,0 +1,185 @@
+{
+  "extName": {
+    "message": "番茄时钟 - 简单的番茄工作法计时器"
+  },
+  "extDescription": {
+    "message": "一个用于管理生产力的简单浏览器扩展。"
+  },
+  "actionDefaultTitle": {
+    "message": "番茄时钟"
+  },
+  "cmd_start_tomato_description": {
+    "message": "开始一个新的番茄计时。"
+  },
+  "cmd_start_short_break_description": {
+    "message": "开始一个新的短休息。"
+  },
+  "cmd_start_long_break_description": {
+    "message": "开始一个新的长休息。"
+  },
+  "cmd_reset_timer_description": {
+    "message": "重置当前计时器。"
+  },
+  "confirmResetStats": {
+    "message": "您确定要重置您的统计数据吗？"
+  },
+  "invalidJSON": {
+    "message": "无效的 JSON"
+  },
+  "tomatoesLabel": {
+    "message": "番茄"
+  },
+  "dateFormat": {
+    "message": "YYYY年M月D日 dddd"
+  },
+  "range_last_7_days": {
+    "message": "最近 7 天"
+  },
+  "range_this_week": {
+    "message": "本周"
+  },
+  "range_last_week": {
+    "message": "上周"
+  },
+  "range_last_30_days": {
+    "message": "最近 30 天"
+  },
+  "range_this_month": {
+    "message": "本月"
+  },
+  "range_last_month": {
+    "message": "上月"
+  },
+  "range_this_year": {
+    "message": "今年"
+  },
+  "range_last_year": {
+    "message": "去年"
+  },
+  "sound_alarm_beep_loud_mp3": {
+    "message": "响亮警报音"
+  },
+  "sound_alarm_beep_mp3": {
+    "message": "警报音"
+  },
+  "sound_beep_beep_mp3": {
+    "message": "哔哔声"
+  },
+  "sound_button_mp3": {
+    "message": "按钮声"
+  },
+  "sound_kitchen_timer_mp3": {
+    "message": "厨房计时器"
+  },
+  "sound_timer_chime_mp3": {
+    "message": "计时器铃声"
+  },
+  "sound_custom": {
+    "message": "自定义"
+  },
+  "panelTitle": {
+    "message": "面板 - 番茄时钟"
+  },
+  "btn_tomato": {
+    "message": "番茄"
+  },
+  "btn_short_break": {
+    "message": "短休息"
+  },
+  "btn_long_break": {
+    "message": "长休息"
+  },
+  "btn_reset": {
+    "message": "重置"
+  },
+  "label_stats": {
+    "message": "统计"
+  },
+  "optionsTitle": {
+    "message": "选项 - 番茄时钟"
+  },
+  "label_minutes_in_tomato": {
+    "message": "番茄时长（分钟）"
+  },
+  "label_minutes_in_short_break": {
+    "message": "短休息时长（分钟）"
+  },
+  "label_minutes_in_long_break": {
+    "message": "长休息时长（分钟）"
+  },
+  "label_notification_sound": {
+    "message": "通知声音"
+  },
+  "placeholder_custom_sound": {
+    "message": "自定义声音"
+  },
+  "btn_clear": {
+    "message": "清除"
+  },
+  "label_toolbar_minute_display": {
+    "message": "工具栏分钟显示"
+  },
+  "label_week_starts_on": {
+    "message": "每周开始于"
+  },
+  "label_sunday": {
+    "message": "星期日"
+  },
+  "label_monday": {
+    "message": "星期一"
+  },
+  "btn_reset_to_default": {
+    "message": "恢复默认设置"
+  },
+  "modal_confirm_reset_title": {
+    "message": "确认重置"
+  },
+  "modal_confirm_reset_body": {
+    "message": "您确定要将所有设置恢复为默认值吗？"
+  },
+  "btn_cancel": {
+    "message": "取消"
+  },
+  "btn_reset_confirm": {
+    "message": "重置"
+  },
+  "statsTitle": {
+    "message": "统计 - 番茄时钟"
+  },
+  "statsHeader": {
+    "message": "统计 - 番茄时钟"
+  },
+  "label_date_range": {
+    "message": "日期范围"
+  },
+  "table_header_timer": {
+    "message": "计时器"
+  },
+  "table_header_count": {
+    "message": "数量"
+  },
+  "label_tomatoes": {
+    "message": "番茄"
+  },
+  "label_short_breaks": {
+    "message": "短休息"
+  },
+  "label_long_breaks": {
+    "message": "长休息"
+  },
+  "btn_export_stats": {
+    "message": "导出统计数据为 JSON"
+  },
+  "btn_import_stats": {
+    "message": "从 JSON 导入统计数据"
+  },
+  "btn_reset_stats": {
+    "message": "重置统计数据"
+  },
+  "offscreenTitle": {
+    "message": "离屏页面"
+  },
+  "label_options": {
+    "message": "选项"
+  }
+}
