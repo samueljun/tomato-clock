@@ -7,7 +7,7 @@ export function t(key) {
   } catch (e) {
     // ignore
   }
-  return key;
+  return "";
 }
 
 export function localizeHtmlPage(doc = document) {
@@ -23,7 +23,7 @@ export function localizeHtmlPage(doc = document) {
       ) {
         const key = attr.value.slice(6, -2);
         const translated = t(key);
-        if (translated !== key) {
+        if (translated) {
           el.setAttribute(attr.name, translated);
         }
       }
@@ -36,7 +36,7 @@ export function localizeHtmlPage(doc = document) {
         if (text.startsWith("__MSG_") && text.endsWith("__")) {
           const key = text.slice(6, -2);
           const translated = t(key);
-          if (translated !== key) {
+          if (translated) {
             node.nodeValue = translated;
           }
         }
