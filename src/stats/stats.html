@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html>
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Stats - Tomato Clock</title>
+    <title>__MSG_statsTitle__</title>
 
     <link
       rel="icon"
@@ -15,12 +15,14 @@
 
   <body>
     <div class="container">
-      <h1 class="mt-3">Stats - Tomato Clock</h1>
+      <h1 class="mt-3">__MSG_statsHeader__</h1>
 
       <hr />
 
       <div class="mb-3">
-        <label for="date-range-picker" class="form-label">Date Range</label>
+        <label for="date-range-picker" class="form-label"
+          >__MSG_label_date_range__</label
+        >
         <input
           class="form-control"
           id="date-range-picker"
@@ -41,21 +43,21 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Timer</th>
-                <th>#</th>
+                <th>__MSG_table_header_timer__</th>
+                <th>__MSG_table_header_count__</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Tomatoes</td>
+                <td>__MSG_label_tomatoes__</td>
                 <td id="tomatoes-count"></td>
               </tr>
               <tr>
-                <td>Short Breaks</td>
+                <td>__MSG_label_short_breaks__</td>
                 <td id="short-breaks-count"></td>
               </tr>
               <tr>
-                <td>Long Breaks</td>
+                <td>__MSG_label_long_breaks__</td>
                 <td id="long-breaks-count"></td>
               </tr>
             </tbody>
@@ -66,12 +68,12 @@
       <hr />
 
       <button class="btn btn-primary" id="export-stats-button">
-        Export Stats as JSON
+        __MSG_btn_export_stats__
       </button>
       <a id="downloadAnchorElem" style="display: none"></a>
 
       <button class="btn btn-secondary" id="import-stats-button">
-        Import Stats from JSON
+        __MSG_btn_import_stats__
       </button>
       <input
         hidden
@@ -81,7 +83,7 @@
       />
 
       <button class="btn btn-warning" id="reset-stats-button">
-        Reset Stats
+        __MSG_btn_reset_stats__
       </button>
     </div>
   </body>

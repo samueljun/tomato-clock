@@ -1,11 +1,11 @@
 import browser from "webextension-polyfill";
+import { localizeHtmlPage } from "../utils/i18n";
 import Modal from "bootstrap/js/dist/modal";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./options.css";
 
 import Settings from "../utils/settings";
 import {
-  AVAILABLE_NOTIFICATION_SOUNDS,
   DEFAULT_SETTINGS,
   SETTINGS_KEY,
   STORAGE_KEY,
@@ -13,6 +13,8 @@ import {
 
 export default class Options {
   constructor() {
+    // Localize static HTML tokens then initialize DOM bindings
+    localizeHtmlPage();
     this.settings = new Settings();
 
     this.domMinutesInTomato = document.getElementById("minutes-in-tomato");
@@ -53,16 +55,6 @@ export default class Options {
 
     this.setOptionsOnPage();
     this.setEventListeners();
-    this.populateSoundSelect();
-  }
-
-  populateSoundSelect() {
-    AVAILABLE_NOTIFICATION_SOUNDS.forEach((sound) => {
-      const option = document.createElement("option");
-      option.value = sound.id;
-      option.textContent = sound.name;
-      this.domNotificationSoundSelect.appendChild(option);
-    });
   }
 
   setOptionsOnPage() {

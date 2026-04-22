@@ -28,16 +28,6 @@ export const DEFAULT_SETTINGS = {
   [SETTINGS_KEY.WEEK_START_DAY]: 0,
 };
 
-export const AVAILABLE_NOTIFICATION_SOUNDS = [
-  { id: "alarm-beep-loud.mp3", name: "Alarm Beep Loud" },
-  { id: "alarm-beep.mp3", name: "Alarm Beep" },
-  { id: "beep-beep.mp3", name: "Beep Beep" },
-  { id: "button.mp3", name: "Button" },
-  { id: "kitchen-timer.mp3", name: "Kitchen Timer" },
-  { id: "timer-chime.mp3", name: "Timer Chime" },
-  { id: "custom", name: "Custom" },
-];
-
 export const TIMER_TYPE = {
   TOMATO: "tomato",
   SHORT_BREAK: "shortBreak",

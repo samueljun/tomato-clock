@@ -109,6 +109,7 @@ module.exports = {
           },
         },
         { from: "./src/assets", to: "./assets" },
+        { from: "./_locales", to: "./_locales" },
       ],
     }),
   ],

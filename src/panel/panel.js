@@ -1,4 +1,5 @@
 import browser from "webextension-polyfill";
+import { localizeHtmlPage } from "../utils/i18n";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./panel.css";
@@ -13,6 +14,7 @@ import Settings from "../utils/settings";
 
 export default class Panel {
   constructor() {
+    localizeHtmlPage();
     this.settings = new Settings();
     this.currentTimeText = document.getElementById("current-time-text");
     this.timer = {};

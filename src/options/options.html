@@ -4,14 +4,14 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Options - Tomato Clock</title>
+    <title>__MSG_optionsTitle__</title>
   </head>
 
   <body>
     <form id="options-form">
       <div class="mb-3">
         <label for="minutes-in-tomato" class="form-label">
-          Minutes in Tomato
+          __MSG_label_minutes_in_tomato__
         </label>
         <input
           type="number"
@@ -22,7 +22,7 @@
       </div>
       <div class="mb-3">
         <label for="minutes-in-short-break" class="form-label">
-          Minutes in Short Break
+          __MSG_label_minutes_in_short_break__
         </label>
         <input
           type="number"
@@ -33,7 +33,7 @@
       </div>
       <div class="mb-3">
         <label for="minutes-in-long-break" class="form-label">
-          Minutes in Long Break
+          __MSG_label_minutes_in_long_break__
         </label>
         <input
           type="number"
@@ -50,13 +50,25 @@
           id="notification-sound-checkbox"
         />
         <label class="form-check-label" for="notification-sound-checkbox">
-          Notification sound
+          __MSG_label_notification_sound__
         </label>
         <select
           class="form-select mt-2"
           id="notification-sound-select"
           disabled
-        ></select>
+        >
+          <option value="alarm-beep-loud.mp3">
+            __MSG_sound_alarm_beep_loud_mp3__
+          </option>
+          <option value="alarm-beep.mp3">__MSG_sound_alarm_beep_mp3__</option>
+          <option value="beep-beep.mp3">__MSG_sound_beep_beep_mp3__</option>
+          <option value="button.mp3">__MSG_sound_button_mp3__</option>
+          <option value="kitchen-timer.mp3">
+            __MSG_sound_kitchen_timer_mp3__
+          </option>
+          <option value="timer-chime.mp3">__MSG_sound_timer_chime_mp3__</option>
+          <option value="custom">__MSG_sound_custom__</option>
+        </select>
 
         <div
           id="custom-sound-upload-container"
@@ -81,14 +93,14 @@
                 class="form-control"
                 id="custom-sound-filename"
                 disabled
-                placeholder="Custom Sound"
+                placeholder="__MSG_placeholder_custom_sound__"
               />
               <button
                 class="btn btn-outline-secondary"
                 type="button"
                 id="clear-custom-sound-button"
               >
-                Clear
+                __MSG_btn_clear__
               </button>
             </div>
           </div>
@@ -102,14 +114,16 @@
           id="toolbar-badge-checkbox"
         />
         <label class="form-check-label" for="toolbar-badge-checkbox">
-          Toolbar minute display
+          __MSG_label_toolbar_minute_display__
         </label>
       </div>
       <div class="mb-3">
-        <label for="week-start-day" class="form-label"> Week starts on </label>
+        <label for="week-start-day" class="form-label">
+          __MSG_label_week_starts_on__
+        </label>
         <select class="form-select" id="week-start-day">
-          <option value="0">Sunday</option>
-          <option value="1">Monday</option>
+          <option value="0">__MSG_label_sunday__</option>
+          <option value="1">__MSG_label_monday__</option>
         </select>
       </div>
     </form>
@@ -118,7 +132,7 @@
 
     <div>
       <button class="btn btn-sm btn-warning" id="reset-options">
-        Reset to default
+        __MSG_btn_reset_to_default__
       </button>
     </div>
 
@@ -133,7 +147,9 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="resetModalLabel">Confirm Reset</h5>
+            <h5 class="modal-title" id="resetModalLabel">
+              __MSG_modal_confirm_reset_title__
+            </h5>
             <button
               type="button"
               class="btn-close"
@@ -141,19 +157,17 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
-            Are you sure you want to reset all settings to default?
-          </div>
+          <div class="modal-body">__MSG_modal_confirm_reset_body__</div>
           <div class="modal-footer">
             <button
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
             >
-              Cancel
+              __MSG_btn_cancel__
             </button>
             <button type="button" class="btn btn-danger" id="confirm-reset">
-              Reset
+              __MSG_btn_reset_confirm__
             </button>
           </div>
         </div>

@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Tomato Clock - A Simple Pomodoro Timer",
+  "default_locale": "en",
+  "name": "__MSG_extName__",
   "version": "__REPLACED_BY_WEBPACK__",
   "author": "Samuel Jun",
-  "description": "A simple browser extension for managing your productivity.",
-
+  "description": "__MSG_extDescription__",
   "icons": {
     "16": "/assets/images/tomato-icon-16.png",
     "32": "/assets/images/tomato-icon-32.png",
@@ -23,7 +23,7 @@
       "128": "/assets/images/tomato-icon-128.png",
       "256": "/assets/images/tomato-icon-256.png"
     },
-    "default_title": "Tomato Clock",
+    "default_title": "__MSG_actionDefaultTitle__",
     "default_popup": "/panel/panel.html"
   },
 
@@ -36,25 +36,25 @@
       "suggested_key": {
         "default": "Alt+Shift+1"
       },
-      "description": "Start a new tomato timer."
+      "description": "__MSG_cmd_start_tomato_description__"
     },
     "start-short-break": {
       "suggested_key": {
         "default": "Alt+Shift+2"
       },
-      "description": "Start a new short break."
+      "description": "__MSG_cmd_start_short_break_description__"
     },
     "start-long-break": {
       "suggested_key": {
         "default": "Alt+Shift+3"
       },
-      "description": "Start a new long break."
+      "description": "__MSG_cmd_start_long_break_description__"
     },
     "reset-timer": {
       "suggested_key": {
         "default": "Alt+Shift+4"
       },
-      "description": "Reset the current timer."
+      "description": "__MSG_cmd_reset_timer_description__"
     }
   },
 
