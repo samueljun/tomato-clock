@@ -1,4 +1,4 @@
-import { DATE_UNIT, MONTH_NAMES, TIMER_TYPE } from "./constants";
+import { DATE_UNIT, TIMER_TYPE } from "./constants";
 import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
 
@@ -35,18 +35,19 @@ export function getZeroArray(length) {
   return zeroArray;
 }
 
-export function getDateMonthName(date) {
-  return MONTH_NAMES[date.getMonth()];
-}
-
 export function getDateLabel(date, dateUnit) {
   switch (dateUnit) {
-    case DATE_UNIT.DAY:
-      return date.toDateString();
     case DATE_UNIT.MONTH:
-      return getDateMonthName(date);
+      return new Intl.DateTimeFormat(undefined, {
+        month: "long",
+      }).format(date);
+    case DATE_UNIT.DAY:
     default:
-      return null;
+      return new Intl.DateTimeFormat(undefined, {
+        month: "short",
+        day: "numeric",
+        weekday: "short",
+      }).format(date);
   }
 }
 
@@ -58,11 +59,12 @@ export function getDateRangeStringArray(startDate, endDate, dateUnit) {
     dateStringArray.push(getDateLabel(currentStartDate, dateUnit));
 
     switch (dateUnit) {
-      case DATE_UNIT.DAY:
-        currentStartDate.setDate(currentStartDate.getDate() + 1);
-        break;
       case DATE_UNIT.MONTH:
         currentStartDate.setMonth(currentStartDate.getMonth() + 1);
+        break;
+      case DATE_UNIT.DAY:
+      default:
+        currentStartDate.setDate(currentStartDate.getDate() + 1);
         break;
     }
   }

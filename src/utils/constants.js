@@ -47,21 +47,6 @@ export const RUNTIME_ACTION = {
 };
 
 export const DATE_UNIT = {
-  DATE: "day",
+  DAY: "day",
   MONTH: "month",
 };
-
-export const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
