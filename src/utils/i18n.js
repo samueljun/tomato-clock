@@ -5,7 +5,7 @@ export function t(key) {
     const msg = browser.i18n.getMessage(key);
     if (msg) return msg;
   } catch (e) {
-    // ignore
+    console.warn(e);
   }
   return "";
 }
