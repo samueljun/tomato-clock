@@ -72,6 +72,10 @@
     "defaults"
   ],
   "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "vitest related --run"
+    ],
     "**/*": "prettier --write --ignore-unknown"
   }
 }
