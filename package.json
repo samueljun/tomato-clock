@@ -11,7 +11,7 @@
     "test:coverage": "vitest run --coverage",
     "build": "webpack --mode=production && web-ext build --source-dir ./dist --artifacts-dir ./dist-zip --overwrite-dest",
     "watch": "webpack --watch",
-    "start": "web-ext run --source-dir ./dist -f /Applications/Firefox.app/Contents/MacOS/firefox",
+    "start": "web-ext run --source-dir ./dist",
     "build:firefox": "npm run build",
     "watch:firefox": "npm run watch",
     "start:firefox": "npm run start",
