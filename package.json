@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint src",
     "lint-fix": "eslint --fix src",
+    "lint:ext": "web-ext lint --source-dir ./dist",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
