@@ -1,12 +1,12 @@
 {
   "extName": {
-    "message": "番茄时钟 - 简单的番茄工作法计时器"
+    "message": "Tomato Clock - 简单的番茄工作法计时器"
   },
   "extDescription": {
     "message": "一个用于管理生产力的简单浏览器扩展。"
   },
   "actionDefaultTitle": {
-    "message": "番茄时钟"
+    "message": "Tomato Clock"
   },
   "cmd_start_tomato_description": {
     "message": "开始一个新的番茄计时。"
@@ -78,7 +78,7 @@
     "message": "自定义"
   },
   "panelTitle": {
-    "message": "面板 - 番茄时钟"
+    "message": "面板 - Tomato Clock"
   },
   "btn_tomato": {
     "message": "番茄"
@@ -96,7 +96,7 @@
     "message": "统计"
   },
   "optionsTitle": {
-    "message": "选项 - 番茄时钟"
+    "message": "选项 - Tomato Clock"
   },
   "label_minutes_in_tomato": {
     "message": "番茄时长（分钟）"
@@ -144,10 +144,10 @@
     "message": "重置"
   },
   "statsTitle": {
-    "message": "统计 - 番茄时钟"
+    "message": "统计 - Tomato Clock"
   },
   "statsHeader": {
-    "message": "统计 - 番茄时钟"
+    "message": "统计 - Tomato Clock"
   },
   "label_date_range": {
     "message": "日期范围"
