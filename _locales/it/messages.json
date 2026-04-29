@@ -1,0 +1,185 @@
+{
+  "extName": {
+    "message": "Tomato Clock - Un Semplice Timer Pomodoro"
+  },
+  "extDescription": {
+    "message": "Una semplice estensione per browser per gestire la tua produttività."
+  },
+  "actionDefaultTitle": {
+    "message": "Tomato Clock"
+  },
+  "cmd_start_tomato_description": {
+    "message": "Avvia un nuovo timer pomodoro."
+  },
+  "cmd_start_short_break_description": {
+    "message": "Avvia una breve pausa."
+  },
+  "cmd_start_long_break_description": {
+    "message": "Avvia una lunga pausa."
+  },
+  "cmd_reset_timer_description": {
+    "message": "Resetta il timer corrente."
+  },
+  "confirmResetStats": {
+    "message": "Sei sicuro di voler resettare le tue statistiche?"
+  },
+  "invalidJSON": {
+    "message": "JSON non valido"
+  },
+  "tomatoesLabel": {
+    "message": "Pomodori"
+  },
+  "dateFormat": {
+    "message": "dddd D MMMM YYYY"
+  },
+  "range_last_7_days": {
+    "message": "Ultimi 7 Giorni"
+  },
+  "range_this_week": {
+    "message": "Questa settimana"
+  },
+  "range_last_week": {
+    "message": "Settimana scorsa"
+  },
+  "range_last_30_days": {
+    "message": "Ultimi 30 Giorni"
+  },
+  "range_this_month": {
+    "message": "Questo Mese"
+  },
+  "range_last_month": {
+    "message": "Mese Scorso"
+  },
+  "range_this_year": {
+    "message": "Quest'Anno"
+  },
+  "range_last_year": {
+    "message": "Anno Scorso"
+  },
+  "sound_alarm_beep_loud_mp3": {
+    "message": "Allarme Forte"
+  },
+  "sound_alarm_beep_mp3": {
+    "message": "Allarme"
+  },
+  "sound_beep_beep_mp3": {
+    "message": "Bip Bip"
+  },
+  "sound_button_mp3": {
+    "message": "Pulsante"
+  },
+  "sound_kitchen_timer_mp3": {
+    "message": "Timer da Cucina"
+  },
+  "sound_timer_chime_mp3": {
+    "message": "Campanella del Timer"
+  },
+  "sound_custom": {
+    "message": "Personalizzato"
+  },
+  "panelTitle": {
+    "message": "Pannello - Tomato Clock"
+  },
+  "btn_tomato": {
+    "message": "Pomodoro"
+  },
+  "btn_short_break": {
+    "message": "Pausa Breve"
+  },
+  "btn_long_break": {
+    "message": "Pausa Lunga"
+  },
+  "btn_reset": {
+    "message": "Resetta"
+  },
+  "label_stats": {
+    "message": "Statistiche"
+  },
+  "optionsTitle": {
+    "message": "Opzioni - Tomato Clock"
+  },
+  "label_minutes_in_tomato": {
+    "message": "Minuti per pomodoro"
+  },
+  "label_minutes_in_short_break": {
+    "message": "Minuti per pausa breve"
+  },
+  "label_minutes_in_long_break": {
+    "message": "Minuti per pausa lunga"
+  },
+  "label_notification_sound": {
+    "message": "Suono di notifica"
+  },
+  "placeholder_custom_sound": {
+    "message": "Suono Personalizzato"
+  },
+  "btn_clear": {
+    "message": "Pulisci"
+  },
+  "label_toolbar_minute_display": {
+    "message": "Mostra minuti nella barra degli strumenti"
+  },
+  "label_week_starts_on": {
+    "message": "La settimana inizia il"
+  },
+  "label_sunday": {
+    "message": "Domenica"
+  },
+  "label_monday": {
+    "message": "Lunedì"
+  },
+  "btn_reset_to_default": {
+    "message": "Ripristina predefiniti"
+  },
+  "modal_confirm_reset_title": {
+    "message": "Conferma Ripristino"
+  },
+  "modal_confirm_reset_body": {
+    "message": "Sei sicuro di voler ripristinare tutte le impostazioni a quelle predefinite?"
+  },
+  "btn_cancel": {
+    "message": "Annulla"
+  },
+  "btn_reset_confirm": {
+    "message": "Ripristina"
+  },
+  "statsTitle": {
+    "message": "Statistiche - Tomato Clock"
+  },
+  "statsHeader": {
+    "message": "Statistiche - Tomato Clock"
+  },
+  "label_date_range": {
+    "message": "Intervallo di Date"
+  },
+  "table_header_timer": {
+    "message": "Timer"
+  },
+  "table_header_count": {
+    "message": "#"
+  },
+  "label_tomatoes": {
+    "message": "Pomodori"
+  },
+  "label_short_breaks": {
+    "message": "Pause Brevi"
+  },
+  "label_long_breaks": {
+    "message": "Pause Lunghe"
+  },
+  "btn_export_stats": {
+    "message": "Esporta Statistiche come JSON"
+  },
+  "btn_import_stats": {
+    "message": "Importa Statistiche da JSON"
+  },
+  "btn_reset_stats": {
+    "message": "Resetta Statistiche"
+  },
+  "offscreenTitle": {
+    "message": "Offscreen"
+  },
+  "label_options": {
+    "message": "Opzioni"
+  }
+}

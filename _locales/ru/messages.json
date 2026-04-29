@@ -1,0 +1,185 @@
+{
+  "extName": {
+    "message": "Tomato Clock - Простой таймер Pomodoro"
+  },
+  "extDescription": {
+    "message": "Простое расширение для браузера для управления вашей продуктивностью."
+  },
+  "actionDefaultTitle": {
+    "message": "Tomato Clock"
+  },
+  "cmd_start_tomato_description": {
+    "message": "Запустить новый таймер Помодоро."
+  },
+  "cmd_start_short_break_description": {
+    "message": "Начать короткий перерыв."
+  },
+  "cmd_start_long_break_description": {
+    "message": "Начать длинный перерыв."
+  },
+  "cmd_reset_timer_description": {
+    "message": "Сбросить текущий таймер."
+  },
+  "confirmResetStats": {
+    "message": "Вы уверены, что хотите сбросить статистику?"
+  },
+  "invalidJSON": {
+    "message": "Недопустимый JSON"
+  },
+  "tomatoesLabel": {
+    "message": "Помидоры"
+  },
+  "dateFormat": {
+    "message": "dddd, D MMMM YYYY [г.]"
+  },
+  "range_last_7_days": {
+    "message": "Последние 7 дней"
+  },
+  "range_this_week": {
+    "message": "Эта неделя"
+  },
+  "range_last_week": {
+    "message": "Прошлая неделя"
+  },
+  "range_last_30_days": {
+    "message": "Последние 30 дней"
+  },
+  "range_this_month": {
+    "message": "Этот месяц"
+  },
+  "range_last_month": {
+    "message": "Прошлый месяц"
+  },
+  "range_this_year": {
+    "message": "Этот год"
+  },
+  "range_last_year": {
+    "message": "Прошлый год"
+  },
+  "sound_alarm_beep_loud_mp3": {
+    "message": "Громкий сигнал будильника"
+  },
+  "sound_alarm_beep_mp3": {
+    "message": "Сигнал будильника"
+  },
+  "sound_beep_beep_mp3": {
+    "message": "Бип Бип"
+  },
+  "sound_button_mp3": {
+    "message": "Кнопка"
+  },
+  "sound_kitchen_timer_mp3": {
+    "message": "Кухонный таймер"
+  },
+  "sound_timer_chime_mp3": {
+    "message": "Звук таймера"
+  },
+  "sound_custom": {
+    "message": "Пользовательский"
+  },
+  "panelTitle": {
+    "message": "Панель - Tomato Clock"
+  },
+  "btn_tomato": {
+    "message": "Помидор"
+  },
+  "btn_short_break": {
+    "message": "Короткий перерыв"
+  },
+  "btn_long_break": {
+    "message": "Длинный перерыв"
+  },
+  "btn_reset": {
+    "message": "Сброс"
+  },
+  "label_stats": {
+    "message": "Статистика"
+  },
+  "optionsTitle": {
+    "message": "Настройки - Tomato Clock"
+  },
+  "label_minutes_in_tomato": {
+    "message": "Минут на помидоре"
+  },
+  "label_minutes_in_short_break": {
+    "message": "Минут на коротком перерыве"
+  },
+  "label_minutes_in_long_break": {
+    "message": "Минут на длинном перерыве"
+  },
+  "label_notification_sound": {
+    "message": "Звук уведомления"
+  },
+  "placeholder_custom_sound": {
+    "message": "Пользовательский звук"
+  },
+  "btn_clear": {
+    "message": "Очистить"
+  },
+  "label_toolbar_minute_display": {
+    "message": "Показывать минуты на панели"
+  },
+  "label_week_starts_on": {
+    "message": "Неделя начинается с"
+  },
+  "label_sunday": {
+    "message": "Воскресенье"
+  },
+  "label_monday": {
+    "message": "Понедельник"
+  },
+  "btn_reset_to_default": {
+    "message": "Сбросить к настройкам по умолчанию"
+  },
+  "modal_confirm_reset_title": {
+    "message": "Подтвердить сброс"
+  },
+  "modal_confirm_reset_body": {
+    "message": "Вы уверены, что хотите сбросить все настройки к значениям по умолчанию?"
+  },
+  "btn_cancel": {
+    "message": "Отмена"
+  },
+  "btn_reset_confirm": {
+    "message": "Сбросить"
+  },
+  "statsTitle": {
+    "message": "Статистика - Tomato Clock"
+  },
+  "statsHeader": {
+    "message": "Статистика - Tomato Clock"
+  },
+  "label_date_range": {
+    "message": "Диапазон дат"
+  },
+  "table_header_timer": {
+    "message": "Таймер"
+  },
+  "table_header_count": {
+    "message": "#"
+  },
+  "label_tomatoes": {
+    "message": "Помидоры"
+  },
+  "label_short_breaks": {
+    "message": "Короткие перерывы"
+  },
+  "label_long_breaks": {
+    "message": "Длинные перерывы"
+  },
+  "btn_export_stats": {
+    "message": "Экспорт статистики в JSON"
+  },
+  "btn_import_stats": {
+    "message": "Импорт статистики из JSON"
+  },
+  "btn_reset_stats": {
+    "message": "Сброс статистики"
+  },
+  "offscreenTitle": {
+    "message": "Offscreen"
+  },
+  "label_options": {
+    "message": "Настройки"
+  }
+}

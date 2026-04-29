@@ -1,0 +1,185 @@
+{
+  "extName": {
+    "message": "Tomato Clock - Ein einfacher Pomodoro Timer"
+  },
+  "extDescription": {
+    "message": "Eine einfache Browser-Erweiterung zur Verwaltung deiner Produktivität."
+  },
+  "actionDefaultTitle": {
+    "message": "Tomato Clock"
+  },
+  "cmd_start_tomato_description": {
+    "message": "Einen neuen Tomato-Timer starten."
+  },
+  "cmd_start_short_break_description": {
+    "message": "Eine neue kurze Pause starten."
+  },
+  "cmd_start_long_break_description": {
+    "message": "Eine neue lange Pause starten."
+  },
+  "cmd_reset_timer_description": {
+    "message": "Den aktuellen Timer zurücksetzen."
+  },
+  "confirmResetStats": {
+    "message": "Bist du sicher, dass du deine Statistiken zurücksetzen möchtest?"
+  },
+  "invalidJSON": {
+    "message": "Ungültiges JSON"
+  },
+  "tomatoesLabel": {
+    "message": "Tomaten"
+  },
+  "dateFormat": {
+    "message": "dddd, D. MMMM YYYY"
+  },
+  "range_last_7_days": {
+    "message": "Letzte 7 Tage"
+  },
+  "range_this_week": {
+    "message": "Diese Woche"
+  },
+  "range_last_week": {
+    "message": "Letzte Woche"
+  },
+  "range_last_30_days": {
+    "message": "Letzte 30 Tage"
+  },
+  "range_this_month": {
+    "message": "Dieser Monat"
+  },
+  "range_last_month": {
+    "message": "Letzter Monat"
+  },
+  "range_this_year": {
+    "message": "Dieses Jahr"
+  },
+  "range_last_year": {
+    "message": "Letztes Jahr"
+  },
+  "sound_alarm_beep_loud_mp3": {
+    "message": "Lautes Alarm-Piepen"
+  },
+  "sound_alarm_beep_mp3": {
+    "message": "Alarm-Piepen"
+  },
+  "sound_beep_beep_mp3": {
+    "message": "Piep Piep"
+  },
+  "sound_button_mp3": {
+    "message": "Taste"
+  },
+  "sound_kitchen_timer_mp3": {
+    "message": "Küchenwecker"
+  },
+  "sound_timer_chime_mp3": {
+    "message": "Timer-Klang"
+  },
+  "sound_custom": {
+    "message": "Benutzerdefiniert"
+  },
+  "panelTitle": {
+    "message": "Panel - Tomato Clock"
+  },
+  "btn_tomato": {
+    "message": "Tomate"
+  },
+  "btn_short_break": {
+    "message": "Kurze Pause"
+  },
+  "btn_long_break": {
+    "message": "Lange Pause"
+  },
+  "btn_reset": {
+    "message": "Zurücksetzen"
+  },
+  "label_stats": {
+    "message": "Statistiken"
+  },
+  "optionsTitle": {
+    "message": "Optionen - Tomato Clock"
+  },
+  "label_minutes_in_tomato": {
+    "message": "Minuten pro Tomate"
+  },
+  "label_minutes_in_short_break": {
+    "message": "Minuten pro kurzer Pause"
+  },
+  "label_minutes_in_long_break": {
+    "message": "Minuten pro langer Pause"
+  },
+  "label_notification_sound": {
+    "message": "Benachrichtigungston"
+  },
+  "placeholder_custom_sound": {
+    "message": "Benutzerdefinierter Ton"
+  },
+  "btn_clear": {
+    "message": "Leeren"
+  },
+  "label_toolbar_minute_display": {
+    "message": "Minutenanzeige in der Symbolleiste"
+  },
+  "label_week_starts_on": {
+    "message": "Woche beginnt am"
+  },
+  "label_sunday": {
+    "message": "Sonntag"
+  },
+  "label_monday": {
+    "message": "Montag"
+  },
+  "btn_reset_to_default": {
+    "message": "Auf Standard zurücksetzen"
+  },
+  "modal_confirm_reset_title": {
+    "message": "Zurücksetzen bestätigen"
+  },
+  "modal_confirm_reset_body": {
+    "message": "Bist du sicher, dass du alle Einstellungen auf den Standard zurücksetzen möchtest?"
+  },
+  "btn_cancel": {
+    "message": "Abbrechen"
+  },
+  "btn_reset_confirm": {
+    "message": "Zurücksetzen"
+  },
+  "statsTitle": {
+    "message": "Statistiken - Tomato Clock"
+  },
+  "statsHeader": {
+    "message": "Statistiken - Tomato Clock"
+  },
+  "label_date_range": {
+    "message": "Datumsbereich"
+  },
+  "table_header_timer": {
+    "message": "Timer"
+  },
+  "table_header_count": {
+    "message": "#"
+  },
+  "label_tomatoes": {
+    "message": "Tomaten"
+  },
+  "label_short_breaks": {
+    "message": "Kurze Pausen"
+  },
+  "label_long_breaks": {
+    "message": "Lange Pausen"
+  },
+  "btn_export_stats": {
+    "message": "Statistiken als JSON exportieren"
+  },
+  "btn_import_stats": {
+    "message": "Statistiken aus JSON importieren"
+  },
+  "btn_reset_stats": {
+    "message": "Statistiken zurücksetzen"
+  },
+  "offscreenTitle": {
+    "message": "Offscreen"
+  },
+  "label_options": {
+    "message": "Optionen"
+  }
+}

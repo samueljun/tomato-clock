@@ -1,0 +1,185 @@
+{
+  "extName": {
+    "message": "Tomato Clock - 簡單的番茄鐘"
+  },
+  "extDescription": {
+    "message": "一個簡單的瀏覽器擴充功能，用於管理您的生產力。"
+  },
+  "actionDefaultTitle": {
+    "message": "Tomato Clock"
+  },
+  "cmd_start_tomato_description": {
+    "message": "開始一個新的番茄鐘計時。"
+  },
+  "cmd_start_short_break_description": {
+    "message": "開始一個短休息。"
+  },
+  "cmd_start_long_break_description": {
+    "message": "開始一個長休息。"
+  },
+  "cmd_reset_timer_description": {
+    "message": "重設目前的計時器。"
+  },
+  "confirmResetStats": {
+    "message": "您確定要重設您的統計資料嗎？"
+  },
+  "invalidJSON": {
+    "message": "無效的 JSON"
+  },
+  "tomatoesLabel": {
+    "message": "番茄鐘"
+  },
+  "dateFormat": {
+    "message": "YYYY年M月D日 dddd"
+  },
+  "range_last_7_days": {
+    "message": "最近 7 天"
+  },
+  "range_this_week": {
+    "message": "本週"
+  },
+  "range_last_week": {
+    "message": "上週"
+  },
+  "range_last_30_days": {
+    "message": "最近 30 天"
+  },
+  "range_this_month": {
+    "message": "本月"
+  },
+  "range_last_month": {
+    "message": "上個月"
+  },
+  "range_this_year": {
+    "message": "今年"
+  },
+  "range_last_year": {
+    "message": "去年"
+  },
+  "sound_alarm_beep_loud_mp3": {
+    "message": "大聲警報聲"
+  },
+  "sound_alarm_beep_mp3": {
+    "message": "警報聲"
+  },
+  "sound_beep_beep_mp3": {
+    "message": "嗶嗶聲"
+  },
+  "sound_button_mp3": {
+    "message": "按鈕聲"
+  },
+  "sound_kitchen_timer_mp3": {
+    "message": "廚房計時器"
+  },
+  "sound_timer_chime_mp3": {
+    "message": "計時器鈴聲"
+  },
+  "sound_custom": {
+    "message": "自訂"
+  },
+  "panelTitle": {
+    "message": "面板 - Tomato Clock"
+  },
+  "btn_tomato": {
+    "message": "番茄鐘"
+  },
+  "btn_short_break": {
+    "message": "短休息"
+  },
+  "btn_long_break": {
+    "message": "長休息"
+  },
+  "btn_reset": {
+    "message": "重設"
+  },
+  "label_stats": {
+    "message": "統計"
+  },
+  "optionsTitle": {
+    "message": "選項 - Tomato Clock"
+  },
+  "label_minutes_in_tomato": {
+    "message": "每個番茄鐘的分鐘數"
+  },
+  "label_minutes_in_short_break": {
+    "message": "短休息的分鐘數"
+  },
+  "label_minutes_in_long_break": {
+    "message": "長休息的分鐘數"
+  },
+  "label_notification_sound": {
+    "message": "通知音效"
+  },
+  "placeholder_custom_sound": {
+    "message": "自訂音效"
+  },
+  "btn_clear": {
+    "message": "清除"
+  },
+  "label_toolbar_minute_display": {
+    "message": "在工具列顯示分鐘數"
+  },
+  "label_week_starts_on": {
+    "message": "一週開始於"
+  },
+  "label_sunday": {
+    "message": "星期日"
+  },
+  "label_monday": {
+    "message": "星期一"
+  },
+  "btn_reset_to_default": {
+    "message": "重設為預設值"
+  },
+  "modal_confirm_reset_title": {
+    "message": "確認重設"
+  },
+  "modal_confirm_reset_body": {
+    "message": "您確定要將所有設定重設為預設值嗎？"
+  },
+  "btn_cancel": {
+    "message": "取消"
+  },
+  "btn_reset_confirm": {
+    "message": "重設"
+  },
+  "statsTitle": {
+    "message": "統計 - Tomato Clock"
+  },
+  "statsHeader": {
+    "message": "統計 - Tomato Clock"
+  },
+  "label_date_range": {
+    "message": "日期範圍"
+  },
+  "table_header_timer": {
+    "message": "計時器"
+  },
+  "table_header_count": {
+    "message": "#"
+  },
+  "label_tomatoes": {
+    "message": "番茄鐘"
+  },
+  "label_short_breaks": {
+    "message": "短休息"
+  },
+  "label_long_breaks": {
+    "message": "長休息"
+  },
+  "btn_export_stats": {
+    "message": "匯出統計資料為 JSON"
+  },
+  "btn_import_stats": {
+    "message": "從 JSON 匯入統計資料"
+  },
+  "btn_reset_stats": {
+    "message": "重設統計資料"
+  },
+  "offscreenTitle": {
+    "message": "Offscreen"
+  },
+  "label_options": {
+    "message": "選項"
+  }
+}

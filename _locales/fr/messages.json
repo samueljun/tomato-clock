@@ -1,0 +1,185 @@
+{
+  "extName": {
+    "message": "Tomato Clock - Un simple minuteur Pomodoro"
+  },
+  "extDescription": {
+    "message": "Une extension de navigateur simple pour gérer votre productivité."
+  },
+  "actionDefaultTitle": {
+    "message": "Tomato Clock"
+  },
+  "cmd_start_tomato_description": {
+    "message": "Démarrer un nouveau minuteur tomate."
+  },
+  "cmd_start_short_break_description": {
+    "message": "Démarrer une courte pause."
+  },
+  "cmd_start_long_break_description": {
+    "message": "Démarrer une longue pause."
+  },
+  "cmd_reset_timer_description": {
+    "message": "Réinitialiser le minuteur actuel."
+  },
+  "confirmResetStats": {
+    "message": "Êtes-vous sûr de vouloir réinitialiser vos statistiques ?"
+  },
+  "invalidJSON": {
+    "message": "JSON invalide"
+  },
+  "tomatoesLabel": {
+    "message": "Tomates"
+  },
+  "dateFormat": {
+    "message": "dddd D MMMM YYYY"
+  },
+  "range_last_7_days": {
+    "message": "Les 7 derniers jours"
+  },
+  "range_this_week": {
+    "message": "Cette semaine"
+  },
+  "range_last_week": {
+    "message": "La semaine dernière"
+  },
+  "range_last_30_days": {
+    "message": "Les 30 derniers jours"
+  },
+  "range_this_month": {
+    "message": "Ce mois-ci"
+  },
+  "range_last_month": {
+    "message": "Le mois dernier"
+  },
+  "range_this_year": {
+    "message": "Cette année"
+  },
+  "range_last_year": {
+    "message": "L'année dernière"
+  },
+  "sound_alarm_beep_loud_mp3": {
+    "message": "Bip d'alarme fort"
+  },
+  "sound_alarm_beep_mp3": {
+    "message": "Bip d'alarme"
+  },
+  "sound_beep_beep_mp3": {
+    "message": "Bip bip"
+  },
+  "sound_button_mp3": {
+    "message": "Bouton"
+  },
+  "sound_kitchen_timer_mp3": {
+    "message": "Minuteur de cuisine"
+  },
+  "sound_timer_chime_mp3": {
+    "message": "Carillon du minuteur"
+  },
+  "sound_custom": {
+    "message": "Personnalisé"
+  },
+  "panelTitle": {
+    "message": "Panneau - Tomato Clock"
+  },
+  "btn_tomato": {
+    "message": "Tomate"
+  },
+  "btn_short_break": {
+    "message": "Courte pause"
+  },
+  "btn_long_break": {
+    "message": "Longue pause"
+  },
+  "btn_reset": {
+    "message": "Réinitialiser"
+  },
+  "label_stats": {
+    "message": "Statistiques"
+  },
+  "optionsTitle": {
+    "message": "Options - Tomato Clock"
+  },
+  "label_minutes_in_tomato": {
+    "message": "Minutes par tomate"
+  },
+  "label_minutes_in_short_break": {
+    "message": "Minutes par courte pause"
+  },
+  "label_minutes_in_long_break": {
+    "message": "Minutes par longue pause"
+  },
+  "label_notification_sound": {
+    "message": "Son de notification"
+  },
+  "placeholder_custom_sound": {
+    "message": "Son personnalisé"
+  },
+  "btn_clear": {
+    "message": "Effacer"
+  },
+  "label_toolbar_minute_display": {
+    "message": "Afficher les minutes dans la barre d'outils"
+  },
+  "label_week_starts_on": {
+    "message": "La semaine commence le"
+  },
+  "label_sunday": {
+    "message": "Dimanche"
+  },
+  "label_monday": {
+    "message": "Lundi"
+  },
+  "btn_reset_to_default": {
+    "message": "Réinitialiser par défaut"
+  },
+  "modal_confirm_reset_title": {
+    "message": "Confirmer la réinitialisation"
+  },
+  "modal_confirm_reset_body": {
+    "message": "Êtes-vous sûr de vouloir réinitialiser tous les paramètres par défaut ?"
+  },
+  "btn_cancel": {
+    "message": "Annuler"
+  },
+  "btn_reset_confirm": {
+    "message": "Réinitialiser"
+  },
+  "statsTitle": {
+    "message": "Statistiques - Tomato Clock"
+  },
+  "statsHeader": {
+    "message": "Statistiques - Tomato Clock"
+  },
+  "label_date_range": {
+    "message": "Plage de dates"
+  },
+  "table_header_timer": {
+    "message": "Minuteur"
+  },
+  "table_header_count": {
+    "message": "#"
+  },
+  "label_tomatoes": {
+    "message": "Tomates"
+  },
+  "label_short_breaks": {
+    "message": "Courtes pauses"
+  },
+  "label_long_breaks": {
+    "message": "Longues pauses"
+  },
+  "btn_export_stats": {
+    "message": "Exporter les statistiques en JSON"
+  },
+  "btn_import_stats": {
+    "message": "Importer les statistiques depuis JSON"
+  },
+  "btn_reset_stats": {
+    "message": "Réinitialiser les statistiques"
+  },
+  "offscreenTitle": {
+    "message": "Hors écran"
+  },
+  "label_options": {
+    "message": "Options"
+  }
+}
