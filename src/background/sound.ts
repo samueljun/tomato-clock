@@ -1,24 +1,27 @@
 import browser from "webextension-polyfill";
 import { STORAGE_KEY } from "../utils/constants";
+import Settings from "../utils/settings";
 
 export default class Sound {
-  constructor(settings) {
-    this.settings = settings;
+  settings: Settings;
+  currentAudio: HTMLAudioElement | null;
 
+  constructor(settings: Settings) {
+    this.settings = settings;
     this.currentAudio = null;
   }
 
-  async play() {
+  async play(): Promise<void> {
     const settings = await this.settings.getSettings();
     const selectedNotificationSound =
-      settings.selectedNotificationSound || "timer-chime.mp3";
-    let audioPath;
+      (settings.selectedNotificationSound as string) || "timer-chime.mp3";
+    let audioPath: string;
 
     if (selectedNotificationSound === "custom") {
       const stored = await browser.storage.local.get(
         STORAGE_KEY.CUSTOM_SOUND_FILE,
       );
-      audioPath = stored[STORAGE_KEY.CUSTOM_SOUND_FILE] || "";
+      audioPath = (stored[STORAGE_KEY.CUSTOM_SOUND_FILE] as string) || "";
     } else {
       audioPath = `/assets/sounds/${selectedNotificationSound}`;
     }
@@ -34,7 +37,7 @@ export default class Sound {
       if (!hasOffscreen) {
         await chrome.offscreen.createDocument({
           url: "offscreen/offscreen.html",
-          reasons: ["AUDIO_PLAYBACK"],
+          reasons: [chrome.offscreen.Reason.AUDIO_PLAYBACK],
           justification: "notification sound",
         });
       }
@@ -54,7 +57,7 @@ export default class Sound {
     }
   }
 
-  async stop() {
+  async stop(): Promise<void> {
     if (typeof chrome !== "undefined" && chrome.offscreen) {
       const hasOffscreen = await chrome.offscreen.hasDocument();
       if (hasOffscreen) {

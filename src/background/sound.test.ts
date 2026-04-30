@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach, Mock } from "vitest";
 
 // Mock the webextension-polyfill module
 vi.mock("webextension-polyfill", () => ({
@@ -18,11 +18,13 @@ vi.mock("webextension-polyfill", () => ({
 import browser from "webextension-polyfill";
 import Sound from "./sound";
 import { STORAGE_KEY } from "../utils/constants";
+import Settings from "../utils/settings";
+import { SettingsData } from "../utils/utils";
 
-describe("Sound.js", () => {
-  let sound;
-  let mockSettings;
-  let mockAudio;
+describe("Sound.ts", () => {
+  let sound: Sound;
+  let mockSettings: Settings;
+  let mockAudio: { play: Mock; pause: Mock };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -31,7 +33,7 @@ describe("Sound.js", () => {
       getSettings: vi.fn().mockResolvedValue({
         selectedNotificationSound: "timer-chime.mp3",
       }),
-    };
+    } as unknown as Settings;
 
     sound = new Sound(mockSettings);
 
@@ -40,28 +42,33 @@ describe("Sound.js", () => {
       play: vi.fn(),
       pause: vi.fn(),
     };
-    global.Audio = vi.fn().mockImplementation(function () {
-      return mockAudio;
-    });
+    vi.stubGlobal(
+      "Audio",
+      vi.fn().mockImplementation(function () {
+        return mockAudio;
+      }),
+    );
 
     // Mock global chrome
-    global.chrome = {
+    vi.stubGlobal("chrome", {
       offscreen: {
+        Reason: {
+          AUDIO_PLAYBACK: "AUDIO_PLAYBACK",
+        },
         hasDocument: vi.fn().mockResolvedValue(false),
         createDocument: vi.fn().mockResolvedValue(true),
       },
-    };
+    });
   });
 
   afterEach(() => {
-    delete global.chrome;
-    delete global.Audio;
+    vi.unstubAllGlobals();
   });
 
   describe("play", () => {
     it("should play default sound when no sound is selected", async () => {
       // Mock non-chrome environment
-      delete global.chrome.offscreen;
+      vi.stubGlobal("chrome", {});
 
       await sound.play();
 
@@ -72,11 +79,11 @@ describe("Sound.js", () => {
     });
 
     it("should play custom sound from storage when 'custom' is selected", async () => {
-      delete global.chrome.offscreen;
-      mockSettings.getSettings.mockResolvedValue({
+      vi.stubGlobal("chrome", {});
+      vi.mocked(mockSettings.getSettings).mockResolvedValue({
         selectedNotificationSound: "custom",
-      });
-      browser.storage.local.get.mockResolvedValue({
+      } as unknown as SettingsData);
+      vi.mocked(browser.storage.local.get).mockResolvedValue({
         [STORAGE_KEY.CUSTOM_SOUND_FILE]: "data:audio/mp3;base64,abc",
       });
 
@@ -106,7 +113,9 @@ describe("Sound.js", () => {
     });
 
     it("should not create offscreen document if it already exists", async () => {
-      chrome.offscreen.hasDocument.mockResolvedValue(true);
+      vi.mocked(
+        chrome.offscreen.hasDocument as () => Promise<boolean>,
+      ).mockResolvedValue(true);
 
       await sound.play();
 
@@ -117,7 +126,7 @@ describe("Sound.js", () => {
 
   describe("stop", () => {
     it("should stop audio in non-Chrome environment", async () => {
-      delete global.chrome.offscreen;
+      vi.stubGlobal("chrome", {});
 
       // First play to set currentAudio
       await sound.play();
@@ -130,7 +139,9 @@ describe("Sound.js", () => {
     });
 
     it("should stop audio via message in Chrome", async () => {
-      chrome.offscreen.hasDocument.mockResolvedValue(true);
+      vi.mocked(
+        chrome.offscreen.hasDocument as () => Promise<boolean>,
+      ).mockResolvedValue(true);
 
       await sound.stop();
 
@@ -141,7 +152,9 @@ describe("Sound.js", () => {
     });
 
     it("should not send stop message if no offscreen document exists", async () => {
-      chrome.offscreen.hasDocument.mockResolvedValue(false);
+      vi.mocked(
+        chrome.offscreen.hasDocument as () => Promise<boolean>,
+      ).mockResolvedValue(false);
 
       await sound.stop();
 
