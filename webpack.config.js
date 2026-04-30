@@ -12,7 +12,7 @@ module.exports = {
     panel: "./src/panel/panel.ts",
     stats: "./src/stats/stats.js",
     options: "./src/options/options.ts",
-    offscreen: "./src/offscreen/offscreen.js",
+    offscreen: "./src/offscreen/offscreen.ts",
   },
   output: {
     path: path.resolve(__dirname, "dist"),

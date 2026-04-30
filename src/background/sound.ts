@@ -1,5 +1,6 @@
 import browser from "webextension-polyfill";
 import { STORAGE_KEY } from "../utils/constants";
+import { OffscreenMessage, OffscreenMessageType } from "../offscreen/offscreen";
 import Settings from "../utils/settings";
 
 export default class Sound {
@@ -43,11 +44,12 @@ export default class Sound {
       }
 
       try {
-        await browser.runtime.sendMessage({
+        const message: OffscreenMessage = {
           target: "offscreen",
-          type: "play-audio",
+          type: OffscreenMessageType.PLAY_AUDIO,
           src: audioPath,
-        });
+        };
+        await browser.runtime.sendMessage(message);
       } catch (e) {
         console.error("Failed to play audio:", e);
       }
@@ -62,10 +64,11 @@ export default class Sound {
       const hasOffscreen = await chrome.offscreen.hasDocument();
       if (hasOffscreen) {
         try {
-          await browser.runtime.sendMessage({
+          const message: OffscreenMessage = {
             target: "offscreen",
-            type: "stop-audio",
-          });
+            type: OffscreenMessageType.STOP_AUDIO,
+          };
+          await browser.runtime.sendMessage(message);
         } catch (e) {
           console.error("Failed to stop audio:", e);
         }
