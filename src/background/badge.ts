@@ -1,20 +1,22 @@
 import browser from "webextension-polyfill";
 
 import Settings from "../utils/settings";
-import { SETTINGS_KEY } from "../utils/constants";
+import { SettingsKey } from "../utils/constants";
 
 export default class Badge {
+  settings: Settings;
+  badgeText: string;
+
   constructor() {
     this.settings = new Settings();
-
     this.badgeText = "";
   }
 
-  getBadgeText() {
+  getBadgeText(): string {
     return this.badgeText;
   }
 
-  _setBadgeText(text, backgroundColor) {
+  _setBadgeText(text: string, backgroundColor: string): void {
     // Try-catch because Firefox Android lacks badge support
     try {
       browser.action.setBadgeText({ text });
@@ -25,9 +27,9 @@ export default class Badge {
     }
   }
 
-  setBadgeText(text, backgroundColor = "#666") {
+  setBadgeText(text: string, backgroundColor = "#666"): void {
     this.settings.getSettings().then((settings) => {
-      if (settings[SETTINGS_KEY.IS_TOOLBAR_BADGE_ENABLED]) {
+      if (settings[SettingsKey.IS_TOOLBAR_BADGE_ENABLED]) {
         this._setBadgeText(text, backgroundColor);
         this.badgeText = text;
       } else {

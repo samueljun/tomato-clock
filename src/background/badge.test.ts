@@ -27,9 +27,11 @@ vi.mock("../utils/settings", () => {
 import browser from "webextension-polyfill";
 import Badge from "./badge";
 import Settings from "../utils/settings";
+import { DEFAULT_SETTINGS, SettingsKey } from "../utils/constants";
+import { SettingsData } from "../utils/utils";
 
-describe("Badge.js", () => {
-  let badge;
+describe("Badge.ts", () => {
+  let badge: Badge;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -44,9 +46,10 @@ describe("Badge.js", () => {
     it("should set badge text and color when badge is enabled", async () => {
       // Mock settings to be enabled
       const mockSettings = new Settings();
-      mockSettings.getSettings.mockResolvedValue({
-        isToolbarBadgeEnabled: true,
-      });
+      vi.mocked(mockSettings.getSettings).mockResolvedValue({
+        ...DEFAULT_SETTINGS,
+        [SettingsKey.IS_TOOLBAR_BADGE_ENABLED]: true,
+      } as SettingsData);
       badge.settings = mockSettings;
 
       badge.setBadgeText("25", "#dc3545");
@@ -67,9 +70,10 @@ describe("Badge.js", () => {
     it("should set empty badge text when badge is disabled", async () => {
       // Mock settings to be disabled
       const mockSettings = new Settings();
-      mockSettings.getSettings.mockResolvedValue({
-        isToolbarBadgeEnabled: false,
-      });
+      vi.mocked(mockSettings.getSettings).mockResolvedValue({
+        ...DEFAULT_SETTINGS,
+        [SettingsKey.IS_TOOLBAR_BADGE_ENABLED]: false,
+      } as SettingsData);
       badge.settings = mockSettings;
 
       badge.setBadgeText("25", "#dc3545");
@@ -85,7 +89,7 @@ describe("Badge.js", () => {
     });
 
     it("should handle browsers without badge support gracefully", async () => {
-      browser.action.setBadgeText.mockImplementation(() => {
+      vi.mocked(browser.action.setBadgeText).mockImplementation(() => {
         throw new Error("Not supported");
       });
 
