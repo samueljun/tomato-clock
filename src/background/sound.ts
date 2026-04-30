@@ -1,5 +1,5 @@
 import browser from "webextension-polyfill";
-import { STORAGE_KEY, RuntimeMessage, RuntimeAction } from "../utils/constants";
+import { StorageKey, RuntimeMessage, RuntimeAction } from "../utils/constants";
 import Settings from "../utils/settings";
 
 export default class Sound {
@@ -19,9 +19,9 @@ export default class Sound {
 
     if (selectedNotificationSound === "custom") {
       const stored = await browser.storage.local.get(
-        STORAGE_KEY.CUSTOM_SOUND_FILE,
+        StorageKey.CUSTOM_SOUND_FILE,
       );
-      audioPath = (stored[STORAGE_KEY.CUSTOM_SOUND_FILE] as string) || "";
+      audioPath = (stored[StorageKey.CUSTOM_SOUND_FILE] as string) || "";
     } else {
       audioPath = `/assets/sounds/${selectedNotificationSound}`;
     }

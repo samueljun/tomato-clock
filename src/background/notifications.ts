@@ -1,6 +1,6 @@
 import browser from "webextension-polyfill";
 
-import { TIMER_TYPE } from "../utils/constants";
+import { TimerType } from "../utils/constants";
 import Settings from "../utils/settings";
 import Sound from "./sound";
 
@@ -19,13 +19,13 @@ export default class Notifications {
     let message = "";
 
     switch (timerType) {
-      case TIMER_TYPE.TOMATO:
+      case TimerType.TOMATO:
         message = browser.i18n.getMessage("notification_tomato_done");
         break;
-      case TIMER_TYPE.SHORT_BREAK:
+      case TimerType.SHORT_BREAK:
         message = browser.i18n.getMessage("notification_short_break_done");
         break;
-      case TIMER_TYPE.LONG_BREAK:
+      case TimerType.LONG_BREAK:
         message = browser.i18n.getMessage("notification_long_break_done");
         break;
       default:

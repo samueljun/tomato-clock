@@ -10,10 +10,9 @@ import {
   getTimerTypeMilliseconds,
 } from "../utils/utils";
 import {
-  TIMER_TYPE,
-  BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE,
-  STORAGE_KEY,
   TimerType,
+  BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE,
+  StorageKey,
   RuntimeAction,
   TimerState,
   RuntimeMessage,
@@ -40,9 +39,9 @@ export default class Timer {
   }
 
   async getTimerState(): Promise<TimerState> {
-    const result = await browser.storage.local.get(STORAGE_KEY.TIMER);
+    const result = await browser.storage.local.get(StorageKey.TIMER);
     return (
-      (result[STORAGE_KEY.TIMER] as TimerState) || {
+      (result[StorageKey.TIMER] as TimerState) || {
         status: "idle",
         type: null,
         scheduledTime: null,
@@ -52,11 +51,11 @@ export default class Timer {
   }
 
   async setTimerState(state: TimerState): Promise<void> {
-    await browser.storage.local.set({ [STORAGE_KEY.TIMER]: state });
+    await browser.storage.local.set({ [StorageKey.TIMER]: state });
   }
 
   async clearTimerState(): Promise<void> {
-    await browser.storage.local.remove(STORAGE_KEY.TIMER);
+    await browser.storage.local.remove(StorageKey.TIMER);
   }
 
   async resetTimer(): Promise<void> {
@@ -227,13 +226,13 @@ export default class Timer {
     browser.commands.onCommand.addListener((command) => {
       switch (command) {
         case "start-tomato":
-          this.setTimer(TIMER_TYPE.TOMATO);
+          this.setTimer(TimerType.TOMATO);
           break;
         case "start-short-break":
-          this.setTimer(TIMER_TYPE.SHORT_BREAK);
+          this.setTimer(TimerType.SHORT_BREAK);
           break;
         case "start-long-break":
-          this.setTimer(TIMER_TYPE.LONG_BREAK);
+          this.setTimer(TimerType.LONG_BREAK);
           break;
         case "reset-timer":
           this.resetTimer();

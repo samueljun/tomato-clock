@@ -19,7 +19,7 @@ vi.mock("webextension-polyfill", () => ({
 
 import browser from "webextension-polyfill";
 import Notifications from "./notifications";
-import { TIMER_TYPE } from "../utils/constants";
+import { TimerType } from "../utils/constants";
 import Sound from "./sound";
 import Settings from "../utils/settings";
 
@@ -41,7 +41,7 @@ describe("Notifications.ts", () => {
 
   describe("createBrowserNotification", () => {
     it("should create a notification for TOMATO timer", () => {
-      notifications.createBrowserNotification(TIMER_TYPE.TOMATO);
+      notifications.createBrowserNotification(TimerType.TOMATO);
 
       expect(browser.notifications.create).toHaveBeenCalledWith("", {
         type: "basic",
@@ -52,7 +52,7 @@ describe("Notifications.ts", () => {
     });
 
     it("should create a notification for SHORT_BREAK timer", () => {
-      notifications.createBrowserNotification(TIMER_TYPE.SHORT_BREAK);
+      notifications.createBrowserNotification(TimerType.SHORT_BREAK);
 
       expect(browser.notifications.create).toHaveBeenCalledWith("", {
         type: "basic",
@@ -63,7 +63,7 @@ describe("Notifications.ts", () => {
     });
 
     it("should create a notification for LONG_BREAK timer", () => {
-      notifications.createBrowserNotification(TIMER_TYPE.LONG_BREAK);
+      notifications.createBrowserNotification(TimerType.LONG_BREAK);
 
       expect(browser.notifications.create).toHaveBeenCalledWith("", {
         type: "basic",

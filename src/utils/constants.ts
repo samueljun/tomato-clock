@@ -73,10 +73,3 @@ export enum DateUnit {
   DAY = "day",
   MONTH = "month",
 }
-
-// Compatibility exports for existing JavaScript code
-export const STORAGE_KEY = StorageKey;
-export const SETTINGS_KEY = SettingsKey;
-export const TIMER_TYPE = TimerType;
-export const RUNTIME_ACTION = RuntimeAction;
-export const DATE_UNIT = DateUnit;

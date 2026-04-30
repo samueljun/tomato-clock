@@ -13,7 +13,7 @@ import {
   getMergedAndDedupedArray,
   SettingsData,
 } from "./utils";
-import { DateUnit, TIMER_TYPE } from "./constants";
+import { DateUnit, TimerType } from "./constants";
 
 describe("utils.ts", () => {
   describe("getSecondsInMilliseconds", () => {
@@ -156,19 +156,19 @@ describe("utils.ts", () => {
     };
 
     it("should return correct milliseconds for TOMATO", () => {
-      expect(getTimerTypeMilliseconds(TIMER_TYPE.TOMATO, settings)).toBe(
+      expect(getTimerTypeMilliseconds(TimerType.TOMATO, settings)).toBe(
         1500000,
       );
     });
 
     it("should return correct milliseconds for SHORT_BREAK", () => {
-      expect(getTimerTypeMilliseconds(TIMER_TYPE.SHORT_BREAK, settings)).toBe(
+      expect(getTimerTypeMilliseconds(TimerType.SHORT_BREAK, settings)).toBe(
         300000,
       );
     });
 
     it("should return correct milliseconds for LONG_BREAK", () => {
-      expect(getTimerTypeMilliseconds(TIMER_TYPE.LONG_BREAK, settings)).toBe(
+      expect(getTimerTypeMilliseconds(TimerType.LONG_BREAK, settings)).toBe(
         900000,
       );
     });

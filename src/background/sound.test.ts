@@ -17,7 +17,7 @@ vi.mock("webextension-polyfill", () => ({
 
 import browser from "webextension-polyfill";
 import Sound from "./sound";
-import { STORAGE_KEY } from "../utils/constants";
+import { StorageKey } from "../utils/constants";
 import Settings from "../utils/settings";
 import { SettingsData } from "../utils/utils";
 
@@ -84,13 +84,13 @@ describe("Sound.ts", () => {
         selectedNotificationSound: "custom",
       } as unknown as SettingsData);
       vi.mocked(browser.storage.local.get).mockResolvedValue({
-        [STORAGE_KEY.CUSTOM_SOUND_FILE]: "data:audio/mp3;base64,abc",
+        [StorageKey.CUSTOM_SOUND_FILE]: "data:audio/mp3;base64,abc",
       });
 
       await sound.play();
 
       expect(browser.storage.local.get).toHaveBeenCalledWith(
-        STORAGE_KEY.CUSTOM_SOUND_FILE,
+        StorageKey.CUSTOM_SOUND_FILE,
       );
       expect(global.Audio).toHaveBeenCalledWith("data:audio/mp3;base64,abc");
       expect(mockAudio.play).toHaveBeenCalled();

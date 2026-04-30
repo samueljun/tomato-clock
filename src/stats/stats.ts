@@ -17,12 +17,7 @@ import {
   getZeroArray,
   getFilenameDate,
 } from "../utils/utils";
-import {
-  DATE_UNIT,
-  TIMER_TYPE,
-  SETTINGS_KEY,
-  DateUnit,
-} from "../utils/constants";
+import { DateUnit, TimerType, SettingsKey } from "../utils/constants";
 
 interface StatsCounts {
   tomatoes: number;
@@ -220,7 +215,7 @@ export default class Stats {
     // Go through timeline
     for (const timelineAlarm of filteredTimeline) {
       switch (timelineAlarm.type) {
-        case TIMER_TYPE.TOMATO:
+        case TimerType.TOMATO:
           stats.tomatoes++;
           this.addTomatoDateToChartData(
             completedTomatoesChartData,
@@ -228,10 +223,10 @@ export default class Stats {
             dateUnit,
           );
           break;
-        case TIMER_TYPE.SHORT_BREAK:
+        case TimerType.SHORT_BREAK:
           stats.shortBreaks++;
           break;
-        case TIMER_TYPE.LONG_BREAK:
+        case TimerType.LONG_BREAK:
           stats.longBreaks++;
           break;
         default:
@@ -276,7 +271,7 @@ export default class Stats {
 
 $(document).ready(async () => {
   const settings = new Settings();
-  const { [SETTINGS_KEY.WEEK_START_DAY]: weekStartDay = 0 } =
+  const { [SettingsKey.WEEK_START_DAY]: weekStartDay = 0 } =
     await settings.getSettings();
 
   moment.locale(browser.i18n.getUILanguage());
@@ -339,7 +334,7 @@ $(document).ready(async () => {
 
       const isRangeYear =
         label === t("range_this_year") || label === t("range_last_year");
-      const dateUnit = isRangeYear ? DATE_UNIT.MONTH : DATE_UNIT.DAY;
+      const dateUnit = isRangeYear ? DateUnit.MONTH : DateUnit.DAY;
 
       stats.changeStatDates(startDate, endDate, dateUnit);
     },
