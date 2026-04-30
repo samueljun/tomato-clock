@@ -8,7 +8,7 @@ const { version } = require("./package.json");
 module.exports = {
   mode: "development",
   entry: {
-    background: "./src/background/background.js",
+    background: "./src/background/background.ts",
     panel: "./src/panel/panel.js",
     stats: "./src/stats/stats.js",
     options: "./src/options/options.js",

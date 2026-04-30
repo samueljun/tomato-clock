@@ -2,7 +2,7 @@
   "name": "tomato-clock",
   "version": "7.6.2",
   "description": "Tomato Clock is a simple browser extension for managing your productivity.",
-  "main": "src/background.js",
+  "main": "src/background/background.ts",
   "scripts": {
     "lint": "eslint src",
     "lint-fix": "eslint --fix src",
