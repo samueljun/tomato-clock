@@ -1,16 +1,16 @@
 import browser from "webextension-polyfill";
 
-export function t(key) {
+export function t(key: string): string {
   try {
     const msg = browser.i18n.getMessage(key);
     if (msg) return msg;
-  } catch (e) {
+  } catch (e: unknown) {
     console.warn(e);
   }
   return "";
 }
 
-export function localizeHtmlPage(doc = document) {
+export function localizeHtmlPage(doc: Document | Element = document): void {
   const all = doc.querySelectorAll("*");
   all.forEach((el) => {
     // attributes
@@ -30,10 +30,10 @@ export function localizeHtmlPage(doc = document) {
     }
 
     // text nodes
-    for (let node of Array.from(el.childNodes)) {
+    for (const node of Array.from(el.childNodes)) {
       if (node.nodeType === Node.TEXT_NODE) {
-        const text = node.nodeValue.trim();
-        if (text.startsWith("__MSG_") && text.endsWith("__")) {
+        const text = node.nodeValue?.trim();
+        if (text && text.startsWith("__MSG_") && text.endsWith("__")) {
           const key = text.slice(6, -2);
           const translated = t(key);
           if (translated) {

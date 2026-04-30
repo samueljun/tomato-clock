@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, MockInstance } from "vitest";
 import fs from "fs";
 import path from "path";
 
@@ -15,37 +15,39 @@ vi.mock("webextension-polyfill", () => ({
 import browser from "webextension-polyfill";
 import { t, localizeHtmlPage } from "./i18n";
 
-describe("i18n.js", () => {
+const getMessageMock = browser.i18n.getMessage as unknown as MockInstance;
+
+describe("i18n.ts", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   describe("t", () => {
     it("should return the translated message when key exists", () => {
-      browser.i18n.getMessage.mockReturnValue("Tomato");
+      getMessageMock.mockReturnValue("Tomato");
       expect(t("btn_tomato")).toBe("Tomato");
       expect(browser.i18n.getMessage).toHaveBeenCalledWith("btn_tomato");
     });
 
     it("should return empty string when key has no translation", () => {
-      browser.i18n.getMessage.mockReturnValue("");
+      getMessageMock.mockReturnValue("");
       expect(t("missing_key")).toBe("");
     });
 
     it("should return empty string when getMessage throws", () => {
-      browser.i18n.getMessage.mockImplementation(() => {
+      getMessageMock.mockImplementation(() => {
         throw new Error("browser.i18n unavailable");
       });
       expect(t("any_key")).toBe("");
     });
 
     it("should return empty string when getMessage returns undefined", () => {
-      browser.i18n.getMessage.mockReturnValue(undefined);
+      getMessageMock.mockReturnValue(undefined);
       expect(t("missing_key")).toBe("");
     });
 
     it("should allow callers to use || fallback pattern", () => {
-      browser.i18n.getMessage.mockReturnValue("");
+      getMessageMock.mockReturnValue("");
       const format = t("dateFormat") || "dddd, MMMM Do YYYY";
       expect(format).toBe("dddd, MMMM Do YYYY");
     });
@@ -58,7 +60,7 @@ describe("i18n.js", () => {
         "text/html",
       );
 
-      browser.i18n.getMessage.mockImplementation((key) => {
+      getMessageMock.mockImplementation((key: string) => {
         if (key === "btn_tomato") return "Tomato";
         return "";
       });
@@ -66,7 +68,7 @@ describe("i18n.js", () => {
       localizeHtmlPage(doc);
 
       const button = doc.querySelector("button");
-      expect(button.textContent).toBe("Tomato");
+      expect(button?.textContent).toBe("Tomato");
     });
 
     it("should translate attributes with __MSG_ pattern", () => {
@@ -75,7 +77,7 @@ describe("i18n.js", () => {
         "text/html",
       );
 
-      browser.i18n.getMessage.mockImplementation((key) => {
+      getMessageMock.mockImplementation((key: string) => {
         if (key === "placeholder_text") return "Enter text...";
         return "";
       });
@@ -83,7 +85,7 @@ describe("i18n.js", () => {
       localizeHtmlPage(doc);
 
       const input = doc.querySelector("input");
-      expect(input.getAttribute("placeholder")).toBe("Enter text...");
+      expect(input?.getAttribute("placeholder")).toBe("Enter text...");
     });
 
     it("should not replace text when translation is missing", () => {
@@ -92,12 +94,12 @@ describe("i18n.js", () => {
         "text/html",
       );
 
-      browser.i18n.getMessage.mockReturnValue("");
+      getMessageMock.mockReturnValue("");
 
       localizeHtmlPage(doc);
 
       const span = doc.querySelector("span");
-      expect(span.textContent).toBe("__MSG_missing_key__");
+      expect(span?.textContent).toBe("__MSG_missing_key__");
     });
 
     it("should not replace attributes when translation is missing", () => {
@@ -106,12 +108,12 @@ describe("i18n.js", () => {
         "text/html",
       );
 
-      browser.i18n.getMessage.mockReturnValue("");
+      getMessageMock.mockReturnValue("");
 
       localizeHtmlPage(doc);
 
       const input = doc.querySelector("input");
-      expect(input.getAttribute("title")).toBe("__MSG_missing_key__");
+      expect(input?.getAttribute("title")).toBe("__MSG_missing_key__");
     });
 
     it("should not modify non-__MSG_ text", () => {
@@ -123,7 +125,7 @@ describe("i18n.js", () => {
       localizeHtmlPage(doc);
 
       const p = doc.querySelector("p");
-      expect(p.textContent).toBe("Regular text");
+      expect(p?.textContent).toBe("Regular text");
       expect(browser.i18n.getMessage).not.toHaveBeenCalled();
     });
 
@@ -133,7 +135,7 @@ describe("i18n.js", () => {
         "text/html",
       );
 
-      browser.i18n.getMessage.mockImplementation((key) => {
+      getMessageMock.mockImplementation((key: string) => {
         if (key === "btn_reset") return "Reset";
         return "";
       });
@@ -141,7 +143,7 @@ describe("i18n.js", () => {
       localizeHtmlPage(doc);
 
       const button = doc.querySelector("button");
-      expect(button.textContent.trim()).toBe("Reset");
+      expect(button?.textContent?.trim()).toBe("Reset");
     });
   });
 
@@ -155,14 +157,14 @@ describe("i18n.js", () => {
     const locales = fs
       .readdirSync(localesDir)
       .filter(
-        (file) =>
+        (file: string) =>
           file !== "en" &&
           fs.statSync(path.join(localesDir, file)).isDirectory(),
       );
 
     it.each(locales)(
       "should have the same keys as English for locale: %s",
-      (locale) => {
+      (locale: string) => {
         const messagesPath = path.join(localesDir, locale, "messages.json");
         const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
         const keys = Object.keys(messages).sort();
