@@ -16,21 +16,8 @@ import {
   STORAGE_KEY,
   TimerType,
   RuntimeAction,
+  TimerState,
 } from "../utils/constants";
-
-export type TimerState =
-  | {
-      status: "idle";
-      type: null;
-      scheduledTime: null;
-      totalTime: null;
-    }
-  | {
-      status: "running";
-      type: TimerType;
-      scheduledTime: number;
-      totalTime: number;
-    };
 
 export interface RuntimeRequest {
   action: RuntimeAction;
@@ -225,11 +212,6 @@ export default class Timer {
     }
   }
 
-  async getTimerScheduledTime(): Promise<number | null> {
-    const state = await this.getTimerState();
-    return state.scheduledTime;
-  }
-
   setListeners(): void {
     browser.runtime.onMessage.addListener((message: unknown) => {
       const request = message as RuntimeRequest;
@@ -242,8 +224,8 @@ export default class Timer {
             this.setTimer(request.data.type);
           }
           break;
-        case RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME:
-          return this.getTimerScheduledTime(); // Returns promise
+        case RUNTIME_ACTION.GET_TIMER_STATE:
+          return this.getTimerState(); // Returns promise
         default:
           break;
       }

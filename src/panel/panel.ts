@@ -4,7 +4,7 @@ import { localizeHtmlPage } from "../utils/i18n";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./panel.css";
 
-import { RuntimeAction, TimerType } from "../utils/constants";
+import { RuntimeAction, TimerType, TimerState } from "../utils/constants";
 import {
   getMillisecondsToTimeText,
   getSecondsInMilliseconds,
@@ -30,11 +30,12 @@ export default class Panel {
 
     browser.runtime
       .sendMessage({
-        action: RuntimeAction.GET_TIMER_SCHEDULED_TIME,
+        action: RuntimeAction.GET_TIMER_STATE,
       })
-      .then((scheduledTime: unknown) => {
-        if (typeof scheduledTime === "number" && scheduledTime > 0) {
-          this.setDisplayTimer(scheduledTime - Date.now());
+      .then((state: unknown) => {
+        const timerState = state as TimerState;
+        if (timerState.status === "running" && timerState.scheduledTime) {
+          this.setDisplayTimer(timerState.scheduledTime - Date.now());
         }
       });
 

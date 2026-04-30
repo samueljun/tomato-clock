@@ -34,6 +34,20 @@ export enum TimerType {
   LONG_BREAK = "longBreak",
 }
 
+export type TimerState =
+  | {
+      status: "idle";
+      type: null;
+      scheduledTime: null;
+      totalTime: null;
+    }
+  | {
+      status: "running";
+      type: TimerType;
+      scheduledTime: number;
+      totalTime: number;
+    };
+
 export const BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE = {
   [TimerType.TOMATO]: "#dc3545",
   [TimerType.SHORT_BREAK]: "#666",
@@ -43,7 +57,7 @@ export const BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE = {
 export enum RuntimeAction {
   SET_TIMER = "setTimer",
   RESET_TIMER = "resetTimer",
-  GET_TIMER_SCHEDULED_TIME = "getTimerScheduledTime",
+  GET_TIMER_STATE = "getTimerState",
 }
 
 export enum DateUnit {
