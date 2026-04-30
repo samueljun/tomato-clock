@@ -181,5 +181,23 @@
   },
   "label_options": {
     "message": "選項"
+  },
+  "notification_tomato_done": {
+    "message": "您的番茄鐘計時結束！"
+  },
+  "notification_short_break_done": {
+    "message": "您的短休結束！"
+  },
+  "notification_long_break_done": {
+    "message": "您的長休結束！"
+  },
+  "notification_timer_done": {
+    "message": "您的計時結束！"
+  },
+  "notification_error_title": {
+    "message": "錯誤！ - Tomato Clock"
+  },
+  "notification_storage_limit_message": {
+    "message": "存儲已達上限。請考慮匯出並重置統計數據。"
   }
 }

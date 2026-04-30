@@ -181,5 +181,23 @@
   },
   "label_options": {
     "message": "Options"
+  },
+  "notification_tomato_done": {
+    "message": "Your Tomato timer is done!"
+  },
+  "notification_short_break_done": {
+    "message": "Your short break is done!"
+  },
+  "notification_long_break_done": {
+    "message": "Your long break is done!"
+  },
+  "notification_timer_done": {
+    "message": "Your timer is done!"
+  },
+  "notification_error_title": {
+    "message": "Error! - Tomato Clock"
+  },
+  "notification_storage_limit_message": {
+    "message": "The storage limit was hit. Consider exporting and resetting stats."
   }
 }

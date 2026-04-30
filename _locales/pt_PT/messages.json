@@ -181,5 +181,23 @@
   },
   "label_options": {
     "message": "Opções"
+  },
+  "notification_tomato_done": {
+    "message": "O seu temporizador Tomato terminou!"
+  },
+  "notification_short_break_done": {
+    "message": "A sua pausa curta terminou!"
+  },
+  "notification_long_break_done": {
+    "message": "A sua pausa longa terminou!"
+  },
+  "notification_timer_done": {
+    "message": "O seu temporizador terminou!"
+  },
+  "notification_error_title": {
+    "message": "Erro! - Tomato Clock"
+  },
+  "notification_storage_limit_message": {
+    "message": "O limite de armazenamento foi atingido. Considere exportar e repor as estatísticas."
   }
 }

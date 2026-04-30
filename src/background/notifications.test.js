@@ -11,6 +11,9 @@ vi.mock("webextension-polyfill", () => ({
         addListener: vi.fn(),
       },
     },
+    i18n: {
+      getMessage: vi.fn((key) => `localized_${key}`),
+    },
   },
 }));
 
@@ -42,7 +45,7 @@ describe("Notifications.js", () => {
         type: "basic",
         iconUrl: "/assets/images/tomato-icon-64.png",
         title: "Tomato Clock",
-        message: "Your Tomato timer is done!",
+        message: "localized_notification_tomato_done",
       });
     });
 
@@ -53,7 +56,7 @@ describe("Notifications.js", () => {
         type: "basic",
         iconUrl: "/assets/images/tomato-icon-64.png",
         title: "Tomato Clock",
-        message: "Your short break is done!",
+        message: "localized_notification_short_break_done",
       });
     });
 
@@ -64,7 +67,7 @@ describe("Notifications.js", () => {
         type: "basic",
         iconUrl: "/assets/images/tomato-icon-64.png",
         title: "Tomato Clock",
-        message: "Your long break is done!",
+        message: "localized_notification_long_break_done",
       });
     });
 
@@ -75,7 +78,7 @@ describe("Notifications.js", () => {
         type: "basic",
         iconUrl: "/assets/images/tomato-icon-64.png",
         title: "Tomato Clock",
-        message: "Your timer is done!",
+        message: "localized_notification_timer_done",
       });
     });
   });
@@ -87,9 +90,8 @@ describe("Notifications.js", () => {
       expect(browser.notifications.create).toHaveBeenCalledWith(null, {
         type: "basic",
         iconUrl: "/assets/images/tomato-icon-inactive-64.png",
-        title: "Error! - Tomato Clock",
-        message:
-          "The storage limit was hit. Consider exporting and resetting stats.",
+        title: "localized_notification_error_title",
+        message: "localized_notification_storage_limit_message",
       });
     });
   });

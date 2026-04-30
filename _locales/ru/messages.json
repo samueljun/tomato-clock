@@ -180,6 +180,24 @@
     "message": "Offscreen"
   },
   "label_options": {
-    "message": "Настройки"
+    "message": "Опции"
+  },
+  "notification_tomato_done": {
+    "message": "Ваш таймер Tomato завершен!"
+  },
+  "notification_short_break_done": {
+    "message": "Ваш короткий перерыв завершен!"
+  },
+  "notification_long_break_done": {
+    "message": "Ваш длинный перерыв завершен!"
+  },
+  "notification_timer_done": {
+    "message": "Ваш таймер завершен!"
+  },
+  "notification_error_title": {
+    "message": "Ошибка! - Tomato Clock"
+  },
+  "notification_storage_limit_message": {
+    "message": "Превышен лимит хранилища. Рекомендуется экспортировать и сбросить статистику."
   }
 }

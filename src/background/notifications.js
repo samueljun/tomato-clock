@@ -15,16 +15,16 @@ export default class Notifications {
 
     switch (timerType) {
       case TIMER_TYPE.TOMATO:
-        message = "Your Tomato timer is done!";
+        message = browser.i18n.getMessage("notification_tomato_done");
         break;
       case TIMER_TYPE.SHORT_BREAK:
-        message = "Your short break is done!";
+        message = browser.i18n.getMessage("notification_short_break_done");
         break;
       case TIMER_TYPE.LONG_BREAK:
-        message = "Your long break is done!";
+        message = browser.i18n.getMessage("notification_long_break_done");
         break;
       default:
-        message = "Your timer is done!";
+        message = browser.i18n.getMessage("notification_timer_done");
         break;
     }
 
@@ -40,9 +40,8 @@ export default class Notifications {
     await browser.notifications.create(null, {
       type: "basic",
       iconUrl: "/assets/images/tomato-icon-inactive-64.png",
-      title: "Error! - Tomato Clock",
-      message:
-        "The storage limit was hit. Consider exporting and resetting stats.",
+      title: browser.i18n.getMessage("notification_error_title"),
+      message: browser.i18n.getMessage("notification_storage_limit_message"),
     });
   }
 
