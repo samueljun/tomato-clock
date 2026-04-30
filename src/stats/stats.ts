@@ -17,26 +17,65 @@ import {
   getZeroArray,
   getFilenameDate,
 } from "../utils/utils";
-import { DATE_UNIT, TIMER_TYPE, SETTINGS_KEY } from "../utils/constants";
+import {
+  DATE_UNIT,
+  TIMER_TYPE,
+  SETTINGS_KEY,
+  DateUnit,
+} from "../utils/constants";
+
+interface StatsCounts {
+  tomatoes: number;
+  shortBreaks: number;
+  longBreaks: number;
+}
+
+interface ChartDataset {
+  label: string;
+  fill: boolean;
+  borderColor: string;
+  backgroundColor: string;
+  pointBorderColor: string;
+  pointBackgroundColor: string;
+  data: number[];
+}
+
+interface ChartData {
+  labels: string[];
+  datasets: ChartDataset[];
+}
 
 export default class Stats {
+  private tomatoesCount: HTMLElement;
+  private shortBreaksCount: HTMLElement;
+  private longBreaksCount: HTMLElement;
+  private resetStatsButton: HTMLElement;
+  private exportStatsButton: HTMLElement;
+  private importStatsButton: HTMLElement;
+  private importStatsHiddenInput: HTMLInputElement;
+  private ctx: CanvasRenderingContext2D;
+  private completedTomatoesChart: Chart | null;
+  private timeline: Timeline;
+
   constructor() {
     localizeHtmlPage();
 
     // Get DOM Elements
-    this.tomatoesCount = document.getElementById("tomatoes-count");
-    this.shortBreaksCount = document.getElementById("short-breaks-count");
-    this.longBreaksCount = document.getElementById("long-breaks-count");
-    this.resetStatsButton = document.getElementById("reset-stats-button");
-    this.exportStatsButton = document.getElementById("export-stats-button");
-    this.importStatsButton = document.getElementById("import-stats-button");
+    this.tomatoesCount = document.getElementById("tomatoes-count")!;
+    this.shortBreaksCount = document.getElementById("short-breaks-count")!;
+    this.longBreaksCount = document.getElementById("long-breaks-count")!;
+    this.resetStatsButton = document.getElementById("reset-stats-button")!;
+    this.exportStatsButton = document.getElementById("export-stats-button")!;
+    this.importStatsButton = document.getElementById("import-stats-button")!;
     this.importStatsHiddenInput = document.getElementById(
       "import-stats-hidden-input",
-    );
+    ) as HTMLInputElement;
 
-    this.ctx = document
-      .getElementById("completed-tomato-dates-chart")
-      .getContext("2d");
+    this.ctx = (
+      document.getElementById(
+        "completed-tomato-dates-chart",
+      ) as HTMLCanvasElement
+    ).getContext("2d")!;
     this.completedTomatoesChart = null;
 
     this.handleResetStatsButtonClick =
@@ -68,7 +107,7 @@ export default class Stats {
     this.resetDateRange();
   }
 
-  handleResetStatsButtonClick() {
+  handleResetStatsButtonClick(): void {
     if (confirm(t("confirmResetStats"))) {
       this.timeline.resetTimeline().then(() => {
         this.resetDateRange();
@@ -76,26 +115,29 @@ export default class Stats {
     }
   }
 
-  handleExportStatsButtonClick() {
+  handleExportStatsButtonClick(): void {
     this.timeline.getTimeline().then((timeline) => {
       const filename = `${getFilenameDate()}_tomato-clock-stats.json`;
 
       const dataStr =
         "data:text/json;charset=utf-8," +
         encodeURIComponent(JSON.stringify(timeline));
-      const dlAnchorElem = document.getElementById("downloadAnchorElem");
+      const dlAnchorElem = document.getElementById("downloadAnchorElem")!;
       dlAnchorElem.setAttribute("href", dataStr);
       dlAnchorElem.setAttribute("download", filename);
       dlAnchorElem.click();
     });
   }
 
-  handleImportStatsButtonClick() {
+  handleImportStatsButtonClick(): void {
     this.importStatsHiddenInput.click();
   }
 
-  async handleImportStatsHiddenInputChange(e) {
-    const [file] = e.target.files;
+  async handleImportStatsHiddenInputChange(e: Event): Promise<void> {
+    const target = e.target as HTMLInputElement;
+    const file = target.files?.[0];
+    if (!file) return;
+
     const timelineJson = await file.text();
 
     let newTimeline;
@@ -111,7 +153,7 @@ export default class Stats {
     window.location.reload();
   }
 
-  resetDateRange() {
+  resetDateRange(): void {
     const today = new Date();
     const lastWeek = new Date(today);
     lastWeek.setDate(lastWeek.getDate() - 6);
@@ -119,22 +161,31 @@ export default class Stats {
     this.changeStatDates(lastWeek, today);
   }
 
-  addTomatoDateToChartData(data, date, dateUnit) {
+  addTomatoDateToChartData(
+    data: ChartData,
+    date: Date | string,
+    dateUnit: DateUnit = DateUnit.DAY,
+  ): void {
+    const dateObj = typeof date === "string" ? new Date(date) : date;
     for (let i = 0; i < data.labels.length; i++) {
-      if (data.labels[i] === getDateLabel(date, dateUnit)) {
+      if (data.labels[i] === getDateLabel(dateObj, dateUnit)) {
         data.datasets[0].data[i]++;
         break;
       }
     }
   }
 
-  setStatsText(stats) {
-    this.tomatoesCount.textContent = stats.tomatoes;
-    this.shortBreaksCount.textContent = stats.shortBreaks;
-    this.longBreaksCount.textContent = stats.longBreaks;
+  setStatsText(stats: StatsCounts): void {
+    this.tomatoesCount.textContent = stats.tomatoes.toString();
+    this.shortBreaksCount.textContent = stats.shortBreaks.toString();
+    this.longBreaksCount.textContent = stats.longBreaks.toString();
   }
 
-  async changeStatDates(startDate, endDate, dateUnit) {
+  async changeStatDates(
+    startDate: Date,
+    endDate: Date,
+    dateUnit: DateUnit = DateUnit.DAY,
+  ): Promise<void> {
     const filteredTimeline = await this.timeline.getFilteredTimeline(
       startDate,
       endDate,
@@ -145,7 +196,7 @@ export default class Stats {
       dateUnit,
     );
 
-    const completedTomatoesChartData = {
+    const completedTomatoesChartData: ChartData = {
       labels: dateRangeStrings,
       datasets: [
         {
@@ -160,14 +211,14 @@ export default class Stats {
       ],
     };
 
-    const stats = {
+    const stats: StatsCounts = {
       tomatoes: 0,
       shortBreaks: 0,
       longBreaks: 0,
     };
 
     // Go through timeline
-    for (let timelineAlarm of filteredTimeline) {
+    for (const timelineAlarm of filteredTimeline) {
       switch (timelineAlarm.type) {
         case TIMER_TYPE.TOMATO:
           stats.tomatoes++;
@@ -230,7 +281,7 @@ $(document).ready(async () => {
 
   moment.locale(browser.i18n.getUILanguage());
   moment.updateLocale(moment.locale(), {
-    week: { dow: weekStartDay },
+    week: { dow: weekStartDay as number },
   });
 
   const stats = new Stats();
@@ -240,7 +291,7 @@ $(document).ready(async () => {
   const momentToday = moment();
 
   // Build localized ranges for daterangepicker
-  const ranges = {
+  const ranges: Record<string, [moment.Moment, moment.Moment]> = {
     [t("range_last_7_days")]: [moment().subtract(6, "days"), momentToday],
     [t("range_this_week")]: [moment().startOf("week"), moment().endOf("week")],
     [t("range_last_week")]: [
@@ -263,11 +314,12 @@ $(document).ready(async () => {
     ],
   };
 
-  $('input[name="daterange"]').daterangepicker(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ($('input[name="daterange"]') as any).daterangepicker(
     {
       locale: {
         format: t("dateFormat") || "dddd, MMMM Do YYYY",
-        firstDay: weekStartDay,
+        firstDay: weekStartDay as number,
       },
       dateLimit: {
         months: 1,
@@ -276,7 +328,11 @@ $(document).ready(async () => {
       endDate: momentToday,
       ranges,
     },
-    (momentStartDate, momentEndDate, label) => {
+    (
+      momentStartDate: moment.Moment,
+      momentEndDate: moment.Moment,
+      label: string,
+    ) => {
       // Convert Moment dates to native JS dates
       const startDate = momentStartDate.toDate();
       const endDate = momentEndDate.toDate();

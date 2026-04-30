@@ -10,7 +10,7 @@ module.exports = {
   entry: {
     background: "./src/background/background.ts",
     panel: "./src/panel/panel.ts",
-    stats: "./src/stats/stats.js",
+    stats: "./src/stats/stats.ts",
     options: "./src/options/options.ts",
     offscreen: "./src/offscreen/offscreen.ts",
   },
