@@ -1,15 +1,5 @@
 import browser from "webextension-polyfill";
-
-export enum OffscreenMessageType {
-  PLAY_AUDIO = "play-audio",
-  STOP_AUDIO = "stop-audio",
-}
-
-export interface OffscreenMessage {
-  target: "offscreen";
-  type: OffscreenMessageType;
-  src?: string;
-}
+import { RuntimeMessage, RuntimeAction } from "../utils/constants";
 
 let currentAudio: HTMLAudioElement | null = null;
 
@@ -21,21 +11,17 @@ if (
   browser.runtime.onMessage
 ) {
   browser.runtime.onMessage.addListener((message: unknown) => {
-    const msg = message as OffscreenMessage;
+    const msg = message as RuntimeMessage;
 
-    if (msg.target !== "offscreen") {
-      return;
-    }
-
-    if (msg.type === OffscreenMessageType.PLAY_AUDIO) {
+    if (msg.action === RuntimeAction.OFFSCREEN_PLAY_AUDIO) {
       if (currentAudio) {
         currentAudio.pause();
       }
-      if (msg.src) {
-        currentAudio = new Audio(msg.src);
+      if (msg.data?.src) {
+        currentAudio = new Audio(msg.data.src);
         currentAudio.play();
       }
-    } else if (msg.type === OffscreenMessageType.STOP_AUDIO) {
+    } else if (msg.action === RuntimeAction.OFFSCREEN_STOP_AUDIO) {
       if (currentAudio) {
         currentAudio.pause();
         currentAudio = null;

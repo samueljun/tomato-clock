@@ -106,9 +106,8 @@ describe("Sound.ts", () => {
         justification: "notification sound",
       });
       expect(browser.runtime.sendMessage).toHaveBeenCalledWith({
-        target: "offscreen",
-        type: "play-audio",
-        src: "/assets/sounds/timer-chime.mp3",
+        action: "offscreenPlayAudio",
+        data: { src: "/assets/sounds/timer-chime.mp3" },
       });
     });
 
@@ -146,8 +145,7 @@ describe("Sound.ts", () => {
       await sound.stop();
 
       expect(browser.runtime.sendMessage).toHaveBeenCalledWith({
-        target: "offscreen",
-        type: "stop-audio",
+        action: "offscreenStopAudio",
       });
     });
 

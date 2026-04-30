@@ -4,7 +4,12 @@ import { localizeHtmlPage } from "../utils/i18n";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./panel.css";
 
-import { RuntimeAction, TimerType, TimerState } from "../utils/constants";
+import {
+  RuntimeAction,
+  TimerType,
+  TimerState,
+  RuntimeMessage,
+} from "../utils/constants";
 import {
   getMillisecondsToTimeText,
   getSecondsInMilliseconds,
@@ -31,7 +36,7 @@ export default class Panel {
     browser.runtime
       .sendMessage({
         action: RuntimeAction.GET_TIMER_STATE,
-      })
+      } as RuntimeMessage)
       .then((state: unknown) => {
         const timerState = state as TimerState;
         if (timerState.status === "running" && timerState.scheduledTime) {
@@ -125,7 +130,7 @@ export default class Panel {
   private resetBackgroundTimer(): void {
     browser.runtime.sendMessage({
       action: RuntimeAction.RESET_TIMER,
-    });
+    } as RuntimeMessage);
   }
 
   private setBackgroundTimer(type: TimerType): void {
@@ -134,7 +139,7 @@ export default class Panel {
       data: {
         type,
       },
-    });
+    } as RuntimeMessage);
   }
 }
 

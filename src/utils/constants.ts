@@ -58,7 +58,16 @@ export enum RuntimeAction {
   SET_TIMER = "setTimer",
   RESET_TIMER = "resetTimer",
   GET_TIMER_STATE = "getTimerState",
+  OFFSCREEN_PLAY_AUDIO = "offscreenPlayAudio",
+  OFFSCREEN_STOP_AUDIO = "offscreenStopAudio",
 }
+
+export type RuntimeMessage =
+  | { action: RuntimeAction.SET_TIMER; data: { type: TimerType } }
+  | { action: RuntimeAction.RESET_TIMER; data?: undefined }
+  | { action: RuntimeAction.GET_TIMER_STATE; data?: undefined }
+  | { action: RuntimeAction.OFFSCREEN_PLAY_AUDIO; data: { src: string } }
+  | { action: RuntimeAction.OFFSCREEN_STOP_AUDIO; data?: undefined };
 
 export enum DateUnit {
   DAY = "day",

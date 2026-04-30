@@ -10,21 +10,14 @@ import {
   getTimerTypeMilliseconds,
 } from "../utils/utils";
 import {
-  RUNTIME_ACTION,
   TIMER_TYPE,
   BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE,
   STORAGE_KEY,
   TimerType,
   RuntimeAction,
   TimerState,
+  RuntimeMessage,
 } from "../utils/constants";
-
-export interface RuntimeRequest {
-  action: RuntimeAction;
-  data?: {
-    type: TimerType;
-  };
-}
 
 export default class Timer {
   settings: Settings;
@@ -214,17 +207,17 @@ export default class Timer {
 
   setListeners(): void {
     browser.runtime.onMessage.addListener((message: unknown) => {
-      const request = message as RuntimeRequest;
+      const request = message as RuntimeMessage;
       switch (request.action) {
-        case RUNTIME_ACTION.RESET_TIMER:
+        case RuntimeAction.RESET_TIMER:
           this.resetTimer();
           break;
-        case RUNTIME_ACTION.SET_TIMER:
+        case RuntimeAction.SET_TIMER:
           if (request.data) {
             this.setTimer(request.data.type);
           }
           break;
-        case RUNTIME_ACTION.GET_TIMER_STATE:
+        case RuntimeAction.GET_TIMER_STATE:
           return this.getTimerState(); // Returns promise
         default:
           break;
