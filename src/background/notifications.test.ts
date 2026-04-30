@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
 
 // Mock the webextension-polyfill module
 vi.mock("webextension-polyfill", () => ({
@@ -20,19 +20,21 @@ vi.mock("webextension-polyfill", () => ({
 import browser from "webextension-polyfill";
 import Notifications from "./notifications";
 import { TIMER_TYPE } from "../utils/constants";
+import Sound from "./sound";
+import Settings from "../utils/settings";
 
-describe("Notifications.js", () => {
-  let notifications;
-  let mockSettings;
-  let mockSound;
+describe("Notifications.ts", () => {
+  let notifications: Notifications;
+  let mockSettings: Settings;
+  let mockSound: Sound;
 
   beforeEach(() => {
     vi.clearAllMocks();
 
-    mockSettings = {};
+    mockSettings = {} as Settings;
     mockSound = {
       stop: vi.fn(),
-    };
+    } as unknown as Sound;
 
     notifications = new Notifications(mockSettings, mockSound);
   });
@@ -87,7 +89,7 @@ describe("Notifications.js", () => {
     it("should create a storage limit notification", async () => {
       await notifications.createStorageLimitNotification();
 
-      expect(browser.notifications.create).toHaveBeenCalledWith(null, {
+      expect(browser.notifications.create).toHaveBeenCalledWith("", {
         type: "basic",
         iconUrl: "/assets/images/tomato-icon-inactive-64.png",
         title: "localized_notification_error_title",
@@ -103,8 +105,9 @@ describe("Notifications.js", () => {
 
     it("should clear notification and stop sound when clicked", () => {
       // Find the listener callback
-      const callback =
-        browser.notifications.onClicked.addListener.mock.calls[0][0];
+      const addListenerMock = browser.notifications.onClicked
+        .addListener as Mock;
+      const callback = addListenerMock.mock.calls[0][0];
 
       callback("test-notification-id");
 

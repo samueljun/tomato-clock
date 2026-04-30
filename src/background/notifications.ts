@@ -1,16 +1,21 @@
 import browser from "webextension-polyfill";
 
 import { TIMER_TYPE } from "../utils/constants";
+import Settings from "../utils/settings";
+import Sound from "./sound";
 
 export default class Notifications {
-  constructor(settings, sound) {
+  settings: Settings;
+  sound: Sound;
+
+  constructor(settings: Settings, sound: Sound) {
     this.settings = settings;
     this.sound = sound;
 
     this.setListeners();
   }
 
-  createBrowserNotification(timerType) {
+  createBrowserNotification(timerType: string): void {
     let message = "";
 
     switch (timerType) {
@@ -36,8 +41,8 @@ export default class Notifications {
     });
   }
 
-  async createStorageLimitNotification() {
-    await browser.notifications.create(null, {
+  async createStorageLimitNotification(): Promise<void> {
+    await browser.notifications.create("", {
       type: "basic",
       iconUrl: "/assets/images/tomato-icon-inactive-64.png",
       title: browser.i18n.getMessage("notification_error_title"),
@@ -45,7 +50,7 @@ export default class Notifications {
     });
   }
 
-  setListeners() {
+  setListeners(): void {
     browser.notifications.onClicked.addListener((notificationId) => {
       browser.notifications.clear(notificationId);
       this.sound.stop();
