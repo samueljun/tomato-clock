@@ -3,6 +3,7 @@ import browser from "webextension-polyfill";
 import Settings from "../utils/settings";
 import Badge from "./badge";
 import Notifications from "./notifications";
+import Sound from "./sound";
 import Timeline from "../utils/timeline";
 import {
   getMillisecondsToMinutesAndSeconds,
@@ -18,8 +19,9 @@ import {
 export default class Timer {
   constructor() {
     this.settings = new Settings();
+    this.sound = new Sound(this.settings);
     this.badge = new Badge();
-    this.notifications = new Notifications(this.settings);
+    this.notifications = new Notifications(this.settings, this.sound);
     this.timeline = new Timeline();
 
     this.timeline.switchStorageFromSyncToLocal();
@@ -52,6 +54,7 @@ export default class Timer {
     await browser.alarms.clearAll();
     await this.clearTimerState();
     this.badge.setBadgeText("");
+    this.sound.stop();
   }
 
   setTimer(type) {
@@ -179,9 +182,15 @@ export default class Timer {
         `Timer expired at ${new Date().toISOString()}. Source: ${source}. Delay: ${delay}ms`,
       );
 
+      await this.resetTimer();
+
       this.notifications.createBrowserNotification(state.type);
       this.timeline.addAlarmToTimeline(state.type, state.totalTime);
-      await this.resetTimer();
+
+      const settings = await this.settings.getSettings();
+      if (settings.isNotificationSoundEnabled) {
+        this.sound.play();
+      }
     }
   }
 

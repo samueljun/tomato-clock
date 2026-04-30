@@ -1,11 +1,22 @@
 import browser from "webextension-polyfill";
-import { localizeHtmlPage } from "../utils/i18n";
 
-localizeHtmlPage();
+let currentAudio = null;
 
 browser.runtime.onMessage.addListener((message) => {
-  if (message.target === "offscreen" && message.type === "play-audio") {
-    const audio = new Audio(message.src);
-    audio.play();
+  if (message.target !== "offscreen") {
+    return;
+  }
+
+  if (message.type === "play-audio") {
+    if (currentAudio) {
+      currentAudio.pause();
+    }
+    currentAudio = new Audio(message.src);
+    currentAudio.play();
+  } else if (message.type === "stop-audio") {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
   }
 });
