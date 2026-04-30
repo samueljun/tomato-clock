@@ -10,5 +10,32 @@ body {
 }
 
 .info-buttons {
-  margin: 5px 0;
+  margin: 10px 0 5px 0;
+}
+
+.btn-icon {
+  padding: 8px;
+  border: none;
+  background: transparent;
+  color: #6c757d;
+  transition:
+    color 0.2s ease,
+    transform 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.btn-icon:hover {
+  color: #212529;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.btn-icon:active {
+  transform: scale(0.95);
+}
+
+.btn-icon svg {
+  display: block;
 }

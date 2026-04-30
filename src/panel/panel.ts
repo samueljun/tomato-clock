@@ -15,6 +15,7 @@ import {
   getSecondsInMilliseconds,
   getTimerTypeMilliseconds,
 } from "../utils/utils";
+import { openOrFocusTab } from "../utils/tabs";
 import Settings from "../utils/settings";
 
 interface PanelTimer {
@@ -72,8 +73,12 @@ export default class Panel {
       this.resetBackgroundTimer();
     });
 
-    document.getElementById("stats-link")?.addEventListener("click", () => {
-      browser.tabs.create({ url: "/stats/stats.html" });
+    document.getElementById("stats-button")?.addEventListener("click", () => {
+      openOrFocusTab("/stats/stats.html");
+    });
+
+    document.getElementById("options-button")?.addEventListener("click", () => {
+      openOrFocusTab("/options/options.html");
     });
   }
 

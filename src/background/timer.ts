@@ -114,8 +114,7 @@ export default class Timer {
 
   async updateBadge(): Promise<void> {
     const state = await this.getTimerState();
-    if (state.status !== "running" || !state.type || !state.scheduledTime)
-      return;
+    if (state.status !== "running") return;
 
     const badgeBackgroundColor =
       BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE[state.type];
