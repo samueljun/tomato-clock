@@ -79,7 +79,7 @@ export function getDateRangeStringArray(
   return dateStringArray;
 }
 
-export interface Settings {
+export interface SettingsData {
   minutesInTomato: number;
   minutesInShortBreak: number;
   minutesInLongBreak: number;
@@ -88,7 +88,7 @@ export interface Settings {
 
 export function getTimerTypeMilliseconds(
   type: TimerType | string,
-  settings: Settings,
+  settings: SettingsData,
 ): number | undefined {
   switch (type) {
     case TimerType.TOMATO:

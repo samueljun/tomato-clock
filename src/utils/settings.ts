@@ -1,8 +1,11 @@
 import browser from "webextension-polyfill";
 
-import { DEFAULT_SETTINGS, STORAGE_KEY } from "./constants";
+import { DEFAULT_SETTINGS, StorageKey } from "./constants";
+import { SettingsData } from "./utils";
 
 export default class Settings {
+  storage: browser.Storage.StorageArea;
+
   constructor() {
     // Sync storage limits (approximately 100 KB, 8 KB per item)
     // Firefox: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync
@@ -10,35 +13,35 @@ export default class Settings {
     this.storage = browser.storage.sync || browser.storage.local;
   }
 
-  getSettings() {
+  getSettings(): Promise<SettingsData> {
     return new Promise((resolve) => {
-      const onSuccess = (storageResults) => {
+      const onSuccess = (storageResults: Record<string, unknown>) => {
         const settings = Object.assign(
           {},
           DEFAULT_SETTINGS,
-          storageResults[STORAGE_KEY.SETTINGS],
-        );
+          storageResults[StorageKey.SETTINGS],
+        ) as SettingsData;
 
         resolve(settings);
       };
 
       const onError = () => {
-        resolve(DEFAULT_SETTINGS);
+        resolve(DEFAULT_SETTINGS as unknown as SettingsData);
       };
 
-      this.storage.get(STORAGE_KEY.SETTINGS).then(onSuccess, onError);
+      this.storage.get(StorageKey.SETTINGS).then(onSuccess, onError);
     });
   }
 
-  saveSettings(settings) {
+  saveSettings(settings: SettingsData): Promise<void> {
     return this.storage.set({
-      [STORAGE_KEY.SETTINGS]: settings,
+      [StorageKey.SETTINGS]: settings,
     });
   }
 
-  resetSettings() {
+  resetSettings(): Promise<void> {
     return this.storage.set({
-      [STORAGE_KEY.SETTINGS]: DEFAULT_SETTINGS,
+      [StorageKey.SETTINGS]: DEFAULT_SETTINGS,
     });
   }
 }

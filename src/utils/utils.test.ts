@@ -11,7 +11,7 @@ import {
   pad,
   getFilenameDate,
   getMergedAndDedupedArray,
-  Settings,
+  SettingsData,
 } from "./utils";
 import { DateUnit, TIMER_TYPE } from "./constants";
 
@@ -149,7 +149,7 @@ describe("utils.ts", () => {
   });
 
   describe("getTimerTypeMilliseconds", () => {
-    const settings: Settings = {
+    const settings: SettingsData = {
       minutesInTomato: 25,
       minutesInShortBreak: 5,
       minutesInLongBreak: 15,
