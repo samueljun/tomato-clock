@@ -173,8 +173,11 @@ describe("utils.ts", () => {
       );
     });
 
-    it("should return undefined for unknown type", () => {
-      expect(getTimerTypeMilliseconds("UNKNOWN", settings)).toBeUndefined();
+    it("should throw error for unknown type", () => {
+      // @ts-expect-error - Testing unknown type
+      expect(() => getTimerTypeMilliseconds("UNKNOWN", settings)).toThrow(
+        "Unknown timer type: UNKNOWN",
+      );
     });
   });
 

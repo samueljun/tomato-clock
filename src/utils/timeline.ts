@@ -13,9 +13,9 @@ export interface TimelineAlarm {
 
 export default class Timeline {
   storage: browser.Storage.StorageArea;
-  notifications: Notifications;
+  notifications: Notifications | undefined;
 
-  constructor(notifications: Notifications) {
+  constructor(notifications?: Notifications) {
     // Keep storage size limits in mind
     this.storage = browser.storage.local;
     this.notifications = notifications;
@@ -100,7 +100,7 @@ export default class Timeline {
       await this.storage.set({ [StorageKey.TIMELINE]: timeline });
     } catch (e: unknown) {
       if (e instanceof Error && e.message.startsWith("QuotaExceededError")) {
-        await this.notifications.createStorageLimitNotification();
+        await this.notifications?.createStorageLimitNotification();
       }
     }
   }
@@ -132,7 +132,7 @@ export default class Timeline {
       await this.storage.set({ [StorageKey.TIMELINE]: timeline });
     } catch (e: unknown) {
       if (e instanceof Error && e.message.startsWith("QuotaExceededError")) {
-        await this.notifications.createStorageLimitNotification();
+        await this.notifications?.createStorageLimitNotification();
       }
     }
   }

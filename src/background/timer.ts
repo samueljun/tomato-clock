@@ -14,9 +14,38 @@ import {
   TIMER_TYPE,
   BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE,
   STORAGE_KEY,
+  TimerType,
+  RuntimeAction,
 } from "../utils/constants";
 
+export type TimerState =
+  | {
+      status: "idle";
+      type: null;
+      scheduledTime: null;
+      totalTime: null;
+    }
+  | {
+      status: "running";
+      type: TimerType;
+      scheduledTime: number;
+      totalTime: number;
+    };
+
+export interface RuntimeRequest {
+  action: RuntimeAction;
+  data?: {
+    type: TimerType;
+  };
+}
+
 export default class Timer {
+  settings: Settings;
+  sound: Sound;
+  badge: Badge;
+  notifications: Notifications;
+  timeline: Timeline;
+
   constructor() {
     this.settings = new Settings();
     this.sound = new Sound(this.settings);
@@ -30,42 +59,43 @@ export default class Timer {
     this.initAlarms();
   }
 
-  async getTimerState() {
+  async getTimerState(): Promise<TimerState> {
     const result = await browser.storage.local.get(STORAGE_KEY.TIMER);
     return (
-      result[STORAGE_KEY.TIMER] || {
+      (result[STORAGE_KEY.TIMER] as TimerState) || {
         status: "idle",
         type: null,
         scheduledTime: null,
-        totalTime: 0,
+        totalTime: null,
       }
     );
   }
 
-  async setTimerState(state) {
+  async setTimerState(state: TimerState): Promise<void> {
     await browser.storage.local.set({ [STORAGE_KEY.TIMER]: state });
   }
 
-  async clearTimerState() {
+  async clearTimerState(): Promise<void> {
     await browser.storage.local.remove(STORAGE_KEY.TIMER);
   }
 
-  async resetTimer() {
+  async resetTimer(): Promise<void> {
     await browser.alarms.clearAll();
     await this.clearTimerState();
     this.badge.setBadgeText("");
     this.sound.stop();
   }
 
-  setTimer(type) {
+  setTimer(type: TimerType): void {
     this.resetTimer().then(() => {
       const badgeBackgroundColor = BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE[type];
 
       this.settings.getSettings().then(async (settings) => {
         const milliseconds = getTimerTypeMilliseconds(type, settings);
+
         const scheduledTime = Date.now() + milliseconds;
 
-        const state = {
+        const state: TimerState = {
           status: "running",
           scheduledTime,
           totalTime: milliseconds,
@@ -103,9 +133,10 @@ export default class Timer {
     });
   }
 
-  async updateBadge() {
+  async updateBadge(): Promise<void> {
     const state = await this.getTimerState();
-    if (state.status !== "running") return;
+    if (state.status !== "running" || !state.type || !state.scheduledTime)
+      return;
 
     const badgeBackgroundColor =
       BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE[state.type];
@@ -131,7 +162,7 @@ export default class Timer {
     }
   }
 
-  initAlarms() {
+  initAlarms(): void {
     browser.alarms.onAlarm.addListener(async (alarm) => {
       switch (alarm.name) {
         case "timer-wake": {
@@ -174,7 +205,7 @@ export default class Timer {
     });
   }
 
-  async handleTimerExpiration(source) {
+  async handleTimerExpiration(source: string): Promise<void> {
     const state = await this.getTimerState();
     if (state.status === "running") {
       const delay = Date.now() - state.scheduledTime;
@@ -194,19 +225,22 @@ export default class Timer {
     }
   }
 
-  async getTimerScheduledTime() {
+  async getTimerScheduledTime(): Promise<number | null> {
     const state = await this.getTimerState();
     return state.scheduledTime;
   }
 
-  setListeners() {
-    browser.runtime.onMessage.addListener((request) => {
+  setListeners(): void {
+    browser.runtime.onMessage.addListener((message: unknown) => {
+      const request = message as RuntimeRequest;
       switch (request.action) {
         case RUNTIME_ACTION.RESET_TIMER:
           this.resetTimer();
           break;
         case RUNTIME_ACTION.SET_TIMER:
-          this.setTimer(request.data.type);
+          if (request.data) {
+            this.setTimer(request.data.type);
+          }
           break;
         case RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME:
           return this.getTimerScheduledTime(); // Returns promise

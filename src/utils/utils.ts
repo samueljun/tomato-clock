@@ -87,9 +87,9 @@ export interface SettingsData {
 }
 
 export function getTimerTypeMilliseconds(
-  type: TimerType | string,
+  type: TimerType,
   settings: SettingsData,
-): number | undefined {
+): number {
   switch (type) {
     case TimerType.TOMATO:
       return getMinutesInMilliseconds(settings.minutesInTomato);
@@ -98,7 +98,7 @@ export function getTimerTypeMilliseconds(
     case TimerType.LONG_BREAK:
       return getMinutesInMilliseconds(settings.minutesInLongBreak);
     default:
-      return;
+      throw new Error(`Unknown timer type: ${type}`);
   }
 }
 
