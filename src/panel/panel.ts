@@ -4,7 +4,7 @@ import { localizeHtmlPage } from "../utils/i18n";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./panel.css";
 
-import { RUNTIME_ACTION, TIMER_TYPE } from "../utils/constants";
+import { RuntimeAction, TimerType } from "../utils/constants";
 import {
   getMillisecondsToTimeText,
   getSecondsInMilliseconds,
@@ -12,19 +12,28 @@ import {
 } from "../utils/utils";
 import Settings from "../utils/settings";
 
+interface PanelTimer {
+  interval: number | null;
+  timeLeft: number;
+}
+
 export default class Panel {
+  private settings: Settings;
+  private currentTimeText: HTMLElement | null;
+  private timer: PanelTimer;
+
   constructor() {
     localizeHtmlPage();
     this.settings = new Settings();
     this.currentTimeText = document.getElementById("current-time-text");
-    this.timer = {};
+    this.timer = { interval: null, timeLeft: 0 };
 
     browser.runtime
       .sendMessage({
-        action: RUNTIME_ACTION.GET_TIMER_SCHEDULED_TIME,
+        action: RuntimeAction.GET_TIMER_SCHEDULED_TIME,
       })
-      .then((scheduledTime) => {
-        if (scheduledTime) {
+      .then((scheduledTime: unknown) => {
+        if (typeof scheduledTime === "number" && scheduledTime > 0) {
           this.setDisplayTimer(scheduledTime - Date.now());
         }
       });
@@ -32,37 +41,37 @@ export default class Panel {
     this.setEventListeners();
   }
 
-  setEventListeners() {
-    document.getElementById("tomato-button").addEventListener("click", () => {
-      this.setTimer(TIMER_TYPE.TOMATO);
-      this.setBackgroundTimer(TIMER_TYPE.TOMATO);
+  private setEventListeners(): void {
+    document.getElementById("tomato-button")?.addEventListener("click", () => {
+      this.setTimer(TimerType.TOMATO);
+      this.setBackgroundTimer(TimerType.TOMATO);
     });
 
     document
       .getElementById("short-break-button")
-      .addEventListener("click", () => {
-        this.setTimer(TIMER_TYPE.SHORT_BREAK);
-        this.setBackgroundTimer(TIMER_TYPE.SHORT_BREAK);
+      ?.addEventListener("click", () => {
+        this.setTimer(TimerType.SHORT_BREAK);
+        this.setBackgroundTimer(TimerType.SHORT_BREAK);
       });
 
     document
       .getElementById("long-break-button")
-      .addEventListener("click", () => {
-        this.setTimer(TIMER_TYPE.LONG_BREAK);
-        this.setBackgroundTimer(TIMER_TYPE.LONG_BREAK);
+      ?.addEventListener("click", () => {
+        this.setTimer(TimerType.LONG_BREAK);
+        this.setBackgroundTimer(TimerType.LONG_BREAK);
       });
 
-    document.getElementById("reset-button").addEventListener("click", () => {
+    document.getElementById("reset-button")?.addEventListener("click", () => {
       this.resetTimer();
       this.resetBackgroundTimer();
     });
 
-    document.getElementById("stats-link").addEventListener("click", () => {
+    document.getElementById("stats-link")?.addEventListener("click", () => {
       browser.tabs.create({ url: "/stats/stats.html" });
     });
   }
 
-  resetTimer() {
+  private resetTimer(): void {
     if (this.timer.interval) {
       clearInterval(this.timer.interval);
     }
@@ -75,23 +84,23 @@ export default class Panel {
     this.setCurrentTimeText(0);
   }
 
-  getTimer() {
+  public getTimer(): PanelTimer {
     return this.timer;
   }
 
-  setTimer(type) {
+  private setTimer(type: TimerType): void {
     this.settings.getSettings().then((settings) => {
       const milliseconds = getTimerTypeMilliseconds(type, settings);
       this.setDisplayTimer(milliseconds);
     });
   }
 
-  setDisplayTimer(milliseconds) {
+  private setDisplayTimer(milliseconds: number): void {
     this.resetTimer();
     this.setCurrentTimeText(milliseconds);
 
     this.timer = {
-      interval: setInterval(() => {
+      interval: window.setInterval(() => {
         const timer = this.getTimer();
 
         timer.timeLeft -= getSecondsInMilliseconds(1);
@@ -105,19 +114,22 @@ export default class Panel {
     };
   }
 
-  setCurrentTimeText(milliseconds) {
-    this.currentTimeText.textContent = getMillisecondsToTimeText(milliseconds);
+  private setCurrentTimeText(milliseconds: number): void {
+    if (this.currentTimeText) {
+      this.currentTimeText.textContent =
+        getMillisecondsToTimeText(milliseconds);
+    }
   }
 
-  resetBackgroundTimer() {
+  private resetBackgroundTimer(): void {
     browser.runtime.sendMessage({
-      action: RUNTIME_ACTION.RESET_TIMER,
+      action: RuntimeAction.RESET_TIMER,
     });
   }
 
-  setBackgroundTimer(type) {
+  private setBackgroundTimer(type: TimerType): void {
     browser.runtime.sendMessage({
-      action: RUNTIME_ACTION.SET_TIMER,
+      action: RuntimeAction.SET_TIMER,
       data: {
         type,
       },
