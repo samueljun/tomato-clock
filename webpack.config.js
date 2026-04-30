@@ -11,7 +11,7 @@ module.exports = {
     background: "./src/background/background.ts",
     panel: "./src/panel/panel.ts",
     stats: "./src/stats/stats.js",
-    options: "./src/options/options.js",
+    options: "./src/options/options.ts",
     offscreen: "./src/offscreen/offscreen.js",
   },
   output: {

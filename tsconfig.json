@@ -17,7 +17,8 @@
       "vitest/globals",
       "node",
       "chrome",
-      "lodash"
+      "lodash",
+      "bootstrap"
     ]
   },
   "include": ["src/**/*"]

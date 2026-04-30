@@ -5,60 +5,76 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./options.css";
 
 import Settings from "../utils/settings";
-import {
-  DEFAULT_SETTINGS,
-  SETTINGS_KEY,
-  STORAGE_KEY,
-} from "../utils/constants";
+import { DEFAULT_SETTINGS, SettingsKey, StorageKey } from "../utils/constants";
+import { SettingsData } from "../utils/utils";
 
 export default class Options {
+  private settings: Settings;
+  private domMinutesInTomato: HTMLInputElement;
+  private domMinutesInShortBreak: HTMLInputElement;
+  private domMinutesInLongBreak: HTMLInputElement;
+  private domNotificationSoundCheckbox: HTMLInputElement;
+  private domNotificationSoundSelect: HTMLSelectElement;
+  private domToolbarBadgeCheckbox: HTMLInputElement;
+  private domCustomSoundUploadContainer: HTMLElement;
+  private domCustomSoundEmptyState: HTMLElement;
+  private domCustomSoundUploadInput: HTMLInputElement;
+  private domCustomSoundFilledState: HTMLElement;
+  private domCustomSoundFilename: HTMLInputElement;
+  private domClearCustomSoundButton: HTMLElement;
+  private domWeekStartDay: HTMLSelectElement;
+
   constructor() {
     // Localize static HTML tokens then initialize DOM bindings
     localizeHtmlPage();
     this.settings = new Settings();
 
-    this.domMinutesInTomato = document.getElementById("minutes-in-tomato");
+    this.domMinutesInTomato = document.getElementById(
+      "minutes-in-tomato",
+    ) as HTMLInputElement;
     this.domMinutesInShortBreak = document.getElementById(
       "minutes-in-short-break",
-    );
+    ) as HTMLInputElement;
     this.domMinutesInLongBreak = document.getElementById(
       "minutes-in-long-break",
-    );
+    ) as HTMLInputElement;
     this.domNotificationSoundCheckbox = document.getElementById(
       "notification-sound-checkbox",
-    );
+    ) as HTMLInputElement;
     this.domNotificationSoundSelect = document.getElementById(
       "notification-sound-select",
-    );
+    ) as HTMLSelectElement;
     this.domToolbarBadgeCheckbox = document.getElementById(
       "toolbar-badge-checkbox",
-    );
+    ) as HTMLInputElement;
     this.domCustomSoundUploadContainer = document.getElementById(
       "custom-sound-upload-container",
-    );
+    ) as HTMLElement;
     this.domCustomSoundEmptyState = document.getElementById(
       "custom-sound-empty-state",
-    );
+    ) as HTMLElement;
     this.domCustomSoundUploadInput = document.getElementById(
       "custom-sound-upload-input",
-    );
+    ) as HTMLInputElement;
     this.domCustomSoundFilledState = document.getElementById(
       "custom-sound-filled-state",
-    );
+    ) as HTMLElement;
     this.domCustomSoundFilename = document.getElementById(
       "custom-sound-filename",
-    );
+    ) as HTMLInputElement;
     this.domClearCustomSoundButton = document.getElementById(
       "clear-custom-sound-button",
-    );
-    this.domWeekStartDay = document.getElementById("week-start-day");
+    ) as HTMLElement;
+    this.domWeekStartDay = document.getElementById(
+      "week-start-day",
+    ) as HTMLSelectElement;
 
     this.setOptionsOnPage();
     this.setEventListeners();
   }
 
-  setOptionsOnPage() {
-    this.settings.getSettings().then((settings) => {
+  private setOptionsOnPage(): void {
+    this.settings.getSettings().then((settings: SettingsData) => {
       const {
         minutesInTomato,
         minutesInShortBreak,
@@ -69,13 +85,15 @@ export default class Options {
         weekStartDay,
       } = settings;
 
-      this.domMinutesInTomato.value = minutesInTomato;
-      this.domMinutesInShortBreak.value = minutesInShortBreak;
-      this.domMinutesInLongBreak.value = minutesInLongBreak;
-      this.domNotificationSoundCheckbox.checked = isNotificationSoundEnabled;
+      this.domMinutesInTomato.value = String(minutesInTomato);
+      this.domMinutesInShortBreak.value = String(minutesInShortBreak);
+      this.domMinutesInLongBreak.value = String(minutesInLongBreak);
+      this.domNotificationSoundCheckbox.checked = Boolean(
+        isNotificationSoundEnabled,
+      );
       this.domNotificationSoundSelect.value =
-        selectedNotificationSound ||
-        DEFAULT_SETTINGS[SETTINGS_KEY.SELECTED_NOTIFICATION_SOUND];
+        (selectedNotificationSound as string) ||
+        (DEFAULT_SETTINGS[SettingsKey.SELECTED_NOTIFICATION_SOUND] as string);
       this.domNotificationSoundSelect.disabled = !isNotificationSoundEnabled;
 
       this.domCustomSoundUploadContainer.style.display =
@@ -83,9 +101,9 @@ export default class Options {
 
       if (selectedNotificationSound === "custom") {
         browser.storage.local
-          .get(STORAGE_KEY.CUSTOM_SOUND_FILENAME)
+          .get(StorageKey.CUSTOM_SOUND_FILENAME)
           .then((result) => {
-            const filename = result[STORAGE_KEY.CUSTOM_SOUND_FILENAME];
+            const filename = result[StorageKey.CUSTOM_SOUND_FILENAME] as string;
             if (filename) {
               this.domCustomSoundFilename.value = filename;
               this.domCustomSoundEmptyState.style.display = "none";
@@ -97,12 +115,12 @@ export default class Options {
           });
       }
 
-      this.domToolbarBadgeCheckbox.checked = isToolbarBadgeEnabled;
-      this.domWeekStartDay.value = weekStartDay;
+      this.domToolbarBadgeCheckbox.checked = Boolean(isToolbarBadgeEnabled);
+      this.domWeekStartDay.value = String(weekStartDay);
     });
   }
 
-  saveOptions() {
+  private saveOptions(): void {
     const minutesInTomato = parseInt(this.domMinutesInTomato.value);
     const minutesInShortBreak = parseInt(this.domMinutesInShortBreak.value);
     const minutesInLongBreak = parseInt(this.domMinutesInLongBreak.value);
@@ -113,19 +131,19 @@ export default class Options {
     const weekStartDay = parseInt(this.domWeekStartDay.value);
 
     this.settings.saveSettings({
-      [SETTINGS_KEY.MINUTES_IN_TOMATO]: minutesInTomato,
-      [SETTINGS_KEY.MINUTES_IN_SHORT_BREAK]: minutesInShortBreak,
-      [SETTINGS_KEY.MINUTES_IN_LONG_BREAK]: minutesInLongBreak,
-      [SETTINGS_KEY.IS_NOTIFICATION_SOUND_ENABLED]: isNotificationSoundEnabled,
-      [SETTINGS_KEY.SELECTED_NOTIFICATION_SOUND]: selectedNotificationSound,
-      [SETTINGS_KEY.IS_TOOLBAR_BADGE_ENABLED]: isToolbarBadgeEnabled,
-      [SETTINGS_KEY.WEEK_START_DAY]: weekStartDay,
+      [SettingsKey.MINUTES_IN_TOMATO]: minutesInTomato,
+      [SettingsKey.MINUTES_IN_SHORT_BREAK]: minutesInShortBreak,
+      [SettingsKey.MINUTES_IN_LONG_BREAK]: minutesInLongBreak,
+      [SettingsKey.IS_NOTIFICATION_SOUND_ENABLED]: isNotificationSoundEnabled,
+      [SettingsKey.SELECTED_NOTIFICATION_SOUND]: selectedNotificationSound,
+      [SettingsKey.IS_TOOLBAR_BADGE_ENABLED]: isToolbarBadgeEnabled,
+      [SettingsKey.WEEK_START_DAY]: weekStartDay,
     });
   }
 
-  setEventListeners() {
+  private setEventListeners(): void {
     // Auto-save on change for all inputs
-    const inputs = [
+    const inputs: (HTMLInputElement | HTMLSelectElement)[] = [
       this.domMinutesInTomato,
       this.domMinutesInShortBreak,
       this.domMinutesInLongBreak,
@@ -149,12 +167,14 @@ export default class Options {
 
             browser.storage.local
               .get([
-                STORAGE_KEY.CUSTOM_SOUND_FILE,
-                STORAGE_KEY.CUSTOM_SOUND_FILENAME,
+                StorageKey.CUSTOM_SOUND_FILE,
+                StorageKey.CUSTOM_SOUND_FILENAME,
               ])
               .then((result) => {
-                const sound = result[STORAGE_KEY.CUSTOM_SOUND_FILE];
-                const filename = result[STORAGE_KEY.CUSTOM_SOUND_FILENAME];
+                const sound = result[StorageKey.CUSTOM_SOUND_FILE] as string;
+                const filename = result[
+                  StorageKey.CUSTOM_SOUND_FILENAME
+                ] as string;
                 if (sound) {
                   new Audio(sound).play();
                 }
@@ -182,33 +202,37 @@ export default class Options {
       });
     });
 
-    this.domCustomSoundUploadInput.addEventListener("change", (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const result = e.target.result;
-          browser.storage.local
-            .set({
-              [STORAGE_KEY.CUSTOM_SOUND_FILE]: result,
-              [STORAGE_KEY.CUSTOM_SOUND_FILENAME]: file.name,
-            })
-            .then(() => {
-              new Audio(result).play();
-              this.domCustomSoundFilename.value = file.name;
-              this.domCustomSoundEmptyState.style.display = "none";
-              this.domCustomSoundFilledState.style.display = "block";
-            });
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+    this.domCustomSoundUploadInput.addEventListener(
+      "change",
+      (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        const file = target.files?.[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const result = e.target?.result as string;
+            browser.storage.local
+              .set({
+                [StorageKey.CUSTOM_SOUND_FILE]: result,
+                [StorageKey.CUSTOM_SOUND_FILENAME]: file.name,
+              })
+              .then(() => {
+                new Audio(result).play();
+                this.domCustomSoundFilename.value = file.name;
+                this.domCustomSoundEmptyState.style.display = "none";
+                this.domCustomSoundFilledState.style.display = "block";
+              });
+          };
+          reader.readAsDataURL(file);
+        }
+      },
+    );
 
     this.domClearCustomSoundButton.addEventListener("click", () => {
       browser.storage.local
         .remove([
-          STORAGE_KEY.CUSTOM_SOUND_FILE,
-          STORAGE_KEY.CUSTOM_SOUND_FILENAME,
+          StorageKey.CUSTOM_SOUND_FILE,
+          StorageKey.CUSTOM_SOUND_FILENAME,
         ])
         .then(() => {
           this.domCustomSoundFilename.value = "";
@@ -219,30 +243,36 @@ export default class Options {
     });
 
     const modalElement = document.getElementById("reset-confirmation-modal");
-    const resetModal = new Modal(modalElement);
+    if (modalElement) {
+      const resetModal = new Modal(modalElement);
 
-    document.getElementById("reset-options").addEventListener("click", () => {
-      resetModal.show();
-    });
+      document
+        .getElementById("reset-options")
+        ?.addEventListener("click", () => {
+          resetModal.show();
+        });
 
-    document.getElementById("confirm-reset").addEventListener("click", () => {
-      this.settings.resetSettings().then(() => {
-        browser.storage.local
-          .remove([
-            STORAGE_KEY.CUSTOM_SOUND_FILE,
-            STORAGE_KEY.CUSTOM_SOUND_FILENAME,
-          ])
-          .then(() => {
-            this.domCustomSoundFilename.value = "";
-            this.domCustomSoundUploadInput.value = "";
-            this.domCustomSoundFilledState.style.display = "none";
-            this.domCustomSoundEmptyState.style.display = "block";
+      document
+        .getElementById("confirm-reset")
+        ?.addEventListener("click", () => {
+          this.settings.resetSettings().then(() => {
+            browser.storage.local
+              .remove([
+                StorageKey.CUSTOM_SOUND_FILE,
+                StorageKey.CUSTOM_SOUND_FILENAME,
+              ])
+              .then(() => {
+                this.domCustomSoundFilename.value = "";
+                this.domCustomSoundUploadInput.value = "";
+                this.domCustomSoundFilledState.style.display = "none";
+                this.domCustomSoundEmptyState.style.display = "block";
 
-            this.setOptionsOnPage();
-            resetModal.hide();
+                this.setOptionsOnPage();
+                resetModal.hide();
+              });
           });
-      });
-    });
+        });
+    }
   }
 }
 

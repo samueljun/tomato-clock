@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
 import fs from "fs";
 import path from "path";
 
@@ -23,8 +23,13 @@ vi.mock("webextension-polyfill", () => ({
   },
 }));
 
+interface MockModalInstance {
+  show: Mock;
+  hide: Mock;
+}
+
 vi.mock("bootstrap/js/dist/modal", () => {
-  const ModalMock = vi.fn(function () {
+  const ModalMock = vi.fn(function (this: MockModalInstance) {
     this.show = vi.fn();
     this.hide = vi.fn();
   });
@@ -37,8 +42,14 @@ vi.mock("../utils/i18n", () => ({
   localizeHtmlPage: vi.fn(),
 }));
 
+interface MockSettingsInstance {
+  getSettings: Mock;
+  saveSettings: Mock;
+  resetSettings: Mock;
+}
+
 vi.mock("../utils/settings", () => {
-  const SettingsMock = vi.fn(function () {
+  const SettingsMock = vi.fn(function (this: MockSettingsInstance) {
     this.getSettings = vi.fn().mockResolvedValue({
       minutesInTomato: 25,
       minutesInShortBreak: 5,
@@ -56,26 +67,57 @@ vi.mock("../utils/settings", () => {
   };
 });
 
-// Mock Audio and FileReader
-global.Audio = vi.fn().mockImplementation(function () {
-  this.play = vi.fn();
-});
+interface MockAudio {
+  play: Mock;
+}
 
-global.FileReader = vi.fn().mockImplementation(function () {
-  this.readAsDataURL = vi.fn().mockImplementation(() => {
-    if (this.onload) {
-      this.onload({ target: { result: "data:audio/mp3;base64,test" } });
-    }
-  });
-});
+// Mock Audio and FileReader
+(globalThis as unknown as { Audio: Mock }).Audio = vi
+  .fn()
+  .mockImplementation(function (this: MockAudio) {
+    this.play = vi.fn();
+  }) as unknown as Mock;
+
+interface MockFileReader {
+  readAsDataURL: Mock;
+  onload?: (e: { target: { result: string } }) => void;
+}
+
+(globalThis as unknown as { FileReader: Mock }).FileReader = vi
+  .fn()
+  .mockImplementation(function (this: MockFileReader) {
+    this.readAsDataURL = vi.fn().mockImplementation(() => {
+      if (this.onload) {
+        this.onload({ target: { result: "data:audio/mp3;base64,test" } });
+      }
+    });
+  }) as unknown as Mock;
 
 import Options from "./options";
 import browser from "webextension-polyfill";
 import Modal from "bootstrap/js/dist/modal";
 import { localizeHtmlPage } from "../utils/i18n";
 
+interface TestableOptions {
+  settings: MockSettingsInstance;
+  domMinutesInTomato: HTMLInputElement;
+  domMinutesInShortBreak: HTMLInputElement;
+  domMinutesInLongBreak: HTMLInputElement;
+  domNotificationSoundCheckbox: HTMLInputElement;
+  domNotificationSoundSelect: HTMLSelectElement;
+  domToolbarBadgeCheckbox: HTMLInputElement;
+  domCustomSoundUploadContainer: HTMLElement;
+  domCustomSoundEmptyState: HTMLElement;
+  domCustomSoundUploadInput: HTMLInputElement;
+  domCustomSoundFilledState: HTMLElement;
+  domCustomSoundFilename: HTMLInputElement;
+  domClearCustomSoundButton: HTMLElement;
+  domWeekStartDay: HTMLSelectElement;
+  setOptionsOnPage: () => void;
+}
+
 describe("Options", () => {
-  let options;
+  let options: TestableOptions;
   const html = fs.readFileSync(
     path.resolve(__dirname, "./options.html"),
     "utf8",
@@ -84,7 +126,7 @@ describe("Options", () => {
   beforeEach(() => {
     document.body.innerHTML = html;
     vi.clearAllMocks();
-    options = new Options();
+    options = new Options() as unknown as TestableOptions;
   });
 
   it("should initialize and localize the page", () => {
@@ -133,7 +175,9 @@ describe("Options", () => {
     options.domNotificationSoundSelect.value = "button.mp3";
     options.domNotificationSoundSelect.dispatchEvent(new Event("change"));
 
-    expect(global.Audio).toHaveBeenCalledWith("/assets/sounds/button.mp3");
+    expect(
+      (globalThis as unknown as { Audio: Mock }).Audio,
+    ).toHaveBeenCalledWith("/assets/sounds/button.mp3");
   });
 
   it("should show custom sound upload container when 'custom' is selected", async () => {
@@ -144,7 +188,7 @@ describe("Options", () => {
   });
 
   it("should play existing custom sound when 'custom' is selected", async () => {
-    browser.storage.local.get.mockResolvedValueOnce({
+    (browser.storage.local.get as Mock).mockResolvedValueOnce({
       customSoundFile: "data:audio/mp3;base64,existing",
       customSoundFilename: "existing.mp3",
     });
@@ -154,12 +198,14 @@ describe("Options", () => {
 
     await new Promise((resolve) => setTimeout(resolve, 0));
 
-    expect(global.Audio).toHaveBeenCalledWith("data:audio/mp3;base64,existing");
+    expect(
+      (globalThis as unknown as { Audio: Mock }).Audio,
+    ).toHaveBeenCalledWith("data:audio/mp3;base64,existing");
     expect(options.domCustomSoundFilename.value).toBe("existing.mp3");
   });
 
   it("should handle custom sound selection when storage is empty", async () => {
-    browser.storage.local.get.mockResolvedValueOnce({});
+    (browser.storage.local.get as Mock).mockResolvedValueOnce({});
 
     options.domNotificationSoundSelect.value = "custom";
     options.domNotificationSoundSelect.dispatchEvent(new Event("change"));
@@ -175,7 +221,7 @@ describe("Options", () => {
     options.settings.getSettings.mockResolvedValueOnce({
       selectedNotificationSound: "custom",
     });
-    browser.storage.local.get.mockResolvedValueOnce({
+    (browser.storage.local.get as Mock).mockResolvedValueOnce({
       customSoundFilename: "init.mp3",
     });
 
@@ -192,7 +238,7 @@ describe("Options", () => {
     options.settings.getSettings.mockResolvedValueOnce({
       selectedNotificationSound: "custom",
     });
-    browser.storage.local.get.mockResolvedValueOnce({});
+    (browser.storage.local.get as Mock).mockResolvedValueOnce({});
 
     options.setOptionsOnPage();
 
@@ -203,13 +249,6 @@ describe("Options", () => {
 
   it("should handle custom sound file upload", async () => {
     const file = new File(["test"], "test.mp3", { type: "audio/mp3" });
-    const event = { target: { files: [file] } };
-
-    options.domCustomSoundUploadInput.dispatchEvent(
-      new CustomEvent("change", { detail: event }),
-    );
-    // Note: Since we are mocking the event listener logic manually or dispatching,
-    // we need to be careful. The actual listener uses event.target.files.
 
     // Let's trigger it more realistically
     Object.defineProperty(options.domCustomSoundUploadInput, "files", {
@@ -239,11 +278,13 @@ describe("Options", () => {
   });
 
   it("should show reset confirmation modal and reset settings", async () => {
-    const resetBtn = document.getElementById("reset-options");
-    const confirmBtn = document.getElementById("confirm-reset");
+    const resetBtn = document.getElementById("reset-options")!;
+    const confirmBtn = document.getElementById("confirm-reset")!;
 
     resetBtn.dispatchEvent(new Event("click"));
-    const modalInstance = Modal.mock.results[0].value;
+    const modalInstance = (
+      Modal as unknown as { mock: { results: { value: MockModalInstance }[] } }
+    ).mock.results[0].value;
     expect(modalInstance.show).toHaveBeenCalled();
 
     confirmBtn.dispatchEvent(new Event("click"));
