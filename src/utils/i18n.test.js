@@ -1,5 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import fs from "fs";
+import path from "path";
 
 // Mock the webextension-polyfill module
 vi.mock("webextension-polyfill", () => ({
@@ -141,5 +143,50 @@ describe("i18n.js", () => {
       const button = doc.querySelector("button");
       expect(button.textContent.trim()).toBe("Reset");
     });
+  });
+
+  describe("Locale Files Consistency", () => {
+    const localesDir = path.resolve(process.cwd(), "_locales");
+    const enMessages = JSON.parse(
+      fs.readFileSync(path.join(localesDir, "en/messages.json"), "utf8"),
+    );
+    const enKeys = Object.keys(enMessages).sort();
+
+    const locales = fs
+      .readdirSync(localesDir)
+      .filter(
+        (file) =>
+          file !== "en" &&
+          fs.statSync(path.join(localesDir, file)).isDirectory(),
+      );
+
+    it.each(locales)(
+      "should have the same keys as English for locale: %s",
+      (locale) => {
+        const messagesPath = path.join(localesDir, locale, "messages.json");
+        const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
+        const keys = Object.keys(messages).sort();
+
+        // Check for missing keys
+        const missingKeys = enKeys.filter((key) => !keys.includes(key));
+        // Check for extra keys
+        const extraKeys = keys.filter((key) => !enKeys.includes(key));
+
+        if (missingKeys.length > 0 || extraKeys.length > 0) {
+          const errorMsg = [];
+          if (missingKeys.length > 0) {
+            errorMsg.push(`Missing keys: ${missingKeys.join(", ")}`);
+          }
+          if (extraKeys.length > 0) {
+            errorMsg.push(`Extra keys: ${extraKeys.join(", ")}`);
+          }
+          throw new Error(
+            `${locale}/messages.json is inconsistent:\n${errorMsg.join("\n")}`,
+          );
+        }
+
+        expect(keys).toEqual(enKeys);
+      },
+    );
   });
 });
