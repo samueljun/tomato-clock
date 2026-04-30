@@ -11,10 +11,11 @@ import {
   pad,
   getFilenameDate,
   getMergedAndDedupedArray,
+  Settings,
 } from "./utils";
-import { DATE_UNIT, TIMER_TYPE } from "./constants";
+import { DateUnit, TIMER_TYPE } from "./constants";
 
-describe("utils.js", () => {
+describe("utils.ts", () => {
   describe("getSecondsInMilliseconds", () => {
     it("should convert seconds to milliseconds", () => {
       expect(getSecondsInMilliseconds(1)).toBe(1000);
@@ -75,12 +76,12 @@ describe("utils.js", () => {
     it("should return long month name for MONTH unit", () => {
       // Using a regex or a subset to avoid locale issues, or just checking if it contains 'April'
       // Note: Intl output depends on environment locale
-      const label = getDateLabel(date, DATE_UNIT.MONTH);
+      const label = getDateLabel(date, DateUnit.MONTH);
       expect(label).toMatch(/April/);
     });
 
     it("should return short date label for DAY unit", () => {
-      const label = getDateLabel(date, DATE_UNIT.DAY);
+      const label = getDateLabel(date, DateUnit.DAY);
       // Expected: "Wed, Apr 22" or similar depending on locale
       expect(label).toMatch(/Apr/);
       expect(label).toMatch(/22/);
@@ -88,7 +89,7 @@ describe("utils.js", () => {
     });
 
     it("should fall back to DAY format for unrecognized dateUnit", () => {
-      const label = getDateLabel(date, "UNKNOWN");
+      const label = getDateLabel(date, "UNKNOWN" as DateUnit);
       // Default branch matches DAY behavior
       expect(label).toMatch(/Apr/);
       expect(label).toMatch(/22/);
@@ -99,7 +100,7 @@ describe("utils.js", () => {
     it("should return an array of date labels for a range of days", () => {
       const start = new Date(2026, 3, 20); // April 20
       const end = new Date(2026, 3, 22); // April 22
-      const result = getDateRangeStringArray(start, end, DATE_UNIT.DAY);
+      const result = getDateRangeStringArray(start, end, DateUnit.DAY);
       expect(result).toHaveLength(3);
       expect(result[0]).toMatch(/20/);
       expect(result[1]).toMatch(/21/);
@@ -109,7 +110,7 @@ describe("utils.js", () => {
     it("should return an array of month labels for a range of months", () => {
       const start = new Date(2026, 0, 1); // Jan 1
       const end = new Date(2026, 2, 1); // Mar 1
-      const result = getDateRangeStringArray(start, end, DATE_UNIT.MONTH);
+      const result = getDateRangeStringArray(start, end, DateUnit.MONTH);
       expect(result).toHaveLength(3);
       expect(result[0]).toMatch(/January/);
       expect(result[1]).toMatch(/February/);
@@ -121,7 +122,7 @@ describe("utils.js", () => {
       // Without the fix, setMonth would overflow Aug 31 + 1 month = Oct 1, skipping September
       const start = new Date(2026, 7, 31); // August 31
       const end = new Date(2026, 10, 30); // November 30
-      const result = getDateRangeStringArray(start, end, DATE_UNIT.MONTH);
+      const result = getDateRangeStringArray(start, end, DateUnit.MONTH);
       expect(result).toHaveLength(4);
       expect(result[0]).toMatch(/August/);
       expect(result[1]).toMatch(/September/);
@@ -131,7 +132,7 @@ describe("utils.js", () => {
 
     it("should return a single entry when start equals end", () => {
       const date = new Date(2026, 3, 22);
-      const result = getDateRangeStringArray(date, date, DATE_UNIT.DAY);
+      const result = getDateRangeStringArray(date, date, DateUnit.DAY);
       expect(result).toHaveLength(1);
       expect(result[0]).toMatch(/22/);
     });
@@ -139,7 +140,7 @@ describe("utils.js", () => {
     it("should handle year boundary crossing (Dec to Jan)", () => {
       const start = new Date(2026, 11, 1); // December 2026
       const end = new Date(2027, 1, 1); // February 2027
-      const result = getDateRangeStringArray(start, end, DATE_UNIT.MONTH);
+      const result = getDateRangeStringArray(start, end, DateUnit.MONTH);
       expect(result).toHaveLength(3);
       expect(result[0]).toMatch(/December/);
       expect(result[1]).toMatch(/January/);
@@ -148,7 +149,7 @@ describe("utils.js", () => {
   });
 
   describe("getTimerTypeMilliseconds", () => {
-    const settings = {
+    const settings: Settings = {
       minutesInTomato: 25,
       minutesInShortBreak: 5,
       minutesInLongBreak: 15,

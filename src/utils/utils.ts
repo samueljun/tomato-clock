@@ -1,32 +1,34 @@
-import { DATE_UNIT, TIMER_TYPE } from "./constants";
+import { DateUnit, TimerType } from "./constants";
 import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
 
-export function getSecondsInMilliseconds(seconds) {
+export function getSecondsInMilliseconds(seconds: number): number {
   return seconds * 1000;
 }
-export function getMinutesInMilliseconds(minutes) {
+export function getMinutesInMilliseconds(minutes: number): number {
   return minutes * 60000;
 }
 
-export function getMillisecondsToMinutesAndSeconds(milliseconds) {
+export function getMillisecondsToMinutesAndSeconds(milliseconds: number): {
+  minutes: number;
+  seconds: number;
+} {
   return {
-    minutes: parseInt(milliseconds / (1000 * 60)),
-    seconds: parseInt((milliseconds / 1000) % 60),
+    minutes: Math.floor(milliseconds / (1000 * 60)),
+    seconds: Math.floor((milliseconds / 1000) % 60),
   };
 }
 
-export function getMillisecondsToTimeText(milliseconds) {
-  const minutes = parseInt(milliseconds / (1000 * 60));
-  const seconds = parseInt((milliseconds / 1000) % 60);
+export function getMillisecondsToTimeText(milliseconds: number): string {
+  const { minutes, seconds } = getMillisecondsToMinutesAndSeconds(milliseconds);
   const minutesString = minutes < 10 ? `0${minutes}` : minutes.toString();
   const secondsString = seconds < 10 ? `0${seconds}` : seconds.toString();
 
   return `${minutesString}:${secondsString}`;
 }
 
-export function getZeroArray(length) {
-  const zeroArray = [];
+export function getZeroArray(length: number): number[] {
+  const zeroArray: number[] = [];
 
   for (let i = 0; i < length; i++) {
     zeroArray[i] = 0;
@@ -35,13 +37,13 @@ export function getZeroArray(length) {
   return zeroArray;
 }
 
-export function getDateLabel(date, dateUnit) {
+export function getDateLabel(date: Date, dateUnit: DateUnit): string {
   switch (dateUnit) {
-    case DATE_UNIT.MONTH:
+    case DateUnit.MONTH:
       return new Intl.DateTimeFormat(undefined, {
         month: "long",
       }).format(date);
-    case DATE_UNIT.DAY:
+    case DateUnit.DAY:
     default:
       return new Intl.DateTimeFormat(undefined, {
         month: "short",
@@ -51,19 +53,23 @@ export function getDateLabel(date, dateUnit) {
   }
 }
 
-export function getDateRangeStringArray(startDate, endDate, dateUnit) {
-  const dateStringArray = [];
+export function getDateRangeStringArray(
+  startDate: Date,
+  endDate: Date,
+  dateUnit: DateUnit,
+): string[] {
+  const dateStringArray: string[] = [];
 
   const currentStartDate = new Date(startDate);
   while (currentStartDate <= endDate) {
     dateStringArray.push(getDateLabel(currentStartDate, dateUnit));
 
     switch (dateUnit) {
-      case DATE_UNIT.MONTH:
+      case DateUnit.MONTH:
         currentStartDate.setDate(1);
         currentStartDate.setMonth(currentStartDate.getMonth() + 1);
         break;
-      case DATE_UNIT.DAY:
+      case DateUnit.DAY:
       default:
         currentStartDate.setDate(currentStartDate.getDate() + 1);
         break;
@@ -73,24 +79,34 @@ export function getDateRangeStringArray(startDate, endDate, dateUnit) {
   return dateStringArray;
 }
 
-export function getTimerTypeMilliseconds(type, settings) {
+export interface Settings {
+  minutesInTomato: number;
+  minutesInShortBreak: number;
+  minutesInLongBreak: number;
+  [key: string]: unknown;
+}
+
+export function getTimerTypeMilliseconds(
+  type: TimerType | string,
+  settings: Settings,
+): number | undefined {
   switch (type) {
-    case TIMER_TYPE.TOMATO:
+    case TimerType.TOMATO:
       return getMinutesInMilliseconds(settings.minutesInTomato);
-    case TIMER_TYPE.SHORT_BREAK:
+    case TimerType.SHORT_BREAK:
       return getMinutesInMilliseconds(settings.minutesInShortBreak);
-    case TIMER_TYPE.LONG_BREAK:
+    case TimerType.LONG_BREAK:
       return getMinutesInMilliseconds(settings.minutesInLongBreak);
     default:
       return;
   }
 }
 
-export function pad(number) {
+export function pad(number: number): string {
   return String(number).padStart(2, "0");
 }
 
-export function getFilenameDate() {
+export function getFilenameDate(): string {
   const date = new Date();
   return (
     date.getFullYear() +
@@ -107,7 +123,7 @@ export function getFilenameDate() {
   );
 }
 
-export function getMergedAndDedupedArray(a, b) {
+export function getMergedAndDedupedArray<T>(a: T[], b: T[]): T[] {
   const mergedArrays = a.concat(b);
 
   return uniqWith(mergedArrays, isEqual);
