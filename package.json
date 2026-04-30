@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
     "build": "webpack --mode=production && web-ext build --source-dir ./dist --artifacts-dir ./dist-zip --overwrite-dest",
     "watch": "webpack --watch",
     "start": "web-ext run --source-dir ./dist",
@@ -48,7 +49,10 @@
     "@babel/core": "^7.28.5",
     "@babel/eslint-parser": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
     "@eslint/js": "^9.39.1",
+    "@types/lodash": "^4.17.24",
+    "@types/webextension-polyfill": "^0.12.5",
     "@vitest/coverage-v8": "^4.1.5",
     "babel-loader": "^10.0.0",
     "copy-webpack-plugin": "^14.0.0",
@@ -61,6 +65,8 @@
     "lint-staged": "^16.2.7",
     "prettier": "3.7.4",
     "style-loader": "^4.0.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.1",
     "vitest": "^4.1.5",
     "web-ext": "^10.0.0",
     "webpack": "^5.105.0",
@@ -71,12 +77,5 @@
   },
   "browserslist": [
     "defaults"
-  ],
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "vitest related --run"
-    ],
-    "**/*": "prettier --write --ignore-unknown"
-  }
+  ]
 }

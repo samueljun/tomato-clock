@@ -1,4 +1,4 @@
-export const NOTIFICATION_ID = "tomatoClockNotification";
+export const NOTIFICATION_ID = "tomatoClockNotification" as const;
 
 export const STORAGE_KEY = {
   TIMELINE: "timeline",
@@ -6,7 +6,7 @@ export const STORAGE_KEY = {
   TIMER: "timer",
   CUSTOM_SOUND_FILE: "customSoundFile",
   CUSTOM_SOUND_FILENAME: "customSoundFilename",
-};
+} as const;
 
 export const SETTINGS_KEY = {
   MINUTES_IN_TOMATO: "minutesInTomato",
@@ -16,7 +16,7 @@ export const SETTINGS_KEY = {
   SELECTED_NOTIFICATION_SOUND: "selectedNotificationSound",
   IS_TOOLBAR_BADGE_ENABLED: "isToolbarBadgeEnabled",
   WEEK_START_DAY: "weekStartDay",
-};
+} as const;
 
 export const DEFAULT_SETTINGS = {
   [SETTINGS_KEY.MINUTES_IN_TOMATO]: 25,
@@ -26,27 +26,27 @@ export const DEFAULT_SETTINGS = {
   [SETTINGS_KEY.IS_TOOLBAR_BADGE_ENABLED]: true,
   [SETTINGS_KEY.SELECTED_NOTIFICATION_SOUND]: "timer-chime.mp3",
   [SETTINGS_KEY.WEEK_START_DAY]: 0,
-};
+} as const;
 
 export const TIMER_TYPE = {
   TOMATO: "tomato",
   SHORT_BREAK: "shortBreak",
   LONG_BREAK: "longBreak",
-};
+} as const;
 
 export const BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE = {
   [TIMER_TYPE.TOMATO]: "#dc3545",
   [TIMER_TYPE.SHORT_BREAK]: "#666",
   [TIMER_TYPE.LONG_BREAK]: "#666",
-};
+} as const;
 
 export const RUNTIME_ACTION = {
   SET_TIMER: "setTimer",
   RESET_TIMER: "resetTimer",
   GET_TIMER_SCHEDULED_TIME: "getTimerScheduledTime",
-};
+} as const;
 
 export const DATE_UNIT = {
   DAY: "day",
   MONTH: "month",
-};
+} as const;

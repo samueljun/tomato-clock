@@ -3,47 +3,59 @@ import isEqual from "lodash/isEqual";
 
 import { STORAGE_KEY } from "./constants";
 import { getMergedAndDedupedArray } from "./utils";
+import Notifications from "../background/notifications";
+
+export interface TimelineAlarm {
+  timeout: number;
+  type: string;
+  date: string | Date;
+}
 
 export default class Timeline {
-  constructor(notifications) {
+  storage: browser.Storage.StorageArea;
+  notifications: Notifications;
+
+  constructor(notifications: Notifications) {
     // Keep storage size limits in mind
     this.storage = browser.storage.local;
     this.notifications = notifications;
   }
 
-  async _getLocalTimeline() {
+  async _getLocalTimeline(): Promise<TimelineAlarm[]> {
     const localStorageResults = await browser.storage.local.get(
       STORAGE_KEY.TIMELINE,
     );
-    return localStorageResults[STORAGE_KEY.TIMELINE];
+    return localStorageResults[STORAGE_KEY.TIMELINE] as TimelineAlarm[];
   }
 
-  async _getSyncTimeline() {
+  async _getSyncTimeline(): Promise<TimelineAlarm[]> {
     const syncStorageResults = await browser.storage.sync.get(
       STORAGE_KEY.TIMELINE,
     );
-    return syncStorageResults[STORAGE_KEY.TIMELINE];
+    return syncStorageResults[STORAGE_KEY.TIMELINE] as TimelineAlarm[];
   }
 
-  async _setLocalTimeline(timeline) {
+  async _setLocalTimeline(timeline: TimelineAlarm[]): Promise<void> {
     await browser.storage.local.set({ [STORAGE_KEY.TIMELINE]: timeline });
   }
 
-  async _setSyncTimeline(timeline) {
+  async _setSyncTimeline(timeline: TimelineAlarm[]): Promise<void> {
     await browser.storage.sync.set({ [STORAGE_KEY.TIMELINE]: timeline });
   }
 
-  async _removeSyncTimelineIfLocalIsExpected(expectedTimeline) {
+  async _removeSyncTimelineIfLocalIsExpected(
+    expectedTimeline: TimelineAlarm[],
+  ): Promise<void> {
     const localTimeline = await this._getLocalTimeline();
 
     if (isEqual(localTimeline, expectedTimeline)) {
       await browser.storage.sync.remove(STORAGE_KEY.TIMELINE);
     } else {
-      throw "localTimeline is not equal to expectedTimeline";
+      throw new Error("localTimeline is not equal to expectedTimeline");
     }
   }
 
-  async switchStorageFromSyncToLocal() {
+  async switchStorageFromSyncToLocal(): Promise<void> {
     const syncTimeline = await this._getSyncTimeline();
     const localTimeline = await this._getLocalTimeline();
 
@@ -54,13 +66,13 @@ export default class Timeline {
       const mergedAndDedupedTimeline = getMergedAndDedupedArray(
         syncTimeline,
         localTimeline,
-      );
+      ) as TimelineAlarm[];
       await this._setLocalTimeline(mergedAndDedupedTimeline);
       await this._removeSyncTimelineIfLocalIsExpected(mergedAndDedupedTimeline);
     }
   }
 
-  async _getRawTimeline() {
+  async _getRawTimeline(): Promise<TimelineAlarm[]> {
     const localTimeline = await this._getLocalTimeline();
     const syncTimeline = await this._getSyncTimeline();
 
@@ -69,7 +81,7 @@ export default class Timeline {
     return localTimeline || syncTimeline || [];
   }
 
-  async getTimeline() {
+  async getTimeline(): Promise<TimelineAlarm[]> {
     const timeline = await this._getRawTimeline();
 
     return timeline.map((timelineAlarm) => {
@@ -78,7 +90,7 @@ export default class Timeline {
     });
   }
 
-  async setTimeline(newTimeline) {
+  async setTimeline(newTimeline: TimelineAlarm[]): Promise<void> {
     const timeline = await this._getRawTimeline();
     newTimeline.map((item) => {
       timeline.push(item);
@@ -86,22 +98,28 @@ export default class Timeline {
 
     try {
       await this.storage.set({ [STORAGE_KEY.TIMELINE]: timeline });
-    } catch (e) {
-      if (e.message.startsWith("QuotaExceededError")) {
+    } catch (e: unknown) {
+      if (e instanceof Error && e.message.startsWith("QuotaExceededError")) {
         await this.notifications.createStorageLimitNotification();
       }
     }
   }
 
   // Inclusive date range
-  async getFilteredTimeline(startDate, endDate) {
+  async getFilteredTimeline(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<TimelineAlarm[]> {
     const timeline = await this.getTimeline();
     return timeline.filter((timelineAlarm) => {
-      return timelineAlarm.date >= startDate && timelineAlarm.date <= endDate;
+      return (
+        (timelineAlarm.date as Date) >= startDate &&
+        (timelineAlarm.date as Date) <= endDate
+      );
     });
   }
 
-  async addAlarmToTimeline(type, totalTime) {
+  async addAlarmToTimeline(type: string, totalTime: number): Promise<void> {
     const timeline = await this._getRawTimeline();
 
     timeline.push({
@@ -112,14 +130,14 @@ export default class Timeline {
 
     try {
       await this.storage.set({ [STORAGE_KEY.TIMELINE]: timeline });
-    } catch (e) {
-      if (e.message.startsWith("QuotaExceededError")) {
+    } catch (e: unknown) {
+      if (e instanceof Error && e.message.startsWith("QuotaExceededError")) {
         await this.notifications.createStorageLimitNotification();
       }
     }
   }
 
-  async resetTimeline() {
+  async resetTimeline(): Promise<void> {
     await browser.storage.sync.remove(STORAGE_KEY.TIMELINE);
     await browser.storage.local.remove(STORAGE_KEY.TIMELINE);
   }

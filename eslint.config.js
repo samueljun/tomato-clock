@@ -1,8 +1,16 @@
 const globals = require("globals");
 const js = require("@eslint/js");
 const babelParser = require("@babel/eslint-parser");
+const tseslint = require("typescript-eslint");
 
-module.exports = [
+const baseGlobals = {
+  ...globals.browser,
+  ...globals.node,
+  ...globals.es2015,
+  ...globals.webextensions,
+};
+
+module.exports = tseslint.config(
   {
     ignores: ["dist/**", "dist-zip/**"],
   },
@@ -17,13 +25,16 @@ module.exports = [
           presets: ["@babel/preset-env"],
         },
       },
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-        ...globals.es2015,
-        ...globals.webextensions,
-      },
+      globals: baseGlobals,
       sourceType: "module",
     },
   },
-];
+  ...tseslint.configs.recommended.map((config) => ({
+    ...config,
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      ...config.languageOptions,
+      globals: baseGlobals,
+    },
+  })),
+);
