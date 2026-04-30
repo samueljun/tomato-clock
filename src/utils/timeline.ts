@@ -78,7 +78,7 @@ export default class Timeline {
 
     // Prefer local storage
     // Check sync storage for backwards compatibility
-    return localTimeline || syncTimeline || [];
+    return (localTimeline || syncTimeline || []).slice();
   }
 
   async getTimeline(): Promise<TimelineAlarm[]> {
@@ -92,7 +92,7 @@ export default class Timeline {
 
   async setTimeline(newTimeline: TimelineAlarm[]): Promise<void> {
     const timeline = await this._getRawTimeline();
-    newTimeline.map((item) => {
+    newTimeline.forEach((item) => {
       timeline.push(item);
     });
 
