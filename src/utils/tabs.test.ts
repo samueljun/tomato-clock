@@ -1,3 +1,6 @@
+/**
+ * @vitest-environment jsdom
+ */
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock the webextension-polyfill module
@@ -6,8 +9,11 @@ vi.mock("webextension-polyfill", () => ({
     runtime: {
       getURL: vi.fn((path: string) => `extension://${path}`),
     },
+    extension: {
+      getViews: vi.fn(),
+    },
     tabs: {
-      query: vi.fn(),
+      getCurrent: vi.fn(),
       update: vi.fn(),
       create: vi.fn(),
     },
@@ -18,7 +24,7 @@ vi.mock("webextension-polyfill", () => ({
 }));
 
 import browser, { Tabs } from "webextension-polyfill";
-import { openOrFocusTab } from "./tabs";
+import { openOrFocusTab, setupTabFocusListener } from "./tabs";
 
 describe("tabs.ts", () => {
   beforeEach(() => {
@@ -26,52 +32,77 @@ describe("tabs.ts", () => {
   });
 
   describe("openOrFocusTab", () => {
-    it("should focus an existing tab if found", async () => {
-      const mockTab = { id: 123, windowId: 456 } as Tabs.Tab;
-      vi.mocked(browser.tabs.query).mockResolvedValue([mockTab]);
+    it("should send focus-tab message if existing tab is found via getViews", async () => {
+      const mockView = {
+        location: { href: "extension:///test.html" },
+        postMessage: vi.fn(),
+      };
+
+      vi.mocked(browser.extension.getViews).mockReturnValue([
+        mockView,
+      ] as unknown as Window[]);
 
       await openOrFocusTab("/test.html");
 
       expect(browser.runtime.getURL).toHaveBeenCalledWith("/test.html");
-      expect(browser.tabs.query).toHaveBeenCalledWith({
-        url: "extension:///test.html",
-      });
-      expect(browser.tabs.update).toHaveBeenCalledWith(123, { active: true });
-      expect(browser.windows.update).toHaveBeenCalledWith(456, {
-        focused: true,
-      });
+      expect(browser.extension.getViews).toHaveBeenCalledWith({ type: "tab" });
+      expect(mockView.postMessage).toHaveBeenCalledWith(
+        { action: "focus-tab" },
+        "*",
+      );
       expect(browser.tabs.create).not.toHaveBeenCalled();
     });
 
-    it("should create a new tab if no existing tab is found", async () => {
-      vi.mocked(browser.tabs.query).mockResolvedValue([]);
+    it("should create a new tab if no matching view is found", async () => {
+      vi.mocked(browser.extension.getViews).mockReturnValue([]);
 
       await openOrFocusTab("/test.html");
 
       expect(browser.tabs.create).toHaveBeenCalledWith({
         url: "extension:///test.html",
       });
-      expect(browser.tabs.update).not.toHaveBeenCalled();
     });
+  });
 
-    it("should not focus window if windowId is missing", async () => {
-      const mockTab = { id: 123 } as Tabs.Tab;
-      vi.mocked(browser.tabs.query).mockResolvedValue([mockTab]);
+  describe("setupTabFocusListener", () => {
+    it("should handle focus-tab message and update current tab", async () => {
+      const addEventListenerSpy = vi.spyOn(window, "addEventListener");
+      const mockTab = { id: 123, windowId: 456 };
+      vi.mocked(browser.tabs.getCurrent).mockResolvedValue(
+        mockTab as unknown as Tabs.Tab,
+      );
 
-      await openOrFocusTab("/test.html");
+      setupTabFocusListener();
 
+      expect(addEventListenerSpy).toHaveBeenCalledWith(
+        "message",
+        expect.any(Function),
+      );
+
+      const messageHandler = addEventListenerSpy.mock.calls.find(
+        (call) => call[0] === "message",
+      )![1] as unknown as (event: { data: { action: string } }) => void;
+
+      // Simulate the message
+      await messageHandler({ data: { action: "focus-tab" } });
+
+      expect(browser.tabs.getCurrent).toHaveBeenCalled();
       expect(browser.tabs.update).toHaveBeenCalledWith(123, { active: true });
-      expect(browser.windows.update).not.toHaveBeenCalled();
+      expect(browser.windows.update).toHaveBeenCalledWith(456, {
+        focused: true,
+      });
     });
 
-    it("should handle tab without id (though unlikely in query results)", async () => {
-      const mockTab = { windowId: 456 } as Tabs.Tab;
-      vi.mocked(browser.tabs.query).mockResolvedValue([mockTab]);
+    it("should not focus if message action is different", async () => {
+      const addEventListenerSpy = vi.spyOn(window, "addEventListener");
+      setupTabFocusListener();
+      const messageHandler = addEventListenerSpy.mock.calls.find(
+        (call) => call[0] === "message",
+      )![1] as unknown as (event: { data: { action: string } }) => void;
 
-      await openOrFocusTab("/test.html");
+      await messageHandler({ data: { action: "other-action" } });
 
-      expect(browser.tabs.update).not.toHaveBeenCalled();
-      expect(browser.windows.update).not.toHaveBeenCalled();
+      expect(browser.tabs.getCurrent).not.toHaveBeenCalled();
     });
   });
 });

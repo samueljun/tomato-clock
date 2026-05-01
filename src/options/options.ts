@@ -7,6 +7,7 @@ import "./options.css";
 import Settings from "../utils/settings";
 import { DEFAULT_SETTINGS, SettingsKey, StorageKey } from "../utils/constants";
 import { SettingsData } from "../utils/utils";
+import { setupTabFocusListener } from "../utils/tabs";
 
 export default class Options {
   private settings: Settings;
@@ -27,6 +28,7 @@ export default class Options {
   constructor() {
     // Localize static HTML tokens then initialize DOM bindings
     localizeHtmlPage();
+    setupTabFocusListener();
     this.settings = new Settings();
 
     this.domMinutesInTomato = document.getElementById(

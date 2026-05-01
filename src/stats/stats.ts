@@ -18,6 +18,7 @@ import {
   getFilenameDate,
 } from "../utils/utils";
 import { DateUnit, TimerType, SettingsKey } from "../utils/constants";
+import { setupTabFocusListener } from "../utils/tabs";
 
 interface StatsCounts {
   tomatoes: number;
@@ -54,6 +55,7 @@ export default class Stats {
 
   constructor() {
     localizeHtmlPage();
+    setupTabFocusListener();
 
     // Get DOM Elements
     this.tomatoesCount = document.getElementById("tomatoes-count")!;
