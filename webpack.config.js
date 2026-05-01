@@ -89,6 +89,7 @@ module.exports = {
 
             switch (process.env.TARGET_BROWSER) {
               case "chrome":
+              case "edge":
                 jsonContent.background = {
                   service_worker: "background/background.js",
                 };

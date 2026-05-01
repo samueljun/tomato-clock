@@ -20,6 +20,9 @@
     "build:chrome": "TARGET_BROWSER=chrome npm run build",
     "watch:chrome": "TARGET_BROWSER=chrome webpack --watch",
     "start:chrome": "web-ext run -t chromium --source-dir ./dist",
+    "build:edge": "TARGET_BROWSER=edge npm run build",
+    "watch:edge": "TARGET_BROWSER=edge webpack --watch",
+    "start:edge": "web-ext run -t chromium --chromium-binary '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge' --source-dir ./dist",
     "prepare": "husky"
   },
   "repository": {
