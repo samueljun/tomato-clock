@@ -6,12 +6,14 @@ import Notifications from "./notifications";
 import Sound from "./sound";
 import Timeline from "../utils/timeline";
 import {
+  roundUpToNearestSecond,
   getMillisecondsToMinutesAndSeconds,
   getTimerTypeMilliseconds,
 } from "../utils/utils";
 import {
   TimerType,
   BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE,
+  BADGE_PAUSED_COLOR,
   StorageKey,
   RuntimeAction,
   TimerState,
@@ -65,55 +67,125 @@ export default class Timer {
     this.sound.stop();
   }
 
-  setTimer(type: TimerType): void {
-    this.resetTimer().then(() => {
-      const badgeBackgroundColor = BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE[type];
+  async setTimer(type: TimerType): Promise<void> {
+    await this.resetTimer();
+    const settings = await this.settings.getSettings();
+    const milliseconds = getTimerTypeMilliseconds(type, settings);
+    const scheduledTime = Date.now() + milliseconds;
 
-      this.settings.getSettings().then(async (settings) => {
-        const milliseconds = getTimerTypeMilliseconds(type, settings);
+    const state: TimerState = {
+      status: "running",
+      scheduledTime,
+      totalTime: milliseconds,
+      type,
+    };
+    await this.setTimerState(state);
+    console.log(
+      `Setting timer: ${type} for ${milliseconds}ms. Scheduled at: ${new Date(
+        scheduledTime,
+      ).toISOString()}`,
+    );
 
-        const scheduledTime = Date.now() + milliseconds;
+    await this._createAlarms(scheduledTime, milliseconds, type);
+  }
 
-        const state: TimerState = {
-          status: "running",
-          scheduledTime,
-          totalTime: milliseconds,
-          type,
-        };
-        await this.setTimerState(state);
-        console.log(
-          `Setting timer: ${type} for ${milliseconds}ms. Scheduled at: ${new Date(
-            scheduledTime,
-          ).toISOString()}`,
-        );
+  private async _createAlarms(
+    scheduledTime: number,
+    milliseconds: number,
+    type: TimerType,
+  ): Promise<void> {
+    const badgeBackgroundColor = BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE[type];
 
-        // Create a wake-up alarm 25 seconds before the timer finishes
-        // This wakes up the service worker so we can use setTimeout for better precision
-        const wakeMilliseconds = 25000;
-        if (milliseconds > wakeMilliseconds) {
-          await browser.alarms.create("timer-wake", {
-            when: scheduledTime - wakeMilliseconds,
-          });
-        }
-
-        // Create a fallback alarm in case the wake-up alarm fails
-        await browser.alarms.create("timer-fallback", { when: scheduledTime });
-
-        await browser.alarms.create("badge", { periodInMinutes: 1 });
-
-        // Initial badge of timer to match the panel minute digits (e.g. "25" badge to "25:00" panel time)
-        const { minutes } = getMillisecondsToMinutesAndSeconds(milliseconds);
-        this.badge.setBadgeText(minutes.toString(), badgeBackgroundColor);
-        // After 1 second, update badge to different panel minute digits (e.g. "24" badge to "24:59" panel time
-        setTimeout(() => {
-          this.updateBadge();
-        }, 1000);
+    // Create a wake-up alarm 25 seconds before the timer finishes
+    // This wakes up the service worker so we can use setTimeout for better precision
+    const wakeMilliseconds = 25000;
+    if (milliseconds > wakeMilliseconds) {
+      await browser.alarms.create("timer-wake", {
+        when: scheduledTime - wakeMilliseconds,
       });
-    });
+    }
+
+    // Create a fallback alarm in case the wake-up alarm fails
+    await browser.alarms.create("timer-fallback", { when: scheduledTime });
+
+    await browser.alarms.create("badge", { periodInMinutes: 1 });
+
+    // Initial badge of timer to match the panel minute digits (e.g. "25" badge to "25:00" panel time)
+    this.badge.setBadgeText(
+      this.formatBadgeText(milliseconds),
+      badgeBackgroundColor,
+    );
+    // After 1 second, update badge to different panel minute digits (e.g. "24" badge to "24:59" panel time
+    setTimeout(() => {
+      this.updateBadge();
+    }, 1000);
+  }
+
+  async pauseTimer(): Promise<void> {
+    const state = await this.getTimerState();
+    if (state.status !== "running") return;
+
+    const remainingTime = state.scheduledTime - Date.now();
+    if (remainingTime <= 0) return;
+
+    await browser.alarms.clearAll();
+
+    const pausedState: TimerState = {
+      status: "paused",
+      type: state.type,
+      remainingTime,
+      totalTime: state.totalTime,
+    };
+    await this.setTimerState(pausedState);
+
+    // Freeze badge with yellow background to indicate paused
+    this.badge.setBadgeText(
+      this.formatBadgeText(remainingTime),
+      BADGE_PAUSED_COLOR,
+    );
+
+    console.log(
+      `Timer paused. Remaining: ${remainingTime}ms. Type: ${state.type}`,
+    );
+  }
+
+  async resumeTimer(): Promise<void> {
+    const state = await this.getTimerState();
+    if (state.status !== "paused") return;
+
+    const scheduledTime = Date.now() + state.remainingTime;
+
+    const runningState: TimerState = {
+      status: "running",
+      type: state.type,
+      scheduledTime,
+      totalTime: state.totalTime,
+    };
+    await this.setTimerState(runningState);
+
+    console.log(
+      `Timer resumed. Remaining: ${state.remainingTime}ms. Scheduled at: ${new Date(
+        scheduledTime,
+      ).toISOString()}`,
+    );
+
+    await this._createAlarms(scheduledTime, state.remainingTime, state.type);
+  }
+
+  async togglePause(): Promise<void> {
+    const state = await this.getTimerState();
+    if (state.status === "running") {
+      await this.pauseTimer();
+    } else if (state.status === "paused") {
+      await this.resumeTimer();
+    }
   }
 
   async updateBadge(): Promise<void> {
     const state = await this.getTimerState();
+
+    // When paused, badge stays frozen at the paused value (set by pauseTimer)
+    if (state.status === "paused") return;
     if (state.status !== "running") return;
 
     const badgeBackgroundColor =
@@ -126,18 +198,22 @@ export default class Timer {
       return;
     }
 
-    const { minutes, seconds } = getMillisecondsToMinutesAndSeconds(timeLeft);
-    const minutesLeft = minutes.toString();
-
     // Check if we need to update
-    const currentText = await this.badge.getBadgeText();
-    if (currentText !== minutesLeft) {
-      if (minutesLeft === "0" && seconds < 60) {
-        this.badge.setBadgeText("<1", badgeBackgroundColor);
-      } else {
-        this.badge.setBadgeText(minutesLeft, badgeBackgroundColor);
-      }
+    const badgeText = this.formatBadgeText(timeLeft);
+    if (this.badge.getBadgeText() !== badgeText) {
+      this.badge.setBadgeText(badgeText, badgeBackgroundColor);
     }
+  }
+
+  private formatBadgeText(milliseconds: number): string {
+    const { minutes, seconds } = getMillisecondsToMinutesAndSeconds(
+      roundUpToNearestSecond(milliseconds),
+    );
+    const minutesLeft = minutes.toString();
+    if (minutesLeft === "0" && seconds < 60) {
+      return "<1";
+    }
+    return minutesLeft;
   }
 
   initAlarms(): void {
@@ -217,6 +293,10 @@ export default class Timer {
           break;
         case RuntimeAction.GET_TIMER_STATE:
           return this.getTimerState(); // Returns promise
+        case RuntimeAction.PAUSE_TIMER:
+          return this.pauseTimer().then(() => this.getTimerState());
+        case RuntimeAction.RESUME_TIMER:
+          return this.resumeTimer().then(() => this.getTimerState());
         default:
           break;
       }
@@ -235,6 +315,9 @@ export default class Timer {
           break;
         case "reset-timer":
           this.resetTimer();
+          break;
+        case "toggle-pause":
+          this.togglePause();
           break;
         default:
           break;

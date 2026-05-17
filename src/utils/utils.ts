@@ -9,6 +9,10 @@ export function getMinutesInMilliseconds(minutes: number): number {
   return minutes * 60000;
 }
 
+export function roundUpToNearestSecond(milliseconds: number): number {
+  return Math.ceil(milliseconds / 1000) * 1000;
+}
+
 export function getMillisecondsToMinutesAndSeconds(milliseconds: number): {
   minutes: number;
   seconds: number;

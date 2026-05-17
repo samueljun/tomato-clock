@@ -46,6 +46,12 @@ export type TimerState =
       type: TimerType;
       scheduledTime: number;
       totalTime: number;
+    }
+  | {
+      status: "paused";
+      type: TimerType;
+      remainingTime: number;
+      totalTime: number;
     };
 
 export const BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE = {
@@ -54,10 +60,14 @@ export const BADGE_BACKGROUND_COLOR_BY_TIMER_TYPE = {
   [TimerType.LONG_BREAK]: "#666",
 } as const;
 
+export const BADGE_PAUSED_COLOR = "#f0ad4e";
+
 export enum RuntimeAction {
   SET_TIMER = "setTimer",
   RESET_TIMER = "resetTimer",
   GET_TIMER_STATE = "getTimerState",
+  PAUSE_TIMER = "pauseTimer",
+  RESUME_TIMER = "resumeTimer",
   OFFSCREEN_PLAY_AUDIO = "offscreenPlayAudio",
   OFFSCREEN_STOP_AUDIO = "offscreenStopAudio",
 }
@@ -66,6 +76,8 @@ export type RuntimeMessage =
   | { action: RuntimeAction.SET_TIMER; data: { type: TimerType } }
   | { action: RuntimeAction.RESET_TIMER; data?: undefined }
   | { action: RuntimeAction.GET_TIMER_STATE; data?: undefined }
+  | { action: RuntimeAction.PAUSE_TIMER; data?: undefined }
+  | { action: RuntimeAction.RESUME_TIMER; data?: undefined }
   | { action: RuntimeAction.OFFSCREEN_PLAY_AUDIO; data: { src: string } }
   | { action: RuntimeAction.OFFSCREEN_STOP_AUDIO; data?: undefined };
 

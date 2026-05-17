@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import {
   getSecondsInMilliseconds,
   getMinutesInMilliseconds,
+  roundUpToNearestSecond,
   getMillisecondsToMinutesAndSeconds,
   getMillisecondsToTimeText,
   getZeroArray,
@@ -27,6 +28,21 @@ describe("utils.ts", () => {
     it("should convert minutes to milliseconds", () => {
       expect(getMinutesInMilliseconds(1)).toBe(60000);
       expect(getMinutesInMilliseconds(25)).toBe(1500000);
+    });
+  });
+
+  describe("roundUpToNearestSecond", () => {
+    it("should round up sub-second values to the next whole second", () => {
+      expect(roundUpToNearestSecond(1499990)).toBe(1500000);
+      expect(roundUpToNearestSecond(1001)).toBe(2000);
+      expect(roundUpToNearestSecond(1)).toBe(1000);
+      expect(roundUpToNearestSecond(999)).toBe(1000);
+    });
+
+    it("should keep exact second values unchanged", () => {
+      expect(roundUpToNearestSecond(1500000)).toBe(1500000);
+      expect(roundUpToNearestSecond(1000)).toBe(1000);
+      expect(roundUpToNearestSecond(0)).toBe(0);
     });
   });
 

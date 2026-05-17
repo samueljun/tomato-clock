@@ -7,6 +7,8 @@ body {
 
 .panel {
   white-space: nowrap;
+  --pause-play-icon-width: 16px;
+  --pause-play-icon-margin: 2px;
 }
 
 .info-buttons {
@@ -38,4 +40,18 @@ body {
 
 .btn-icon svg {
   display: block;
+}
+
+.pause-play-icon {
+  display: inline-block;
+  text-align: center;
+  width: var(--pause-play-icon-width);
+  margin-right: var(--pause-play-icon-margin);
+}
+
+.spacer {
+  display: inline-block;
+  width: calc(
+    (var(--pause-play-icon-width) + var(--pause-play-icon-margin)) / 2
+  );
 }

@@ -1,5 +1,5 @@
 import browser from "webextension-polyfill";
-import { localizeHtmlPage } from "../utils/i18n";
+import { localizeHtmlPage, t } from "../utils/i18n";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./panel.css";
@@ -9,68 +9,93 @@ import {
   TimerType,
   TimerState,
   RuntimeMessage,
+  StorageKey,
 } from "../utils/constants";
 import {
+  roundUpToNearestSecond,
   getMillisecondsToTimeText,
   getSecondsInMilliseconds,
-  getTimerTypeMilliseconds,
 } from "../utils/utils";
 import { openOrFocusTab } from "../utils/tabs";
-import Settings from "../utils/settings";
 
-interface PanelTimer {
-  interval: number | null;
-  timeLeft: number;
-}
+const PLAY_ICON = "▶\uFE0E";
+const PAUSE_ICON = "⏸\uFE0E";
+
+const TIMER_BUTTON_IDS: Record<TimerType, string> = {
+  [TimerType.TOMATO]: "tomato-button",
+  [TimerType.SHORT_BREAK]: "short-break-button",
+  [TimerType.LONG_BREAK]: "long-break-button",
+};
+
+const BUTTON_LABELS: Record<TimerType, string> = {
+  [TimerType.TOMATO]: "btn_tomato",
+  [TimerType.SHORT_BREAK]: "btn_short_break",
+  [TimerType.LONG_BREAK]: "btn_long_break",
+};
+
+const PAUSE_LABELS: Record<TimerType, string> = {
+  [TimerType.TOMATO]: "label_pause_tomato",
+  [TimerType.SHORT_BREAK]: "label_pause_short_break",
+  [TimerType.LONG_BREAK]: "label_pause_long_break",
+};
+
+const RESUME_LABELS: Record<TimerType, string> = {
+  [TimerType.TOMATO]: "label_resume_tomato",
+  [TimerType.SHORT_BREAK]: "label_resume_short_break",
+  [TimerType.LONG_BREAK]: "label_resume_long_break",
+};
+
+const IDLE_STATE: TimerState = {
+  status: "idle",
+  type: null,
+  scheduledTime: null,
+  totalTime: null,
+};
 
 export default class Panel {
-  private settings: Settings;
   private currentTimeText: HTMLElement | null;
-  private timer: PanelTimer;
+  private displayInterval: number | null;
+  private timerState: TimerState;
 
   constructor() {
     localizeHtmlPage();
-    this.settings = new Settings();
     this.currentTimeText = document.getElementById("current-time-text");
-    this.timer = { interval: null, timeLeft: 0 };
+    this.displayInterval = null;
+    this.timerState = { ...IDLE_STATE };
 
-    browser.runtime
-      .sendMessage({
-        action: RuntimeAction.GET_TIMER_STATE,
-      } as RuntimeMessage)
-      .then((state: unknown) => {
-        const timerState = state as TimerState;
-        if (timerState.status === "running" && timerState.scheduledTime) {
-          this.setDisplayTimer(timerState.scheduledTime - Date.now());
-        }
-      });
+    this.syncWithBackground();
+
+    browser.storage.onChanged.addListener((changes, area) => {
+      if (area === "local" && changes[StorageKey.TIMER]) {
+        const newState = (changes[StorageKey.TIMER].newValue as TimerState) || {
+          ...IDLE_STATE,
+        };
+        this.applyTimerState(newState);
+      }
+    });
 
     this.setEventListeners();
   }
 
   private setEventListeners(): void {
     document.getElementById("tomato-button")?.addEventListener("click", () => {
-      this.setTimer(TimerType.TOMATO);
-      this.setBackgroundTimer(TimerType.TOMATO);
+      this.handleTimerButtonClick(TimerType.TOMATO);
     });
 
     document
       .getElementById("short-break-button")
       ?.addEventListener("click", () => {
-        this.setTimer(TimerType.SHORT_BREAK);
-        this.setBackgroundTimer(TimerType.SHORT_BREAK);
+        this.handleTimerButtonClick(TimerType.SHORT_BREAK);
       });
 
     document
       .getElementById("long-break-button")
       ?.addEventListener("click", () => {
-        this.setTimer(TimerType.LONG_BREAK);
-        this.setBackgroundTimer(TimerType.LONG_BREAK);
+        this.handleTimerButtonClick(TimerType.LONG_BREAK);
       });
 
     document.getElementById("reset-button")?.addEventListener("click", () => {
-      this.resetTimer();
-      this.resetBackgroundTimer();
+      this.sendMessage({ action: RuntimeAction.RESET_TIMER });
     });
 
     document.getElementById("stats-button")?.addEventListener("click", () => {
@@ -82,69 +107,128 @@ export default class Panel {
     });
   }
 
-  private resetTimer(): void {
-    if (this.timer.interval) {
-      clearInterval(this.timer.interval);
+  private applyTimerState(state: TimerState): void {
+    this.timerState = state;
+
+    if (state.status === "running") {
+      this.setDisplayTimer(state.scheduledTime);
+    } else if (state.status === "paused") {
+      this.clearDisplayInterval();
+      this.setCurrentTimeText(state.remainingTime);
+    } else {
+      this.clearDisplayInterval();
+      this.setCurrentTimeText(0);
     }
 
-    this.timer = {
-      interval: null,
-      timeLeft: 0,
-    };
-
-    this.setCurrentTimeText(0);
+    this.updateButtonStates();
   }
 
-  public getTimer(): PanelTimer {
-    return this.timer;
-  }
-
-  private setTimer(type: TimerType): void {
-    this.settings.getSettings().then((settings) => {
-      const milliseconds = getTimerTypeMilliseconds(type, settings);
-      this.setDisplayTimer(milliseconds);
+  private syncWithBackground(): void {
+    this.sendMessage<TimerState>({
+      action: RuntimeAction.GET_TIMER_STATE,
+    }).then((state) => {
+      this.applyTimerState(state);
     });
   }
 
-  private setDisplayTimer(milliseconds: number): void {
-    this.resetTimer();
-    this.setCurrentTimeText(milliseconds);
+  private clearDisplayInterval(): void {
+    if (this.displayInterval) {
+      clearInterval(this.displayInterval);
+      this.displayInterval = null;
+    }
+  }
 
-    this.timer = {
-      interval: window.setInterval(() => {
-        const timer = this.getTimer();
+  private setDisplayTimer(scheduledTime: number): void {
+    this.clearDisplayInterval();
 
-        timer.timeLeft -= getSecondsInMilliseconds(1);
-        this.setCurrentTimeText(timer.timeLeft);
+    const remaining = Math.max(0, scheduledTime - Date.now());
+    this.setCurrentTimeText(remaining);
 
-        if (timer.timeLeft <= 0) {
-          this.resetTimer();
-        }
-      }, getSecondsInMilliseconds(1)),
-      timeLeft: milliseconds,
-    };
+    this.displayInterval = window.setInterval(() => {
+      const remaining = Math.max(0, scheduledTime - Date.now());
+      this.setCurrentTimeText(remaining);
+
+      if (remaining <= 0) {
+        this.applyTimerState({ ...IDLE_STATE });
+      }
+    }, getSecondsInMilliseconds(1));
   }
 
   private setCurrentTimeText(milliseconds: number): void {
     if (this.currentTimeText) {
-      this.currentTimeText.textContent =
-        getMillisecondsToTimeText(milliseconds);
+      this.currentTimeText.textContent = getMillisecondsToTimeText(
+        roundUpToNearestSecond(milliseconds),
+      );
     }
   }
 
-  private resetBackgroundTimer(): void {
-    browser.runtime.sendMessage({
-      action: RuntimeAction.RESET_TIMER,
-    } as RuntimeMessage);
+  private handleTimerButtonClick(type: TimerType): void {
+    if (this.timerState.status !== "idle" && this.timerState.type === type) {
+      // Toggle pause/resume on the active timer
+      if (this.timerState.status === "paused") {
+        this.sendMessage<TimerState>({
+          action: RuntimeAction.RESUME_TIMER,
+        })
+          .then((state) => this.applyTimerState(state))
+          .catch(() => this.syncWithBackground());
+      } else {
+        // Stop the interval immediately so the countdown freezes
+        this.clearDisplayInterval();
+
+        this.sendMessage<TimerState>({
+          action: RuntimeAction.PAUSE_TIMER,
+        })
+          .then((state) => this.applyTimerState(state))
+          .catch(() => this.syncWithBackground());
+      }
+    } else {
+      // Start a new timer
+      this.sendMessage({
+        action: RuntimeAction.SET_TIMER,
+        data: { type },
+      });
+    }
   }
 
-  private setBackgroundTimer(type: TimerType): void {
-    browser.runtime.sendMessage({
-      action: RuntimeAction.SET_TIMER,
-      data: {
-        type,
-      },
-    } as RuntimeMessage);
+  private updateButtonStates(): void {
+    const timerTypes = [
+      TimerType.TOMATO,
+      TimerType.SHORT_BREAK,
+      TimerType.LONG_BREAK,
+    ];
+
+    for (const type of timerTypes) {
+      const buttonId = TIMER_BUTTON_IDS[type];
+      const button = document.getElementById(buttonId);
+      if (!button) continue;
+
+      if (this.timerState.status === "idle") {
+        // Idle state: all buttons enabled, original labels, no icons
+        button.removeAttribute("disabled");
+        button.removeAttribute("aria-label");
+        button.innerHTML = `<span class="spacer"></span>${t(BUTTON_LABELS[type])}<span class="spacer"></span>`;
+      } else if (this.timerState.type === type) {
+        // Active button: show pause/play icon, set aria-label
+        button.removeAttribute("disabled");
+
+        if (this.timerState.status === "paused") {
+          button.innerHTML = `<span class="pause-play-icon">${PLAY_ICON}</span>${t(BUTTON_LABELS[type])}`;
+          button.setAttribute("aria-label", t(RESUME_LABELS[type]));
+        } else {
+          button.innerHTML = `<span class="pause-play-icon">${PAUSE_ICON}</span>${t(BUTTON_LABELS[type])}`;
+          button.setAttribute("aria-label", t(PAUSE_LABELS[type]));
+        }
+      } else {
+        // Inactive button: disabled
+        button.setAttribute("disabled", "true");
+        button.removeAttribute("aria-label");
+        button.innerHTML = `<span class="spacer"></span>${t(BUTTON_LABELS[type])}<span class="spacer"></span>`;
+      }
+    }
+  }
+
+  private sendMessage<T>(message: RuntimeMessage): Promise<T> {
+    return browser.runtime.sendMessage(message) as Promise<T>;
   }
 }
 
