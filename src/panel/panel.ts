@@ -157,7 +157,7 @@ export default class Panel {
   private setCurrentTimeText(milliseconds: number): void {
     if (this.currentTimeText) {
       this.currentTimeText.textContent = getMillisecondsToTimeText(
-        roundUpToNearestSecond(milliseconds),
+        roundUpToNearestSecond(Math.max(0, milliseconds)),
       );
     }
   }

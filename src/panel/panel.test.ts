@@ -60,6 +60,7 @@ import Panel from "./panel";
 interface TestablePanel {
   setDisplayTimer: (scheduledTime: number) => void;
   applyTimerState: (state: unknown) => void;
+  setCurrentTimeText: (milliseconds: number) => void;
 }
 
 describe("Panel - setDisplayTimer()", () => {
@@ -120,6 +121,13 @@ describe("Panel - setDisplayTimer()", () => {
 
     const timeText = document.getElementById("current-time-text");
     expect(timeText?.textContent).toBe("25:00");
+  });
+
+  it("should never display negative time and clamp negative input to 00:00", () => {
+    panel = new Panel() as unknown as TestablePanel;
+    panel.setCurrentTimeText(-5000);
+    const timeText = document.getElementById("current-time-text");
+    expect(timeText?.textContent).toBe("00:00");
   });
 
   it("should tick every second and update display text", () => {
