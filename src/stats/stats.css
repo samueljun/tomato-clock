@@ -1,3 +1,44 @@
 .container {
   padding-bottom: 15px;
 }
+
+/* Dark mode overrides for daterangepicker */
+[data-bs-theme="dark"] .daterangepicker,
+[data-bs-theme="dark"] .daterangepicker .calendar-table {
+  background-color: var(--bs-body-bg);
+  border-color: var(--bs-border-color);
+}
+
+[data-bs-theme="dark"] .daterangepicker {
+  color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .daterangepicker td.off,
+[data-bs-theme="dark"] .daterangepicker td.off.in-range,
+[data-bs-theme="dark"] .daterangepicker td.off.start-date,
+[data-bs-theme="dark"] .daterangepicker td.off.end-date {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-secondary-color);
+}
+
+[data-bs-theme="dark"] .daterangepicker td.available:hover,
+[data-bs-theme="dark"] .daterangepicker th.available:hover,
+[data-bs-theme="dark"] .daterangepicker td.in-range,
+[data-bs-theme="dark"] .daterangepicker .ranges li:hover {
+  background-color: var(--bs-tertiary-bg);
+}
+
+[data-bs-theme="dark"] .daterangepicker td.in-range {
+  color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .daterangepicker td.active,
+[data-bs-theme="dark"] .daterangepicker td.active:hover,
+[data-bs-theme="dark"] .daterangepicker .ranges li.active {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+}
+
+[data-bs-theme="dark"] .daterangepicker .drp-buttons {
+  border-top: 1px solid var(--bs-border-color);
+}

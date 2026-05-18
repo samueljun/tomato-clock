@@ -19,7 +19,7 @@ body {
   padding: 8px;
   border: none;
   background: transparent;
-  color: #6c757d;
+  color: var(--bs-secondary-color);
   transition:
     color 0.2s ease,
     transform 0.1s ease;
@@ -30,8 +30,8 @@ body {
 }
 
 .btn-icon:hover {
-  color: #212529;
-  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--bs-body-color);
+  background-color: var(--bs-tertiary-bg);
 }
 
 .btn-icon:active {

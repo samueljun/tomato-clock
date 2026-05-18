@@ -4,15 +4,11 @@ import fs from "fs";
 import path from "path";
 
 // Use vi.hoisted to declare mock variables before vi.mock runs
-const { mockSendMessage, mockStorageListener } = vi.hoisted(() => ({
-  mockStorageListener: {
-    cb: null as
-      | ((
-          changes: Record<string, { newValue?: unknown; oldValue?: unknown }>,
-          area: string,
-        ) => void)
-      | null,
-  },
+const { mockSendMessage, mockStorageListeners } = vi.hoisted(() => ({
+  mockStorageListeners: [] as ((
+    changes: Record<string, { newValue?: unknown; oldValue?: unknown }>,
+    area: string,
+  ) => void)[],
   mockSendMessage: vi.fn().mockResolvedValue({
     status: "idle",
     type: null,
@@ -31,7 +27,7 @@ vi.mock("webextension-polyfill", () => ({
       },
       onChanged: {
         addListener: vi.fn((cb) => {
-          mockStorageListener.cb = cb;
+          mockStorageListeners.push(cb);
         }),
       },
     },
@@ -70,6 +66,7 @@ describe("Panel - setDisplayTimer()", () => {
   beforeEach(() => {
     document.body.innerHTML = html;
     vi.clearAllMocks();
+    mockStorageListeners.length = 0;
     vi.useFakeTimers();
   });
 
@@ -181,6 +178,7 @@ describe("Panel - Integration and DOM Events", () => {
   beforeEach(() => {
     document.body.innerHTML = html;
     vi.clearAllMocks();
+    mockStorageListeners.length = 0;
     vi.useFakeTimers();
   });
 
@@ -231,14 +229,16 @@ describe("Panel - Integration and DOM Events", () => {
       totalTime: 1500000,
     };
 
-    expect(mockStorageListener.cb).not.toBeNull();
-    mockStorageListener.cb!(
-      {
-        [StorageKey.TIMER]: {
-          newValue: mockNewState,
+    expect(mockStorageListeners.length).toBeGreaterThan(0);
+    mockStorageListeners.forEach((cb) =>
+      cb(
+        {
+          [StorageKey.TIMER]: {
+            newValue: mockNewState,
+          },
         },
-      },
-      "local",
+        "local",
+      ),
     );
 
     // Should tick and start displaying the tomato countdown
@@ -363,18 +363,20 @@ describe("Panel - Integration and DOM Events", () => {
     expect(tomatoBtn?.innerHTML).toContain("btn_tomato");
 
     // Mock storage update to running tomato
-    mockStorageListener.cb!(
-      {
-        [StorageKey.TIMER]: {
-          newValue: {
-            status: "running",
-            type: TimerType.TOMATO,
-            scheduledTime: Date.now() + 1500000,
-            totalTime: 1500000,
+    mockStorageListeners.forEach((cb) =>
+      cb(
+        {
+          [StorageKey.TIMER]: {
+            newValue: {
+              status: "running",
+              type: TimerType.TOMATO,
+              scheduledTime: Date.now() + 1500000,
+              totalTime: 1500000,
+            },
           },
         },
-      },
-      "local",
+        "local",
+      ),
     );
 
     // Only active is enabled, other buttons are disabled, active has pause icon and label
@@ -385,18 +387,20 @@ describe("Panel - Integration and DOM Events", () => {
     expect(longBtn?.hasAttribute("disabled")).toBe(true);
 
     // Mock storage update to paused tomato
-    mockStorageListener.cb!(
-      {
-        [StorageKey.TIMER]: {
-          newValue: {
-            status: "paused",
-            type: TimerType.TOMATO,
-            remainingTime: 1500000,
-            totalTime: 1500000,
+    mockStorageListeners.forEach((cb) =>
+      cb(
+        {
+          [StorageKey.TIMER]: {
+            newValue: {
+              status: "paused",
+              type: TimerType.TOMATO,
+              remainingTime: 1500000,
+              totalTime: 1500000,
+            },
           },
         },
-      },
-      "local",
+        "local",
+      ),
     );
 
     // Active button has play icon and resume label

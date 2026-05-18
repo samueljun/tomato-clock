@@ -122,6 +122,18 @@
   "label_week_starts_on": {
     "message": "Неделя начинается с"
   },
+  "label_theme": {
+    "message": "Тема"
+  },
+  "theme_auto": {
+    "message": "Авто"
+  },
+  "theme_light": {
+    "message": "Светлая"
+  },
+  "theme_dark": {
+    "message": "Темная"
+  },
   "label_sunday": {
     "message": "Воскресенье"
   },

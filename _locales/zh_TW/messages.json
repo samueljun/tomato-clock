@@ -122,6 +122,18 @@
   "label_week_starts_on": {
     "message": "一週開始於"
   },
+  "label_theme": {
+    "message": "主題"
+  },
+  "theme_auto": {
+    "message": "自動"
+  },
+  "theme_light": {
+    "message": "淺色"
+  },
+  "theme_dark": {
+    "message": "深色"
+  },
   "label_sunday": {
     "message": "星期日"
   },

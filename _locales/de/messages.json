@@ -122,6 +122,18 @@
   "label_week_starts_on": {
     "message": "Woche beginnt am"
   },
+  "label_theme": {
+    "message": "Design"
+  },
+  "theme_auto": {
+    "message": "Automatisch"
+  },
+  "theme_light": {
+    "message": "Hell"
+  },
+  "theme_dark": {
+    "message": "Dunkel"
+  },
   "label_sunday": {
     "message": "Sonntag"
   },

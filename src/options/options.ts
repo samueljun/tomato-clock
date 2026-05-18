@@ -5,9 +5,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./options.css";
 
 import Settings from "../utils/settings";
-import { DEFAULT_SETTINGS, SettingsKey, StorageKey } from "../utils/constants";
+import {
+  DEFAULT_SETTINGS,
+  SettingsKey,
+  StorageKey,
+  Theme,
+} from "../utils/constants";
 import { SettingsData } from "../utils/utils";
 import { setupTabFocusListener } from "../utils/tabs";
+import { initializeTheme } from "../utils/theme";
 
 export default class Options {
   private settings: Settings;
@@ -24,11 +30,13 @@ export default class Options {
   private domCustomSoundFilename: HTMLInputElement;
   private domClearCustomSoundButton: HTMLElement;
   private domWeekStartDay: HTMLSelectElement;
+  private domTheme: HTMLSelectElement;
 
   constructor() {
     // Localize static HTML tokens then initialize DOM bindings
     localizeHtmlPage();
     setupTabFocusListener();
+    initializeTheme();
     this.settings = new Settings();
 
     this.domMinutesInTomato = document.getElementById(
@@ -70,6 +78,7 @@ export default class Options {
     this.domWeekStartDay = document.getElementById(
       "week-start-day",
     ) as HTMLSelectElement;
+    this.domTheme = document.getElementById("theme") as HTMLSelectElement;
 
     this.setOptionsOnPage();
     this.setEventListeners();
@@ -85,6 +94,7 @@ export default class Options {
         selectedNotificationSound,
         isToolbarBadgeEnabled,
         weekStartDay,
+        theme,
       } = settings;
 
       this.domMinutesInTomato.value = String(minutesInTomato);
@@ -119,6 +129,8 @@ export default class Options {
 
       this.domToolbarBadgeCheckbox.checked = Boolean(isToolbarBadgeEnabled);
       this.domWeekStartDay.value = String(weekStartDay);
+      this.domTheme.value =
+        (theme as Theme) || (DEFAULT_SETTINGS[SettingsKey.THEME] as Theme);
     });
   }
 
@@ -131,6 +143,7 @@ export default class Options {
     const selectedNotificationSound = this.domNotificationSoundSelect.value;
     const isToolbarBadgeEnabled = this.domToolbarBadgeCheckbox.checked;
     const weekStartDay = parseInt(this.domWeekStartDay.value);
+    const theme = this.domTheme.value as Theme;
 
     this.settings.saveSettings({
       [SettingsKey.MINUTES_IN_TOMATO]: minutesInTomato,
@@ -140,6 +153,7 @@ export default class Options {
       [SettingsKey.SELECTED_NOTIFICATION_SOUND]: selectedNotificationSound,
       [SettingsKey.IS_TOOLBAR_BADGE_ENABLED]: isToolbarBadgeEnabled,
       [SettingsKey.WEEK_START_DAY]: weekStartDay,
+      [SettingsKey.THEME]: theme,
     });
   }
 
@@ -153,6 +167,7 @@ export default class Options {
       this.domNotificationSoundSelect,
       this.domToolbarBadgeCheckbox,
       this.domWeekStartDay,
+      this.domTheme,
     ];
 
     inputs.forEach((input) => {

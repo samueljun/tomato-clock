@@ -7,6 +7,9 @@ import path from "path";
 vi.mock("webextension-polyfill", () => ({
   default: {
     storage: {
+      onChanged: {
+        addListener: vi.fn(),
+      },
       local: {
         get: vi.fn().mockResolvedValue({}),
         set: vi.fn().mockResolvedValue({}),

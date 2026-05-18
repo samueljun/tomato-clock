@@ -16,6 +16,13 @@ export enum SettingsKey {
   SELECTED_NOTIFICATION_SOUND = "selectedNotificationSound",
   IS_TOOLBAR_BADGE_ENABLED = "isToolbarBadgeEnabled",
   WEEK_START_DAY = "weekStartDay",
+  THEME = "theme",
+}
+
+export enum Theme {
+  AUTO = "auto",
+  LIGHT = "light",
+  DARK = "dark",
 }
 
 export const DEFAULT_SETTINGS = {
@@ -26,6 +33,7 @@ export const DEFAULT_SETTINGS = {
   [SettingsKey.IS_TOOLBAR_BADGE_ENABLED]: true,
   [SettingsKey.SELECTED_NOTIFICATION_SOUND]: "timer-chime.mp3",
   [SettingsKey.WEEK_START_DAY]: 0,
+  [SettingsKey.THEME]: Theme.AUTO,
 } as const;
 
 export enum TimerType {

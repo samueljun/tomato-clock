@@ -87,6 +87,7 @@ export interface SettingsData {
   minutesInTomato: number;
   minutesInShortBreak: number;
   minutesInLongBreak: number;
+  theme?: string;
   [key: string]: unknown;
 }
 

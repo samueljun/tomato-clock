@@ -17,6 +17,7 @@ import {
   getSecondsInMilliseconds,
 } from "../utils/utils";
 import { openOrFocusTab } from "../utils/tabs";
+import { initializeTheme } from "../utils/theme";
 
 const PLAY_ICON = "▶\uFE0E";
 const PAUSE_ICON = "⏸\uFE0E";
@@ -59,6 +60,7 @@ export default class Panel {
 
   constructor() {
     localizeHtmlPage();
+    initializeTheme();
     this.currentTimeText = document.getElementById("current-time-text");
     this.displayInterval = null;
     this.timerState = { ...IDLE_STATE };

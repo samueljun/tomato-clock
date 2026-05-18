@@ -122,6 +122,18 @@
   "label_week_starts_on": {
     "message": "每周开始于"
   },
+  "label_theme": {
+    "message": "主题"
+  },
+  "theme_auto": {
+    "message": "自动"
+  },
+  "theme_light": {
+    "message": "浅色"
+  },
+  "theme_dark": {
+    "message": "深色"
+  },
   "label_sunday": {
     "message": "星期日"
   },

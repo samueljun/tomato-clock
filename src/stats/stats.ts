@@ -19,6 +19,7 @@ import {
 } from "../utils/utils";
 import { DateUnit, TimerType, SettingsKey } from "../utils/constants";
 import { setupTabFocusListener } from "../utils/tabs";
+import { initializeTheme } from "../utils/theme";
 
 interface StatsCounts {
   tomatoes: number;
@@ -52,10 +53,14 @@ export default class Stats {
   private ctx: CanvasRenderingContext2D;
   private completedTomatoesChart: Chart | null;
   private timeline: Timeline;
+  private startDate: Date;
+  private endDate: Date;
+  private dateUnit: DateUnit;
 
   constructor() {
     localizeHtmlPage();
     setupTabFocusListener();
+    initializeTheme();
 
     // Get DOM Elements
     this.tomatoesCount = document.getElementById("tomatoes-count")!;
@@ -74,6 +79,10 @@ export default class Stats {
       ) as HTMLCanvasElement
     ).getContext("2d")!;
     this.completedTomatoesChart = null;
+
+    this.startDate = new Date();
+    this.endDate = new Date();
+    this.dateUnit = DateUnit.DAY;
 
     this.handleResetStatsButtonClick =
       this.handleResetStatsButtonClick.bind(this);
@@ -102,6 +111,11 @@ export default class Stats {
 
     this.timeline = new Timeline();
     this.resetDateRange();
+
+    // Listen for theme changes to re-render chart with new colors
+    document.addEventListener("themeChanged", () => {
+      this.changeStatDates(this.startDate, this.endDate, this.dateUnit);
+    });
   }
 
   handleResetStatsButtonClick(): void {
@@ -183,6 +197,10 @@ export default class Stats {
     endDate: Date,
     dateUnit: DateUnit = DateUnit.DAY,
   ): Promise<void> {
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.dateUnit = dateUnit;
+
     const filteredTimeline = await this.timeline.getFilteredTimeline(
       startDate,
       endDate,
@@ -239,8 +257,16 @@ export default class Stats {
     this.setStatsText(stats);
 
     // Setup 'Completed Tomatoes' Line Chart
+    const bodyStyle = getComputedStyle(document.documentElement);
+    const textColor = bodyStyle.getPropertyValue("--bs-body-color").trim();
+    const gridColor = bodyStyle.getPropertyValue("--bs-border-color").trim();
+
     if (this.completedTomatoesChart) {
       this.completedTomatoesChart.data = completedTomatoesChartData;
+      this.completedTomatoesChart.options.scales!.x!.ticks!.color = textColor;
+      this.completedTomatoesChart.options.scales!.y!.ticks!.color = textColor;
+      this.completedTomatoesChart.options.scales!.x!.grid!.color = gridColor;
+      this.completedTomatoesChart.options.scales!.y!.grid!.color = gridColor;
       this.completedTomatoesChart.update();
     } else {
       this.completedTomatoesChart = new Chart(this.ctx, {
@@ -254,14 +280,29 @@ export default class Stats {
             },
             legend: {
               position: "bottom",
+              labels: {
+                color: textColor,
+              },
             },
           },
           scales: {
+            x: {
+              ticks: {
+                color: textColor,
+              },
+              grid: {
+                color: gridColor,
+              },
+            },
             y: {
               beginAtZero: true,
               suggestedMax: 5,
               ticks: {
                 maxTicksLimit: 5,
+                color: textColor,
+              },
+              grid: {
+                color: gridColor,
               },
             },
           },
