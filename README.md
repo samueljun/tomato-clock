@@ -2,6 +2,7 @@
 
 [![Mozilla Add-on Users](https://img.shields.io/amo/users/tomato-clock?logo=firefox&label=Firefox%20Users&color=red)](https://addons.mozilla.org/firefox/addon/tomato-clock/)
 [![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/enemipdanmallpjakiehedcgjmibjihj?logo=googlechrome&label=Chrome%20Users&color=blue)](https://chrome.google.com/webstore/detail/tomato-clock/enemipdanmallpjakiehedcgjmibjihj)
+[![Microsoft Edge Add-ons](https://img.shields.io/badge/Edge%20Users-Get-0078d4?logo=microsoftedge&logoColor=white)](https://microsoftedge.microsoft.com/addons/detail/tomato-clock-a-simple-p/janbmlijncoecahinncnncknjiajihoe)
 
 Tomato Clock is a simple browser extension for managing your productivity. Use the extension to break down your work into 25 minute 'Tomato' intervals separated by short breaks. Use the long break after completing four Tomato intervals.
 
@@ -24,6 +25,7 @@ Please file any issues or feature requests at https://github.com/samueljun/tomat
 
 - [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/tomato-clock/)
 - [Chrome Web Store](https://chrome.google.com/webstore/detail/tomato-clock/enemipdanmallpjakiehedcgjmibjihj)
+- [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/tomato-clock-a-simple-p/janbmlijncoecahinncnncknjiajihoe)
 
 ## Development
 
