@@ -11,6 +11,8 @@ Features:
 - Browser notifications
 - Customizable notification sounds
 - Stat tracking
+- Pause/resume timer
+- Dark theme
 
 You can customize the length of the Tomatoes and breaks in the extension page. The extension uses the default browser notification system, accompanied by a notification sound, to let you know when the timer is over. The extension also features stats for tracking how many Tomatoes you complete. Your stats are synced across devices using the browser's cloud storage support.
 
