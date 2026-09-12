@@ -31,15 +31,9 @@ module.exports = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: [
-              "@babel/preset-typescript",
-              [
-                "@babel/preset-env",
-                {
-                  useBuiltIns: "usage",
-                  corejs: 3,
-                },
-              ],
+            presets: ["@babel/preset-typescript", "@babel/preset-env"],
+            plugins: [
+              ["babel-plugin-polyfill-corejs3", { method: "usage-global" }],
             ],
           },
         },
@@ -103,7 +97,7 @@ module.exports = {
                 jsonContent.browser_specific_settings = {
                   gecko: {
                     id: "jid1-Kt2kYYgi32zPuw@jetpack",
-                    strict_min_version: "109.0",
+                    strict_min_version: "140.0",
                   },
                 };
                 jsonContent.permissions = permissions;
